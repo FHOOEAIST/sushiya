@@ -28,36 +28,14 @@
       <version>${project.version}</version>
               
     </dependency>
-            
-    <dependency>
-                  
-      <groupId>science.aist.sushiya</groupId>
-                  
-      <artifactId>persistence-core</artifactId>
-                  
-      <version>${project.version}</version>
-              
-    </dependency>
-            
-    <!-- test dependencies -->
-            
-    <dependency>
-                  
-      <groupId>science.aist.sushiya</groupId>
-                  
-      <artifactId>h2db</artifactId>
-                  
-      <version>${project.version}</version>
-                  
-      <scope>test</scope>
-              
-    </dependency>
+
         
   </dependencies>
   
   <modules>
       
     <module>core</module>
+    <module>languageServer</module>
       
   </modules>
 </project>
