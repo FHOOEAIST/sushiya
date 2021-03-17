@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sushiya</artifactId>
+        <groupId>science.aist.sushiya</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <packaging>war</packaging>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>deployment</artifactId>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>science.aist.sushiya</groupId>
+            <artifactId>rest</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <!-- dependencies for testing -->
+        <!-- servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax-servlet.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.6</version>
+                    <configuration>
+                        <warSourceDirectory>src/main/webapp</warSourceDirectory>
+                        <warName>sushiya-1.0.0-SNAPSHOT</warName>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+	<finalName>sushiya-1.0.0-SNAPSHOT</finalName>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- This is the default profile of the implementation. It starts a tomcat to run integration tests on the project and uses the in-memory h2db -->
+            <id>implementation</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>science.aist.sushiya</groupId>
+                    <artifactId>h2db</artifactId>
+                    <version>1.0.0-SNAPSHOT</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!-- BEGIN Container based tests -->
+                        <!-- exclude integration tests from regular testphase -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                            <configuration>
+                                <argLine>${jacoco.agent.it.arg}</argLine>
+                                <excludes>
+                                    <exclude>**/it/**</exclude>
+                                </excludes>
+                            </configuration>
+                        </plugin>
+
+                        <!-- include integrationtests in integration-test phase -->
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-failsafe-plugin</artifactId>
+                            <version>${maven-surefire-plugin.version}</version>
+                            <configuration>
+                                <argLine>${jacoco.agent.it.arg}</argLine>
+                                <includes>
+                                    <include>**/it/**</include>
+                                </includes>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <goals>
+                                        <goal>integration-test</goal>
+                                        <goal>verify</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <!-- run tomcat container during tests -->
+                        <plugin>
+                            <groupId>org.codehaus.cargo</groupId>
+                            <artifactId>cargo-maven2-plugin</artifactId>
+                            <version>${cargo-maven2-plugin.version}</version>
+                            <configuration>
+                                <container>
+                                    <containerId>tomcat9x</containerId>
+                                    <zipUrlInstaller>
+                                        <url>
+                                            https://repo.maven.apache.org/maven2/org/apache/tomcat/tomcat/9.0.8/tomcat-9.0.8.zip
+                                        </url>
+                                        <downloadDir>${project.build.directory}/downloads</downloadDir>
+                                        <extractDir>${project.build.directory}/extracts</extractDir>
+                                    </zipUrlInstaller>
+                                </container>
+                                <configuration>
+                                    <home>${project.build.directory}/catalina-base</home>
+                                    <properties>
+                                        <cargo.jvmargs>${jacoco.agent.it.arg}</cargo.jvmargs>
+                                        <cargo.hostname>localhost</cargo.hostname>
+                                        <cargo.servlet.port>12345</cargo.servlet.port>
+                                    </properties>
+                                </configuration>
+                                <deployables>
+                                    <deployable>
+                                        <groupId>${project.groupId}</groupId>
+                                        <artifactId>${project.artifactId}</artifactId>
+                                        <type>war</type>
+                                        <properties>
+                                            <context>sushiya</context>
+                                        </properties>
+                                    </deployable>
+                                </deployables>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>start-tomcat</id>
+                                    <phase>pre-integration-test</phase>
+                                    <goals>
+                                        <goal>start</goal>
+                                    </goals>
+                                </execution>
+                                <execution>
+                                    <id>stop-tomcat</id>
+                                    <phase>post-integration-test</phase>
+                                    <goals>
+                                        <goal>stop</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                        <!-- END Container based tests -->
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <!-- builds a war file referencing the postgres db. It does NOT execute integrationtests -->
+            <id>deployment</id>
+            <dependencies>
+                <dependency>
+                    <groupId>science.aist.sushiya</groupId>
+                    <artifactId>postgres</artifactId>
+                    <version>1.0.0-SNAPSHOT</version>
+                    <type>jar</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-surefire-plugin</artifactId>
+                            <configuration>
+                                <skipTests>true</skipTests>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+
+    </profiles>
+</project>

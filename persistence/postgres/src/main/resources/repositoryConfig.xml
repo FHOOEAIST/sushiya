@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+            http://www.springframework.org/schema/data/jpa
+            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- DataSource with Connection-Pool -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"></property>
+        <property name="url" value="jdbc:postgresql://localhost:5432/sushiya"></property>
+        <property name="username" value="sushiya"></property>
+        <property name="password" value="sushiya"></property>
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          id="entityManagerFactory">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="packagesToScan" value="science.aist.sushiya.sushiya.core"/>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL95Dialect</prop>
+                <prop key="show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager"
+          id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <context:component-scan base-package="science.aist.sushiya.persistence" />
+    <jpa:repositories base-package="science.aist.sushiya.persistence"/>
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>
