@@ -47,7 +47,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
     private LanguageClient client;
 
     public FSHLanguageServer() {
-        super.setTextDocumentService(new FSHTextDocumentService(this));
+        super.setTextDocumentService(new FSHTextDocumentService());
         super.setWorkspaceService(new FSHWorkspaceService(getTextDocumentService()));
     }
 

@@ -16,6 +16,11 @@
   <artifactId>languageServer</artifactId>
       
   <packaging>jar</packaging>
+
+  <properties>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.8</maven.compiler.source>
+  </properties>
       
   <dependencies>
             
@@ -56,7 +61,37 @@
       <version>0.10.0</version>
     </dependency>
 
-
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.1.1</version>
+
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>science.aist.sushiya.languageserver.Runner</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+
+      </plugin>
+    </plugins>
+  </build>
 </project>
