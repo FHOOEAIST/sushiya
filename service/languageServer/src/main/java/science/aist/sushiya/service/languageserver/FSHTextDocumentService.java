@@ -11,23 +11,22 @@ import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.DidSaveTextDocumentParams;
-import org.eclipse.lsp4j.services.TextDocumentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FSHTextDocumentService implements TextDocumentService {
+public class TextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHTextDocumentService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextDocumentService.class);
 
-    public FSHTextDocumentService() {
+    public TextDocumentService() {
     }
 
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
-        System.out.println("did open: ");
+        LOGGER.info("did close: ", didOpenTextDocumentParams.getTextDocument());
     }
 
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        System.out.println("did change: ");
+        LOGGER.info("did close: ", didChangeTextDocumentParams.getTextDocument());
     }
 
     public void didClose(DidCloseTextDocumentParams didCloseTextDocumentParams) {
