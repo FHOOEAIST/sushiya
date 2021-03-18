@@ -14,11 +14,11 @@ import org.eclipse.lsp4j.DidSaveTextDocumentParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
+public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TextDocumentService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FSHTextDocumentService.class);
 
-    public TextDocumentService() {
+    public FSHTextDocumentService() {
     }
 
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {

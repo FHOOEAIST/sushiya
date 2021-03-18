@@ -41,7 +41,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class FSHLanguageServer extends AbstractLanguageServer implements LanguageServer, LanguageClientAware {
 
-    public static final String LANGUAGE_ID = "LANGUAGE_ID_FSH";
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHLanguageServer.class);
 
     private LanguageClient client;
@@ -74,17 +73,19 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
 
         ServerCapabilities capabilities = createServerCapabilities();
         InitializeResult result = new InitializeResult(capabilities);
+        if(CompletableFuture.completedFuture(result).isDone()) {
+            LOGGER.info("THE VALUE IS DONE");
+        }else {
+            LOGGER.info("THE VALUE IS NOT DONE");
+        }
         return CompletableFuture.completedFuture(result);
     }
 
     private ServerCapabilities createServerCapabilities() {
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
-        capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(".","?","&", "\"", "=")));
         capabilities.setHoverProvider(Boolean.TRUE);
-        capabilities.setDocumentSymbolProvider(Boolean.TRUE);
-        capabilities.setReferencesProvider(Boolean.TRUE);
-        capabilities.setDefinitionProvider(Boolean.TRUE);
+        capabilities.setCompletionProvider(new CompletionOptions());
         capabilities.setCodeActionProvider(new CodeActionOptions(Arrays.asList(CodeActionKind.QuickFix)));
         return capabilities;
     }
@@ -117,4 +118,8 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         return client;
     }
 
+    @Override
+    public void initialized(InitializedParams params) {
+        LOGGER.info("server and client are initialized.");
+    }
 }

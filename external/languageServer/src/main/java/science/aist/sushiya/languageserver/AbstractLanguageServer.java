@@ -16,10 +16,10 @@
  */
 package science.aist.sushiya.languageserver;
 
+import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import science.aist.sushiya.service.languageserver.FSHTextDocumentService;
 
 import java.io.IOException;
 
@@ -38,6 +38,7 @@ public abstract class AbstractLanguageServer {
             while (!shutdown && parentProcessStillRunning() && !Thread.currentThread().isInterrupted()) {
                 try {
                     Thread.sleep(1000);
+                    LOGGER.info("Server is running...");
                 } catch (InterruptedException e) {
                     LOGGER.error(e.getMessage(), e);
                     Thread.currentThread().interrupt();
@@ -55,7 +56,7 @@ public abstract class AbstractLanguageServer {
     private volatile boolean shutdown;
     private long parentProcessId;
     private WorkspaceService workspaceService;
-    private FSHTextDocumentService textDocumentService;
+    private TextDocumentService textDocumentService;
 
     /**
      * starts the language server process
@@ -147,14 +148,14 @@ public abstract class AbstractLanguageServer {
     /**
      * @return the textDocumentService
      */
-    public FSHTextDocumentService getTextDocumentService() {
+    public TextDocumentService getTextDocumentService() {
         return this.textDocumentService;
     }
 
     /**
      * @param textDocumentService the textDocumentService to set
      */
-    protected void setTextDocumentService(FSHTextDocumentService textDocumentService) {
+    protected void setTextDocumentService(TextDocumentService textDocumentService) {
         this.textDocumentService = textDocumentService;
     }
 
