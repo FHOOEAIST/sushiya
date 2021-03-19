@@ -73,11 +73,6 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
 
         ServerCapabilities capabilities = createServerCapabilities();
         InitializeResult result = new InitializeResult(capabilities);
-        if(CompletableFuture.completedFuture(result).isDone()) {
-            LOGGER.info("THE VALUE IS DONE");
-        }else {
-            LOGGER.info("THE VALUE IS NOT DONE");
-        }
         return CompletableFuture.completedFuture(result);
     }
 

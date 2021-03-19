@@ -7,12 +7,11 @@
 package science.aist.sushiya.service.languageserver;
 
 
-import org.eclipse.lsp4j.DidChangeTextDocumentParams;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
-import org.eclipse.lsp4j.DidSaveTextDocumentParams;
+import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
 
@@ -21,19 +20,22 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     public FSHTextDocumentService() {
     }
 
-    public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
-        LOGGER.info("did close: ", didOpenTextDocumentParams.getTextDocument());
+    public void didOpen(DidOpenTextDocumentParams params) {
+        TextDocumentItem textDocument = params.getTextDocument();
+        LOGGER.info("did open: ", textDocument);
     }
 
-    public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        LOGGER.info("did close: ", didChangeTextDocumentParams.getTextDocument());
+    public void didChange(DidChangeTextDocumentParams params) {
+        LOGGER.info("did change: {}", params.getTextDocument());
+        List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
     }
 
-    public void didClose(DidCloseTextDocumentParams didCloseTextDocumentParams) {
-        LOGGER.info("did close: ", didCloseTextDocumentParams.getTextDocument());
+    public void didClose(DidCloseTextDocumentParams params) {
+        LOGGER.info("did close: {}", params.getTextDocument());
+        String uri = params.getTextDocument().getUri();
     }
 
-    public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
-        LOGGER.info("did save: " , didSaveTextDocumentParams.getTextDocument());
+    public void didSave(DidSaveTextDocumentParams params) {
+        LOGGER.info("did save: {}", params.getTextDocument());
     }
 }

@@ -20,9 +20,6 @@ import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 
-import java.util.Arrays;
-import java.util.List;
-
 //create when websocket is needed
 //import science.aist.sushiya.languageserver.websocket.WebSocketRunner;
 
@@ -38,23 +35,10 @@ public class Runner {
      */
     static FSHLanguageServer server;
 
-    static final String HELP_PARAMETER = "--help";
-
-    static final String HELP_MESSAGE =
-            "`--help` to display this message\n\n"
-                    + "When launching without parameter, the Language Client can use Standard Input and Ouput to connect to the FSH Language Server.\n\n";
-
     public static void main(String[] args) {
-        List<String> arguments = Arrays.asList(args);
-        if (arguments.contains(HELP_PARAMETER)) {
-            System.out.println(HELP_MESSAGE);
-        } else {
-            System.out.println("server started.");
-
-            server = new FSHLanguageServer();
-            Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, System.in, System.out);
-            server.connect(launcher.getRemoteProxy());
-            launcher.startListening();
-        }
+        server = new FSHLanguageServer();
+        Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, System.in, System.out);
+        server.connect(launcher.getRemoteProxy());
+        launcher.startListening();
     }
 }
