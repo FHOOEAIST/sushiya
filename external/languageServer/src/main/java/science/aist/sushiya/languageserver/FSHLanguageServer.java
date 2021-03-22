@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.FSHTextDocumentService;
 import science.aist.sushiya.service.languageserver.FSHWorkspaceService;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 public class FSHLanguageServer extends AbstractLanguageServer implements LanguageServer, LanguageClientAware {
@@ -81,7 +80,6 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         capabilities.setHoverProvider(Boolean.TRUE);
         capabilities.setCompletionProvider(new CompletionOptions());
-        capabilities.setCodeActionProvider(new CodeActionOptions(Arrays.asList(CodeActionKind.QuickFix)));
         return capabilities;
     }
 
