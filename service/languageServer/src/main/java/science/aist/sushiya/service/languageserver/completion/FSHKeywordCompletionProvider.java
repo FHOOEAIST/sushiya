@@ -1,6 +1,6 @@
 package science.aist.sushiya.service.languageserver.completion;
 
-import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,12 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
     }
 
     @Override
-    public List<CompletionItem> get() {
+    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         return completionItems;
+    }
+
+    @Override
+    public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        return true;
     }
 }

@@ -26,7 +26,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHTextDocumentService.class);
     private Map<String,TextDocumentItem> openedDocuments = new HashMap<>();
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>> hoverProcessor = new HoverProcessor();
-    private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> completionProcessor = new CompletionProcessor();
+    private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> completionProcessor = new CompletionProcessor();
 
     public void didOpen(DidOpenTextDocumentParams params) {
         TextDocumentItem textDocument = params.getTextDocument();
@@ -36,7 +36,12 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
 
     public void didChange(DidChangeTextDocumentParams params) {
         LOGGER.info("did change: {}", params.getTextDocument());
+        // update the saved Documents
         List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
+        TextDocumentItem textDocumentItem = openedDocuments.get(params.getTextDocument().getUri());
+        if (!contentChanges.isEmpty()) {
+            textDocumentItem.setText(contentChanges.get(0).getText());
+        }
     }
 
     public void didClose(DidCloseTextDocumentParams params) {
@@ -62,7 +67,12 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
         LOGGER.info("completion: {}");
         String uri = completionParams.getTextDocument().getUri();
         TextDocumentItem textDocument = openedDocuments.get(uri);
-        return completionProcessor.apply(completionParams.getPosition(), textDocument);
+        return completionProcessor.apply(textDocument, completionParams);
     }
 
+    @Override
+    public CompletableFuture<CompletionItem> resolveCompletionItem(CompletionItem unresolved) {
+        LOGGER.info("resolveCompletionItem: {}", unresolved.getLabel());
+        return CompletableFuture.completedFuture(unresolved);
+    }
 }

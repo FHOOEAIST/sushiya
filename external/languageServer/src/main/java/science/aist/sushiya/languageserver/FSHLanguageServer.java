@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.FSHTextDocumentService;
 import science.aist.sushiya.service.languageserver.FSHWorkspaceService;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -45,7 +46,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
 
     public FSHLanguageServer() {
         super.setTextDocumentService(new FSHTextDocumentService());
-        super.setWorkspaceService(new FSHWorkspaceService(getTextDocumentService()));
+        super.setWorkspaceService(new FSHWorkspaceService());
     }
 
     @Override
@@ -83,7 +84,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         capabilities.setHoverProvider(Boolean.TRUE);
-        capabilities.setCompletionProvider(new CompletionOptions());
+        capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(" ", ".", "")));
         return capabilities;
     }
 
