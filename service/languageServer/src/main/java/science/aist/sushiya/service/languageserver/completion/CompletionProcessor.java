@@ -28,19 +28,20 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
     public CompletionProcessor(){
         completionProviders.add(new FSHKeywordCompletionProvider());
         completionProviders.add(new AliasCompletionProvider());
+        completionProviders.add(new ParentCompletionProvider());
     }
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        List<List<CompletionItem>> completionProvidersItems = new ArrayList<>();
+        List<List<CompletionItem>> completionItems = new ArrayList<>();
         for (ICompletionProvider cp: completionProviders) {
             if(cp.test(textDocumentItem,completionParams)){
-                completionProvidersItems.add(cp.apply(textDocumentItem, completionParams));
+                completionItems.add(cp.apply(textDocumentItem, completionParams));
             }
         }
         return CompletableFuture
                 .completedFuture(Either
-                        .forLeft(completionProvidersItems.stream()
+                        .forLeft(completionItems.stream()
                                 .flatMap(List::stream)
                                 .collect(Collectors.toList())));
     }

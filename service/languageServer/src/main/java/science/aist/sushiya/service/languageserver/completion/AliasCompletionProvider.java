@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>This is the completion provider for the entity 'alias'.</p>
+ * <p>It contains common used aliases.</p>
+ * <p>The providers will be handled and managed by the CompletionProcessor.</p>
  *
  * @author SophieBauernfeind
  */
@@ -20,9 +22,7 @@ public class AliasCompletionProvider implements ICompletionProvider {
 
     public AliasCompletionProvider() {
         completionItems.add(new CompletionItem("LNC = http://loinc.org"));
-        completionItems.add(new CompletionItem("LOINC = http://loinc.org"));
         completionItems.add(new CompletionItem("SCT = http://snomed.info/sct"));
-        completionItems.add(new CompletionItem("SNOMED = http://snomed.info/sct"));
     }
 
     @Override
