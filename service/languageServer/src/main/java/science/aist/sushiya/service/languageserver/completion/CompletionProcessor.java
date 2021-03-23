@@ -15,7 +15,9 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>For a better structure of the server, the completion requests will be handled here.</p>
+ * <p>The CompletionProcessor has a collection of different CompletionProvider.</p>
+ * <p>Each CompletionProvider, provides a different list of CompletionItems for a special case.</p>
  *
  * @author SophieBauernfeind
  */

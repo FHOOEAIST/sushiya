@@ -26,6 +26,8 @@ import java.io.IOException;
 /**
  * @author lhein
  *
+ * <p>This is the base structure for the server.</p>
+ *
  * @author SophieBauernfeind - replaced "Camel" with "FSH"
  */
 public abstract class AbstractLanguageServer {

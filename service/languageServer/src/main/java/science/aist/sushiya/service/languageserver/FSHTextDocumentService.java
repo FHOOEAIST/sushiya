@@ -1,5 +1,6 @@
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>In this class most of the incoming requests of the clients are handled.</p>
+ * <p>For each set capability of the server, the specific function has to be implemented, to process the requests.</p>
  *
  * @author SophieBauernfeind
  */
@@ -27,9 +28,6 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>> hoverProcessor = new HoverProcessor();
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> completionProcessor = new CompletionProcessor();
 
-    public FSHTextDocumentService() {
-    }
-
     public void didOpen(DidOpenTextDocumentParams params) {
         TextDocumentItem textDocument = params.getTextDocument();
         LOGGER.info("did open: ", textDocument);
@@ -52,7 +50,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     }
 
     @Override
-    public CompletableFuture<Hover> hover (HoverParams hoverParams){
+    public CompletableFuture<Hover> hover(HoverParams hoverParams){
         LOGGER.info("hover: {}", hoverParams.getTextDocument());
         String uri = hoverParams.getTextDocument().getUri();
         TextDocumentItem textDocument = openedDocuments.get(uri);
@@ -66,6 +64,5 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
         TextDocumentItem textDocument = openedDocuments.get(uri);
         return completionProcessor.apply(completionParams.getPosition(), textDocument);
     }
-
 
 }

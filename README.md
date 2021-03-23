@@ -1,14 +1,20 @@
-# <Project name >
+# FSH-language-server
 
-<project description>
+The FSH-language-server is a languageserver implementation for 
+[HL7® FHIR® Shorthand](http://hl7.org/fhir/uv/shorthand/STU1/) 
+and implements the [language server protocol](https://microsoft.github.io/language-server-protocol/).
+It can be used with any editor, if the editor implements a client for this language server. The base structure leaned on the [camel-language-server](https://github.com/camel-tooling/camel-language-server/tree/master).
 
-## Getting Started
+## Clients
+Right now there is no functioning client, but there is one in work [VS Code](https://github.com/FHOOEAIST/Itamae).
 
-<Write how to get started. e.g. which dependencies are required, how you can build the project. and how you can start.>
+## Features
+
+Righ now there are no implemented features.
 
 ## FAQ
 
-If you have any questions, please checkout our <insert FAQ link here if using maven site, otherwise write a small FAQ section here>.
+If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
 
 ## Contributing
 

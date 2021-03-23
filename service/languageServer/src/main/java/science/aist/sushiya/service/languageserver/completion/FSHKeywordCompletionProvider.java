@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>One sample of a completion provider for the language server.</p>
+ * <p>The providers will be handled and managed by the CompletionProcessor.</p>
  *
  * @author SophieBauernfeind
  */

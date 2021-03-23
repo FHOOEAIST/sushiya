@@ -20,19 +20,16 @@ import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 
-//create when websocket is needed
-//import science.aist.sushiya.languageserver.websocket.WebSocketRunner;
 
 /**
  * @author lhein
+ *
+ * <p>Function which is executed with the jar file.</p>
  *
  * @author SophieBauernfeind - replaced "Camel" with "FSH"
  */
 public class Runner {
 
-    /**
-     * For test only
-     */
     static FSHLanguageServer server;
 
     public static void main(String[] args) {

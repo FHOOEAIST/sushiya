@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>For a better structure of the server, the hover requests will be handled here.</p>
  *
  * @author SophieBauernfeind
  */

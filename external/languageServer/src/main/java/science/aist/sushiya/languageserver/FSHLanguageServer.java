@@ -14,16 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-/**
- * this is the actual server implementation
- *
- * @author lhein
- *
- * @author SophieBauernfeind - replaced "Camel" with "FSH"
- */
-
 package science.aist.sushiya.languageserver;
 
 import org.eclipse.lsp4j.*;
@@ -37,6 +27,15 @@ import science.aist.sushiya.service.languageserver.FSHTextDocumentService;
 import science.aist.sushiya.service.languageserver.FSHWorkspaceService;
 
 import java.util.concurrent.CompletableFuture;
+
+/**
+ * @author lhein
+ *
+ * <p>This is the actual server implementation.</p>
+ * <p>The server capabilites specify which features such as hover or autocompletion, will be supported by the server.</p>
+ *
+ * @author SophieBauernfeind - replaced "Camel" with "FSH"
+ */
 
 public class FSHLanguageServer extends AbstractLanguageServer implements LanguageServer, LanguageClientAware {
 
@@ -75,6 +74,11 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         return CompletableFuture.completedFuture(result);
     }
 
+    /**
+     * Which features will be supported by the server will be set here in the capabilities.
+     * For each set capability the required function has the be implemented in the Workspace service or the TextDocument service,
+     * to handle the incoming requests of the client.
+     */
     private ServerCapabilities createServerCapabilities() {
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
