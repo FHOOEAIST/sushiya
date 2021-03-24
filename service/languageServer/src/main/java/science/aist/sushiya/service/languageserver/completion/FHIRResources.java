@@ -14,6 +14,7 @@ import java.util.List;
  *
  */
 public class FHIRResources {
+
     private static final List<CompletionItem> foundationConformanceCompletionItems = new ArrayList<>();
     private static final List<CompletionItem> foundationTerminologyCompletionItems = new ArrayList<>();
     private static final List<CompletionItem> foundationSecurityCompletionItems = new ArrayList<>();

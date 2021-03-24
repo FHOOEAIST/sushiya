@@ -1,8 +1,8 @@
 package science.aist.sushiya.service.languageserver.completion;
 
-import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionParams;
+import org.eclipse.lsp4j.TextDocumentItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +14,13 @@ import java.util.List;
  * @author SophieBauernfeind
  */
 public class FSHKeywordCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHKeywordCompletionProvider.class);
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
     public FSHKeywordCompletionProvider() {
         completionItems.add(new CompletionItem("alias"));
         completionItems.add(new CompletionItem("profile"));
         completionItems.add(new CompletionItem("instance"));
-        completionItems.add(new CompletionItem("ivairant"));
+        completionItems.add(new CompletionItem("invariant"));
         completionItems.add(new CompletionItem("ruleSet"));
         completionItems.add(new CompletionItem("mapping"));
         completionItems.add(new CompletionItem("id"));
@@ -35,7 +34,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("target"));
         completionItems.add(new CompletionItem("from"));
         completionItems.add(new CompletionItem("example"));
-        completionItems.add(new CompletionItem("preffered"));
+        completionItems.add(new CompletionItem("prefered"));
         completionItems.add(new CompletionItem("extensible"));
         completionItems.add(new CompletionItem("required"));
         completionItems.add(new CompletionItem("contains"));
@@ -68,6 +67,6 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        return true;
+        return false;
     }
 }

@@ -175,10 +175,9 @@ public class EnityAndMetadataCompletionProvider implements ICompletionProvider {
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        //TODO: check different conditions
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.length() == 0 || line.replaceAll("\\s","").matches("");
+            return line.trim().split("\\s").length == 1 && completionParams.getContext().getTriggerKind() == CompletionTriggerKind.Invoked;
 
         }catch (Error error){
             LOGGER.error(error.getMessage());

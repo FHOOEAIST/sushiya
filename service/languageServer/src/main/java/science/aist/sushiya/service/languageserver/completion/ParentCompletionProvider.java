@@ -16,10 +16,11 @@ import java.util.stream.Collectors;
  */
 public class ParentCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParentCompletionProvider.class);
-    private static final List<CompletionItem> completionItems = new ArrayList<>();
+    private List<CompletionItem> completionItems = new ArrayList<>();
 
     @Override
     public List<CompletionItem> get() {
+        completionItems.clear();
         FHIRResources resources = new FHIRResources();
 
         //adding all Resources which are for sure used
@@ -33,7 +34,6 @@ public class ParentCompletionProvider implements ICompletionProvider {
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        LOGGER.info("Parent Completion: {}" , checkKeywordParent(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked);
         return checkKeywordParent(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
     }
 

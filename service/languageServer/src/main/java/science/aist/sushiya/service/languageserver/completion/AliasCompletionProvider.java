@@ -21,17 +21,18 @@ public class AliasCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(AliasCompletionProvider.class);
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
-    @Override
-    public List<CompletionItem> get() {
+    public AliasCompletionProvider() {
         completionItems.add(new CompletionItem("LNC = http://loinc.org"));
         completionItems.add(new CompletionItem("SCT = http://snomed.info/sct"));
+    }
 
+    @Override
+    public List<CompletionItem> get() {
         return completionItems;
     }
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        LOGGER.info("Alias Completion: {}" , checkKeywordAlias(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked);
         return checkKeywordAlias(textDocumentItem,completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
     }
 

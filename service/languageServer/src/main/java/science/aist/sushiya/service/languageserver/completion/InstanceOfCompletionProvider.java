@@ -21,8 +21,10 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceOfCompletionProvider.class);
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
+
     @Override
     public List<CompletionItem> get() {
+        completionItems.clear();
         FHIRResources resources = new FHIRResources();
 
         //adding all Resources which are for sure used
@@ -35,7 +37,6 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        LOGGER.info("InstanceOf Completion: {}" , checkKeywordInstanceOf(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked);
         return checkKeywordInstanceOf(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
     }
 

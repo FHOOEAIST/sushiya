@@ -37,11 +37,19 @@ public class FSHFileHandler {
         List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
         TextDocumentItem textDocument = openedDocuments.get(params.getTextDocument().getUri());
         if (!contentChanges.isEmpty()) {
+            LOGGER.info("size before delete Extensions: {}", createdExtensions.size());
+            LOGGER.info("size before delete Profile: {}", createdProfiles.size());
             removeEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
             removeEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
+            LOGGER.info("size after delete Extensions: {}", createdExtensions.size());
+            LOGGER.info("size after delete Profile: {}", createdProfiles.size());
             textDocument.setText(contentChanges.get(0).getText());
+            LOGGER.info("size before add Extensions: {}", createdExtensions.size());
+            LOGGER.info("size before add Profile: {}", createdProfiles.size());
             addEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
             addEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
+            LOGGER.info("size after add Extensions: {}", createdExtensions.size());
+            LOGGER.info("size after add Profile: {}", createdProfiles.size());
         }
     }
 
