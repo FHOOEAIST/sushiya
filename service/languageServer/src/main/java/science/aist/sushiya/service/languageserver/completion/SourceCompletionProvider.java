@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>This is the provider for the metadata-type 'source'.</p>
  *
  * @author SophieBauernfeind
  */
