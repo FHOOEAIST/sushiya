@@ -6,9 +6,11 @@ import org.eclipse.lsp4j.CompletionTriggerKind;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>This is the provider for the entity 'InstanceOf'.</p>
@@ -20,14 +22,13 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
     @Override
-    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+    public List<CompletionItem> get() {
         FHIRResources resources = new FHIRResources();
 
         //adding all Resources which are for sure used
         completionItems.addAll(resources.getAllBase());
         completionItems.addAll(resources.getAllClinical());
-
-        //TODO: get profiles of all open files
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems;
     }

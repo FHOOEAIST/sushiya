@@ -15,39 +15,29 @@ import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
 import science.aist.sushiya.service.languageserver.hover.HoverProcessor;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHTextDocumentService.class);
-    private Map<String,TextDocumentItem> openedDocuments = new HashMap<>();
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>> hoverProcessor = new HoverProcessor();
     private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> completionProcessor = new CompletionProcessor();
 
     public void didOpen(DidOpenTextDocumentParams params) {
-        TextDocumentItem textDocument = params.getTextDocument();
-        LOGGER.info("did open: ", textDocument);
-        openedDocuments.put(textDocument.getUri(),textDocument);
+        LOGGER.info("did open: {}", params.getTextDocument());
+        FSHFileHandler.getInstance().addFile(params);
     }
 
     public void didChange(DidChangeTextDocumentParams params) {
         LOGGER.info("did change: {}", params.getTextDocument());
-        // update the saved Documents
-        List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
-        TextDocumentItem textDocumentItem = openedDocuments.get(params.getTextDocument().getUri());
-        if (!contentChanges.isEmpty()) {
-            textDocumentItem.setText(contentChanges.get(0).getText());
-        }
+        FSHFileHandler.getInstance().update(params);
     }
 
     public void didClose(DidCloseTextDocumentParams params) {
-        LOGGER.info("did close: {}");
-        String uri = params.getTextDocument().getUri();
-        openedDocuments.remove(uri);
+        LOGGER.info("did close: {}", params.getTextDocument());
+        FSHFileHandler.getInstance().removeFile(params);
     }
 
     public void didSave(DidSaveTextDocumentParams params) {
@@ -58,7 +48,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     public CompletableFuture<Hover> hover(HoverParams hoverParams){
         LOGGER.info("hover: {}", hoverParams.getTextDocument());
         String uri = hoverParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = openedDocuments.get(uri);
+        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(uri);
         return hoverProcessor.apply(hoverParams.getPosition(), textDocument);
     }
 
@@ -66,7 +56,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams completionParams) {
         LOGGER.info("completion: {}");
         String uri = completionParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = openedDocuments.get(uri);
+        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(uri);
         return completionProcessor.apply(textDocument, completionParams);
     }
 

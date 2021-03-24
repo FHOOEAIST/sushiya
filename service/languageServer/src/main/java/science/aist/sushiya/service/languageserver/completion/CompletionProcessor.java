@@ -5,8 +5,6 @@ import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,6 @@ import java.util.stream.Collectors;
  * @author SophieBauernfeind
  */
 public class CompletionProcessor implements BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompletionProcessor.class);
     private static final List<ICompletionProvider> completionProviders = new ArrayList<>();
 
     public CompletionProcessor(){
@@ -35,11 +32,9 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         List<List<CompletionItem>> completionItems = new ArrayList<>();
-        int run = 0;
         for (ICompletionProvider cp: completionProviders) {
-            run++;
             if(cp.test(textDocumentItem,completionParams)){
-                completionItems.add(cp.apply(textDocumentItem, completionParams));
+                completionItems.add(cp.get());
             }
         }
         return CompletableFuture

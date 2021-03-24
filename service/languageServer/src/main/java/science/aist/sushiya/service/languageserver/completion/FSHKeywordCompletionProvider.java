@@ -62,7 +62,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
     }
 
     @Override
-    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+    public List<CompletionItem> get() {
         return completionItems;
     }
 

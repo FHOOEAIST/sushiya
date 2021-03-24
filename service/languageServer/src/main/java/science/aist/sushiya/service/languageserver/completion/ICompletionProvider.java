@@ -5,9 +5,9 @@ import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.TextDocumentItem;
 
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
+import java.util.function.Supplier;
 
-public interface ICompletionProvider extends BiFunction<TextDocumentItem, CompletionParams, List<CompletionItem>>, BiPredicate<TextDocumentItem, CompletionParams> {
+public interface ICompletionProvider extends Supplier<List<CompletionItem>>, BiPredicate<TextDocumentItem, CompletionParams> {
 
 }

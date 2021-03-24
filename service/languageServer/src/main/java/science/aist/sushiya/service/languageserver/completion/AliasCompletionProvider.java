@@ -22,7 +22,7 @@ public class AliasCompletionProvider implements ICompletionProvider {
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
     @Override
-    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+    public List<CompletionItem> get() {
         completionItems.add(new CompletionItem("LNC = http://loinc.org"));
         completionItems.add(new CompletionItem("SCT = http://snomed.info/sct"));
 
