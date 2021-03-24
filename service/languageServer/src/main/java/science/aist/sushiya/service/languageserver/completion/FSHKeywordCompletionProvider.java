@@ -55,7 +55,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("units"));
         completionItems.add(new CompletionItem("exactly"));
         completionItems.add(new CompletionItem("insert"));
-        completionItems.add(new CompletionItem("Reference"));
+        completionItems.add(new CompletionItem("reference"));
         completionItems.add(new CompletionItem("extension"));
         completionItems.add(new CompletionItem("code"));
         completionItems.add(new CompletionItem("value"));

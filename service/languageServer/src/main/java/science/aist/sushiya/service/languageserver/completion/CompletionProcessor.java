@@ -29,12 +29,15 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
         completionProviders.add(new FSHKeywordCompletionProvider());
         completionProviders.add(new AliasCompletionProvider());
         completionProviders.add(new ParentCompletionProvider());
+        completionProviders.add(new InstanceOfCompletionProvider());
     }
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         List<List<CompletionItem>> completionItems = new ArrayList<>();
+        int run = 0;
         for (ICompletionProvider cp: completionProviders) {
+            run++;
             if(cp.test(textDocumentItem,completionParams)){
                 completionItems.add(cp.apply(textDocumentItem, completionParams));
             }

@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * <p>This is the provider for the metadata-type 'profile'.</p>
- * <p>It provides all official defined resources based on: https://www.hl7.org/fhir/resourcelist.html (23.03.21)</p>
  *
  * @author SophieBauernfeind
  */
@@ -17,23 +16,22 @@ public class ParentCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParentCompletionProvider.class);
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
-    public ParentCompletionProvider() {
+    @Override
+    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         FHIRResources resources = new FHIRResources();
 
         //adding all Resources which are for sure used
         completionItems.addAll(resources.getAllBase());
         completionItems.addAll(resources.getAllClinical());
-        
-        //TODO: get extensions and profiles of all open files
-    }
 
-    @Override
-    public List<CompletionItem> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        //TODO: get extensions and profiles of all open files
+
         return completionItems;
     }
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        LOGGER.info("Parent Completion: {}" , checkKeywordParent(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked);
         return checkKeywordParent(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
     }
 
