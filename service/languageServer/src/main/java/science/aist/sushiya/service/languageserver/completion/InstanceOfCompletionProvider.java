@@ -19,17 +19,16 @@ import java.util.stream.Collectors;
  */
 public class InstanceOfCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceOfCompletionProvider.class);
-    private static final List<CompletionItem> completionItems = new ArrayList<>();
+    private List<CompletionItem> completionItems = new ArrayList<>();
 
 
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
-        FHIRResources resources = new FHIRResources();
 
         //adding all Resources which are for sure used
-        completionItems.addAll(resources.getAllBase());
-        completionItems.addAll(resources.getAllClinical());
+        completionItems.addAll(FHIRResources.getInstance().getAllBase());
+        completionItems.addAll(FHIRResources.getInstance().getAllClinical());
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems;

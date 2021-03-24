@@ -14,33 +14,39 @@ import java.util.List;
  *
  */
 public class FHIRResources {
+    private static final FHIRResources instance = new FHIRResources();
 
-    private static final List<CompletionItem> foundationConformanceCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> foundationTerminologyCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> foundationSecurityCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> foundationDocumentsCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> foundationOtherCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> baseIndividualsCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> baseEntities1CompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> baseEntities2CompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> baseWorkflowCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> baseManagementCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> clinicalSummaryCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> clinicalDiagnosticsCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> clinicalMedicationsCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> clinicalCareProvisionCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> clinicalRequestResponseCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> financialSupportCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> financialBillingCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> financialPaymentCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> financialGeneralCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> specializedPublicHealthResearchCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> specializedDefinitionalArtifactsCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> specializedEvidenceBasedMedicineCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> specializedQualityReportingTestingCompletionItems = new ArrayList<>();
-    private static final List<CompletionItem> specializedMedicationDefinitionCompletionItems = new ArrayList<>();
+    private List<CompletionItem> foundationConformanceCompletionItems = new ArrayList<>();
+    private List<CompletionItem> foundationTerminologyCompletionItems = new ArrayList<>();
+    private List<CompletionItem> foundationSecurityCompletionItems = new ArrayList<>();
+    private List<CompletionItem> foundationDocumentsCompletionItems = new ArrayList<>();
+    private List<CompletionItem> foundationOtherCompletionItems = new ArrayList<>();
+    private List<CompletionItem> baseIndividualsCompletionItems = new ArrayList<>();
+    private List<CompletionItem> baseEntities1CompletionItems = new ArrayList<>();
+    private List<CompletionItem> baseEntities2CompletionItems = new ArrayList<>();
+    private List<CompletionItem> baseWorkflowCompletionItems = new ArrayList<>();
+    private List<CompletionItem> baseManagementCompletionItems = new ArrayList<>();
+    private List<CompletionItem> clinicalSummaryCompletionItems = new ArrayList<>();
+    private List<CompletionItem> clinicalDiagnosticsCompletionItems = new ArrayList<>();
+    private List<CompletionItem> clinicalMedicationsCompletionItems = new ArrayList<>();
+    private List<CompletionItem> clinicalCareProvisionCompletionItems = new ArrayList<>();
+    private List<CompletionItem> clinicalRequestResponseCompletionItems = new ArrayList<>();
+    private List<CompletionItem> financialSupportCompletionItems = new ArrayList<>();
+    private List<CompletionItem> financialBillingCompletionItems = new ArrayList<>();
+    private List<CompletionItem> financialPaymentCompletionItems = new ArrayList<>();
+    private List<CompletionItem> financialGeneralCompletionItems = new ArrayList<>();
+    private List<CompletionItem> specializedPublicHealthResearchCompletionItems = new ArrayList<>();
+    private List<CompletionItem> specializedDefinitionalArtifactsCompletionItems = new ArrayList<>();
+    private List<CompletionItem> specializedEvidenceBasedMedicineCompletionItems = new ArrayList<>();
+    private List<CompletionItem> specializedQualityReportingTestingCompletionItems = new ArrayList<>();
+    private List<CompletionItem> specializedMedicationDefinitionCompletionItems = new ArrayList<>();
 
-    public FHIRResources() {
+    public static FHIRResources getInstance() {
+        return instance;
+    }
+
+    //private constructor to make it as a singleton
+    private FHIRResources() {
         //foundation
         foundationConformanceCompletionItems.add(new CompletionItem("CapabilityStatement"));
         foundationConformanceCompletionItems.add(new CompletionItem("StructureDefinition"));
