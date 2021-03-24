@@ -27,7 +27,7 @@ public class SourceCompletionProvider implements ICompletionProvider {
 
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
-        return completionItems;
+        return completionItems.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

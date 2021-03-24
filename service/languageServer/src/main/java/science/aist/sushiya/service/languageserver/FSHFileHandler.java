@@ -20,10 +20,12 @@ public class FSHFileHandler {
     private Map<String,TextDocumentItem> openedDocuments = new HashMap<>();
     private List<String> createdProfiles = new ArrayList<>();
     private List<String> createdExtensions = new ArrayList<>();
+    private List<String> createdAlias = new ArrayList<>();
 
     enum Entity{
         PROFILE,
-        EXTENSION
+        EXTENSION,
+        ALIAS
     }
 
     //private constructor to make it as a singleton
@@ -37,19 +39,13 @@ public class FSHFileHandler {
         List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
         TextDocumentItem textDocument = openedDocuments.get(params.getTextDocument().getUri());
         if (!contentChanges.isEmpty()) {
-            LOGGER.info("size before delete Extensions: {}", createdExtensions.size());
-            LOGGER.info("size before delete Profile: {}", createdProfiles.size());
             removeEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
             removeEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
-            LOGGER.info("size after delete Extensions: {}", createdExtensions.size());
-            LOGGER.info("size after delete Profile: {}", createdProfiles.size());
+            removeEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
             textDocument.setText(contentChanges.get(0).getText());
-            LOGGER.info("size before add Extensions: {}", createdExtensions.size());
-            LOGGER.info("size before add Profile: {}", createdProfiles.size());
             addEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
             addEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
-            LOGGER.info("size after add Extensions: {}", createdExtensions.size());
-            LOGGER.info("size after add Profile: {}", createdProfiles.size());
+            addEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
         }
     }
 
@@ -57,6 +53,7 @@ public class FSHFileHandler {
         TextDocumentItem textDocument = params.getTextDocument();
         addEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
         addEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
+        addEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
         openedDocuments.put(textDocument.getUri(),textDocument);
     }
 
@@ -65,6 +62,7 @@ public class FSHFileHandler {
         TextDocumentItem textDocument = openedDocuments.get(uri);
         removeEntities(Entity.PROFILE, getEntities(Entity.PROFILE,textDocument));
         removeEntities(Entity.EXTENSION, getEntities(Entity.EXTENSION,textDocument));
+        removeEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
         openedDocuments.remove(uri);
     }
 
@@ -78,9 +76,16 @@ public class FSHFileHandler {
                             entity.name().substring(1,entity.name().length()).toLowerCase();
         String[]lines = textDocument.getText().split("\\n");
         for (String line:lines) {
-            if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*")){
-                String createdEntityName = line.trim().split("\\s")[line.trim().split("\\s").length-1];
-                result.add(createdEntityName);
+            if(entity == Entity.ALIAS){
+                if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*=\\s*\\S+\\s*")){
+                    String createdEntityName = line.replaceFirst("\\s*" + entityName + "\\s*:","").trim();
+                    result.add(createdEntityName);
+                }
+            }else {
+                if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*")){
+                    String createdEntityName = line.trim().split("\\s")[line.trim().split("\\s").length-1];
+                    result.add(createdEntityName);
+                }
             }
         }
         return result;
@@ -88,17 +93,35 @@ public class FSHFileHandler {
 
     private void addEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case ALIAS:
+                for (String entityName: entityNames) {
+                    if(! createdAlias.contains(entityName)){
+                        createdAlias.add(entityName);
+                    }
+                }
+                break;
             case EXTENSION:
-                createdExtensions.addAll(entityNames);
+                for (String entityName: entityNames) {
+                    if(! createdExtensions.contains(entityName)){
+                        createdExtensions.add(entityName);
+                    }
+                }
                 break;
             case PROFILE:
-                createdProfiles.addAll(entityNames);
+                for (String entityName: entityNames) {
+                    if(! createdProfiles.contains(entityName)){
+                        createdProfiles.add(entityName);
+                    }
+                }
                 break;
         }
     }
 
     private void removeEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case ALIAS:
+                createdAlias.removeAll(entityNames);
+                break;
             case EXTENSION:
                 createdExtensions.removeAll(entityNames);
                 break;
@@ -114,5 +137,9 @@ public class FSHFileHandler {
 
     public List<String> getCreatedExtensions() {
         return createdExtensions;
+    }
+
+    public List<String> getCreatedAlias() {
+        return createdAlias;
     }
 }

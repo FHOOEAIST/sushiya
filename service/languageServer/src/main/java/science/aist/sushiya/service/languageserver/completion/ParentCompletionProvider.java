@@ -28,7 +28,7 @@ public class ParentCompletionProvider implements ICompletionProvider {
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedExtensions().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
-        return completionItems;
+        return completionItems.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
