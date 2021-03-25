@@ -3,20 +3,20 @@ package science.aist.sushiya.service.languageserver;
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.AliasCompletionProvider;
+import science.aist.sushiya.service.languageserver.completion.SourceCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
- * <p>Test class for the different CompletionProvider</p>
+ * <p>Test class for {@link SourceCompletionProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class AliasCompletionProviderTests {
+public class SourceCompletionProviderTest {
     @Test
     public void testActivation1(){
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -37,8 +37,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testActivation2(){
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "  Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "  Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -59,8 +59,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testActivation3(){
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "  Alias  : ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "  Source  : ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -81,8 +81,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationWrongPosition() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -103,8 +103,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationOutOfBound() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -125,8 +125,30 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationEmptyText() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
+        SourceCompletionProvider provider = new SourceCompletionProvider();
         String text = "";
+
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri("testing");
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationIncorrectText() {
+        //given
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "test Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -147,8 +169,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -167,8 +189,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
@@ -186,8 +208,8 @@ public class AliasCompletionProviderTests {
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        AliasCompletionProvider provider = new AliasCompletionProvider();
-        String text = "Alias: ";
+        SourceCompletionProvider provider = new SourceCompletionProvider();
+        String text = "Source: ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);

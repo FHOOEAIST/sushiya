@@ -30,23 +30,32 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
         //adding all Resources which are for sure used
         completionItems.addAll(FHIRResources.getInstance().getAllBase());
         completionItems.addAll(FHIRResources.getInstance().getAllClinical());
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
+                .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        return checkKeywordInstanceOf(textDocumentItem, completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+        if(textDocumentItem != null
+                && completionParams != null
+                && completionParams.getContext() != null
+                && completionParams.getContext().getTriggerKind() != null) {
+            return checkKeywordInstanceOf(textDocumentItem, completionParams)
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+        }
+        return false;
     }
 
     private boolean checkKeywordInstanceOf(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.replaceAll("\\s","").matches("InstanceOf:") && line.lastIndexOf("InstanceOf:") < completionParams.getPosition().getCharacter();
+            return line.replaceAll("\\s","").matches("InstanceOf:")
+                    && line.lastIndexOf("InstanceOf:") < completionParams.getPosition().getCharacter();
 
-        }catch (Error error){
-            LOGGER.error(error.getMessage());
+        }catch (Exception exception){
+            LOGGER.error(exception.getMessage());
             return false;
         }
     }

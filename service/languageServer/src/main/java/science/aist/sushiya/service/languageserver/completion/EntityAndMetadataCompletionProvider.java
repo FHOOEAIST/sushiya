@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>This is the completion provider for the entities and metadata.</p>
  *
  * @author SophieBauernfeind
  */
-public class EnityAndMetadataCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EnityAndMetadataCompletionProvider.class);
+public class EntityAndMetadataCompletionProvider implements ICompletionProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityAndMetadataCompletionProvider.class);
     private static final List<CompletionItem> completionItems = new ArrayList<>();
 
-    public EnityAndMetadataCompletionProvider() {
+    public EntityAndMetadataCompletionProvider() {
         CompletionItem alias = new CompletionItem("Alias");
         TextEdit textEditAlias = new TextEdit();
         textEditAlias.setNewText("Alias:");

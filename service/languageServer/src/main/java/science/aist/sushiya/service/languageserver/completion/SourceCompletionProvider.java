@@ -26,23 +26,32 @@ public class SourceCompletionProvider implements ICompletionProvider {
     public List<CompletionItem> get() {
         completionItems.clear();
 
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
+                .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        return checkKeywordParent(textDocumentItem,completionParams) && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+        if(textDocumentItem != null
+                && completionParams != null
+                && completionParams.getContext() != null
+                && completionParams.getContext().getTriggerKind() != null) {
+            return checkKeywordParent(textDocumentItem,completionParams)
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+        }
+        return false;
     }
 
     private boolean checkKeywordParent(TextDocumentItem textDocumentItem, CompletionParams completionParams){
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.replaceAll("\\s","").matches("Source:") && line.lastIndexOf("Source:") < completionParams.getPosition().getCharacter();
+            return line.replaceAll("\\s","").matches("Source:")
+                    && line.lastIndexOf("Source:") < completionParams.getPosition().getCharacter();
 
-        }catch (Error error){
-            LOGGER.error(error.getMessage());
+        }catch (Exception exception){
+            LOGGER.error(exception.getMessage());
             return false;
         }
     }
