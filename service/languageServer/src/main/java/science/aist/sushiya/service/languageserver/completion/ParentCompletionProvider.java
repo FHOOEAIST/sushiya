@@ -3,6 +3,7 @@ package science.aist.sushiya.service.languageserver.completion;
 import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.Entity;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
@@ -25,8 +26,8 @@ public class ParentCompletionProvider implements ICompletionProvider {
         //adding all Resources which are for sure used
         completionItems.addAll(FHIRResources.getInstance().getAllBase());
         completionItems.addAll(FHIRResources.getInstance().getAllClinical());
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedExtensions().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }

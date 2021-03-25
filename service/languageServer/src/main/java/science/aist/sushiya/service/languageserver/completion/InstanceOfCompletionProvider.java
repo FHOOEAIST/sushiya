@@ -6,6 +6,7 @@ import org.eclipse.lsp4j.CompletionTriggerKind;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.Entity;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
         //adding all Resources which are for sure used
         completionItems.addAll(FHIRResources.getInstance().getAllBase());
         completionItems.addAll(FHIRResources.getInstance().getAllClinical());
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedProfiles().stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }

@@ -9,11 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <p>This class handles all open fsh files of the editor and provides additional information.</p>
- *
- * @author SophieBauernfeind
- */
 public class FSHFileHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHFileHandler.class);
     private static final FSHFileHandler instance = new FSHFileHandler();
@@ -21,12 +16,6 @@ public class FSHFileHandler {
     private List<String> createdProfiles = new ArrayList<>();
     private List<String> createdExtensions = new ArrayList<>();
     private List<String> createdAlias = new ArrayList<>();
-
-    enum Entity{
-        PROFILE,
-        EXTENSION,
-        ALIAS
-    }
 
     //private constructor to make it as a singleton
     private FSHFileHandler(){}
@@ -66,8 +55,8 @@ public class FSHFileHandler {
         openedDocuments.remove(uri);
     }
 
-    public TextDocumentItem getFile(String uri){
-        return openedDocuments.get(uri);
+    public TextDocumentItem getFile(TextDocumentIdentifier identifier){
+        return openedDocuments.get(identifier.getUri());
     }
 
     private List<String> getEntities(Entity entity,TextDocumentItem textDocument){
@@ -131,15 +120,22 @@ public class FSHFileHandler {
         }
     }
 
-    public List<String> getCreatedProfiles() {
-        return createdProfiles;
+    public List<String> getCreatedEntities(Entity entity){
+        switch(entity){
+            case ALIAS:
+                return createdAlias;
+            case EXTENSION:
+                return createdExtensions;
+            case PROFILE:
+                return createdProfiles;
+        }
+        return new ArrayList<>();
     }
 
-    public List<String> getCreatedExtensions() {
-        return createdExtensions;
-    }
-
-    public List<String> getCreatedAlias() {
-        return createdAlias;
+    protected void clean(){
+        openedDocuments = new HashMap<>();
+        createdProfiles = new ArrayList<>();
+        createdExtensions = new ArrayList<>();
+        createdAlias = new ArrayList<>();
     }
 }

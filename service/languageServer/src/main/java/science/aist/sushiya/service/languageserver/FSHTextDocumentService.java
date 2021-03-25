@@ -39,14 +39,14 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     @Override
     public CompletableFuture<Hover> hover(HoverParams hoverParams){
         String uri = hoverParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(uri);
+        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri));
         return hoverProcessor.apply(hoverParams.getPosition(), textDocument);
     }
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams completionParams) {
         String uri = completionParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(uri);
+        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri));
         return completionProcessor.apply(textDocument, completionParams);
     }
 
