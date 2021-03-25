@@ -111,7 +111,7 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 0,FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS).size(),0);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 0,FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).size(),0);
     }
 
     @Test
@@ -145,14 +145,96 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 0,FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size(),0);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesAliasNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: is = correct\n"
+                + "  Alias:  is = correct\n"
+                + "  Alias  : is = correct\n"
+                + "  Alias  :  is  =  correct\n"
+                + " testing Alias: not = correct\n"
+                + " Alias: not correct\n"
+                + "Alias not = correct"
+                + "simple Alias test";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS).size(), 1);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesProfileNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile: isCorrect\n"
+                + "  Profile: isCorrect\n"
+                + "  Profile  : isCorrect\n"
+                + "  Profile  :  isCorrect\n"
+                + "Profile: is not correct\n"
+                + "test Profile: notCorrect\n"
+                + "Profile notCorrect\n"
+                + "simple Profile test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).size(), 1);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesExtensionNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Extension: isCorrect\n"
+                + "  Extension: isCorrect\n"
+                + "  Extension  : isCorrect\n"
+                + "  Extension  :  isCorrect\n"
+                + "Extension: is not correct\n"
+                + "test Extension: notCorrect\n"
+                + "Extension notCorrect\n"
+                + "simple Extension test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size(), 1);
     }
 
     @Test
     public void testGetCreatedEntitiesAlias() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: test = testing \n" + "more text";
+        String text = "Alias: is = correct1\n"
+                + "  Alias:  is = correct2\n"
+                + "  Alias  : is = correct3\n"
+                + "  Alias  :  is  =  correct4\n"
+                + " testing Alias: not = correct\n"
+                + " Alias: not correct\n"
+                + "Alias not = correct"
+                + "simple Alias test";
         textDocumentItem.setText(text);
         String uri = "testing";
         textDocumentItem.setUri(uri);
@@ -163,14 +245,21 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 1 ,FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS).size(), 4);
     }
 
     @Test
     public void testGetCreatedEntitiesProfile() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Profile: test \n" + "more text";
+        String text = "Profile: isCorrect1\n"
+                + "  Profile: isCorrect2\n"
+                + "  Profile  : isCorrect3\n"
+                + "  Profile  :  isCorrect4\n"
+                + "Profile: is not correct\n"
+                + "test Profile: notCorrect\n"
+                + "Profile notCorrect\n"
+                + "simple Profile test\n";
         textDocumentItem.setText(text);
         String uri = "testing";
         textDocumentItem.setUri(uri);
@@ -181,14 +270,21 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 1,FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE).size(), 4);
     }
 
     @Test
     public void testGetCreatedEntitiesExtension() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Extension: test \n" + "more text";
+        String text = "Extension: isCorrect1\n"
+                + "  Extension: isCorrect2\n"
+                + "  Extension  : isCorrect3\n"
+                + "  Extension  :  isCorrect4\n"
+                + "Extension: is not correct\n"
+                + "test Extension: notCorrect\n"
+                + "Extension notCorrect\n"
+                + "simple Extension test\n";
         textDocumentItem.setText(text);
         String uri = "testing";
         textDocumentItem.setUri(uri);
@@ -199,6 +295,6 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertEquals( 1,FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size());
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size(), 4);
     }
 }
