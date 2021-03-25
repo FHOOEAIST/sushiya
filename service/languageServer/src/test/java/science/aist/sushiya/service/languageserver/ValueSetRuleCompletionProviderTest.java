@@ -89,6 +89,56 @@ public class ValueSetRuleCompletionProviderTest {
     }
 
     @Test
+    public void testActivation4() {
+        //given
+        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        String text = "  ValueSet  : \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * include ";
+
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri("testing");
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,11);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testActivation5() {
+        //given
+        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        String text = "  ValueSet  : \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * exclude ";
+
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri("testing");
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,11);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
     public void testActivationNewRule() {
         //given
         ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
@@ -116,7 +166,7 @@ public class ValueSetRuleCompletionProviderTest {
     }
 
     @Test
-    public void testActivationInRuleOneWord() {
+    public void testActivationInRuleInclude() {
         //given
         ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
         String text = "Test \n"
@@ -143,7 +193,7 @@ public class ValueSetRuleCompletionProviderTest {
     }
 
     @Test
-    public void testActivationInRuleMoreWords() {
+    public void testActivationInRuleIncludeMoreWords() {
         //given
         ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
         String text = "Test \n"
@@ -152,6 +202,60 @@ public class ValueSetRuleCompletionProviderTest {
                 + " Title: \n"
                 + " Description: \n"
                 + "  * include codes from valueset ";
+
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri("testing");
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,31);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testActivationInRuleExclude() {
+        //given
+        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        String text = "Test \n"
+                + "\n"
+                + " ValueSet: \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * exclude ";
+
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri("testing");
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,11);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testActivationInRuleExcludeMoreWords() {
+        //given
+        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        String text = "Test \n"
+                + "\n"
+                + " ValueSet: \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * exclude codes from system ";
 
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);

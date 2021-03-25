@@ -6,9 +6,12 @@ import org.eclipse.lsp4j.CompletionTriggerKind;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.Entity;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>This is the provider for the some valueSet rules.</p>
@@ -19,6 +22,9 @@ public class ValueSetRuleCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValueSetRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
+    private boolean includeExcludeRule = false;
+    private boolean valueSetRule = false;
+    private boolean systemRule = false;
 
     @Override
     public List<CompletionItem> get() {
@@ -26,6 +32,15 @@ public class ValueSetRuleCompletionProvider implements ICompletionProvider {
         if (newRule){
             completionItems.add(new CompletionItem("include"));
             completionItems.add(new CompletionItem("exclude"));
+        }else if (includeExcludeRule){
+            completionItems.add(new CompletionItem("codes from valueset"));
+            completionItems.add(new CompletionItem("codes from system"));
+        }else if(valueSetRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        }else if(systemRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }
         return completionItems;
     }
@@ -70,6 +85,9 @@ public class ValueSetRuleCompletionProvider implements ICompletionProvider {
     }
 
     private boolean inRule(String line){
+        includeExcludeRule = line.matches("\\s*\\* (include|exclude)\\s*");
+        systemRule = line.matches("\\s*\\* (include|exclude) codes from system\\s*");
+        valueSetRule = line.matches("\\s*\\* (include|exclude) codes from valueset\\s*");
         return line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*");
     }
 }

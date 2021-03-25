@@ -9,5 +9,7 @@ package science.aist.sushiya.service.languageserver;
 public enum Entity{
     PROFILE,
     EXTENSION,
-    ALIAS
+    ALIAS,
+    CODESYSTEM,
+    VALUESET
 }

@@ -149,6 +149,40 @@ public class FSHFileHandlerTest{
     }
 
     @Test
+    public void testGetCreatedEntitiesCodeSystemEmpty() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText("This is a test.");
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM).size(),0);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesValueSetEmpty() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText("This is a test.");
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET).size(),0);
+    }
+
+    @Test
     public void testGetCreatedEntitiesAliasNoDuplicates() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
@@ -221,6 +255,56 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size(), 1);
+    }
+    
+    @Test
+    public void testGetCreatedEntitiesCodeSystemNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "CodeSystem: isCorrect\n"
+                + "  CodeSystem: isCorrect\n"
+                + "  CodeSystem  : isCorrect\n"
+                + "  CodeSystem  :  isCorrect\n"
+                + "CodeSystem: is not correct\n"
+                + "test CodeSystem: notCorrect\n"
+                + "CodeSystem notCorrect\n"
+                + "simple CodeSystem test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM).size(), 1);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesValueSetNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: isCorrect\n"
+                + "  ValueSet: isCorrect\n"
+                + "  ValueSet  : isCorrect\n"
+                + "  ValueSet  :  isCorrect\n"
+                + "ValueSet: is not correct\n"
+                + "test ValueSet: notCorrect\n"
+                + "ValueSet notCorrect\n"
+                + "simple ValueSet test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET).size(), 1);
     }
 
     @Test
@@ -296,5 +380,55 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION).size(), 4);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesCodeSystem() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "CodeSystem: isCorrect1\n"
+                + "  CodeSystem: isCorrect2\n"
+                + "  CodeSystem  : isCorrect3\n"
+                + "  CodeSystem  :  isCorrect4\n"
+                + "CodeSystem: is not correct\n"
+                + "test CodeSystem: notCorrect\n"
+                + "CodeSystem notCorrect\n"
+                + "simple CodeSystem test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM).size(), 4);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesValueSet() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: isCorrect1\n"
+                + "  ValueSet: isCorrect2\n"
+                + "  ValueSet  : isCorrect3\n"
+                + "  ValueSet  :  isCorrect4\n"
+                + "ValueSet: is not correct\n"
+                + "test ValueSet: notCorrect\n"
+                + "ValueSet notCorrect\n"
+                + "simple ValueSet test\n";
+        textDocumentItem.setText(text);
+        String uri = "testing";
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET).size(), 4);
     }
 }
