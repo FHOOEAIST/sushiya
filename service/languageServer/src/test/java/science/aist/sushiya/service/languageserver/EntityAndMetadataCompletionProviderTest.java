@@ -158,46 +158,4 @@ public class EntityAndMetadataCompletionProviderTest {
         //then
         Assert.assertFalse(provider.test(textDocumentItem,params));
     }
-
-    @Test
-    public void testNoActivationIncorrectTriggerKind(){
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: LNC = http://loinc.org\n"
-                + "\n"
-                + "Profi";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(2,5);
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testActivationNoSetUri(){
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Al";
-        textDocumentItem.setText(text);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        //the uri does not affect the completion
-        Assert.assertTrue(provider.test(textDocumentItem,params));
-    }
 }

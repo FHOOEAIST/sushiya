@@ -2,6 +2,7 @@ package science.aist.sushiya.service.languageserver;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import science.aist.sushiya.service.languageserver.completion.vsRuleCompletionProvider;
 
@@ -11,9 +12,14 @@ import science.aist.sushiya.service.languageserver.completion.vsRuleCompletionPr
  *
  * @author Sophie Bauernfeind
  */
-public class vsSdRuleCompletionProviderTest {
+public class vsRuleCompletionProviderTest {
     private static final vsRuleCompletionProvider provider = new vsRuleCompletionProvider();
     private static final String uri = "testing";
+
+    @BeforeMethod
+    public void setUp() {
+        FSHFileHandler.getInstance().clean();
+    }
 
     @Test
     public void testActivation1() {
@@ -414,5 +420,144 @@ public class vsSdRuleCompletionProviderTest {
 
         //then
         Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testAmountCompletionItemsNewRule() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,3);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsStartedRuleInclude() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * include ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,12);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsStartedRuleExclude() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * exclude ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,12);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsValueSet() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: Test2"
+                + "\n"
+                + "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * include codes from valueset ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,32);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsCodeSystem() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "CodeSystem: Test2\n"
+                + "\n"
+                + "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * include codes from codesystem ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,34);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),1);
     }
 }

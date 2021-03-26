@@ -2,6 +2,7 @@ package science.aist.sushiya.service.languageserver;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import science.aist.sushiya.service.languageserver.completion.AliasCompletionProvider;
 
@@ -14,6 +15,11 @@ import science.aist.sushiya.service.languageserver.completion.AliasCompletionPro
 public class AliasCompletionProviderTest {
     private static final AliasCompletionProvider provider = new AliasCompletionProvider();
     private static final String uri = "testing";
+
+    @BeforeMethod
+    public void setUp() {
+        FSHFileHandler.getInstance().clean();
+    }
 
     @Test
     public void testActivation1(){
@@ -248,5 +254,83 @@ public class AliasCompletionProviderTest {
         //then
         //the uri does not affect the completion
         Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testAmountCompletionItems(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: test = testing \n"
+                    + "Alias: test2 = testing\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),4);
+    }
+
+    @Test
+    public void testAmountCompletionItems2(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile: Testing \n"
+                    + "Alias: test = testing\n" ;
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),3);
+    }
+
+    @Test
+    public void testAmountCompletionItems3(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = " Alias: test = testing\n"
+                    + "Alias  : test2 = testing\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),4);
     }
 }

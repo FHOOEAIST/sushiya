@@ -198,7 +198,6 @@ public class FSHFileHandlerTest{
         String text = "Alias: is = correct\n"
                 + "  Alias:  is = correct\n"
                 + "  Alias  : is = correct\n"
-                + "  Alias  :  is  =  correct\n"
                 + " testing Alias: not = correct\n"
                 + " Alias: not correct\n"
                 + "Alias not = correct"
