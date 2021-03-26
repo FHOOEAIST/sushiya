@@ -90,7 +90,6 @@ public class FSHFileHandler {
             if(entity.equals(Entity.ALIAS)){
                 if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*=\\s*\\S+\\s*")){
                     String createdEntityName = line.replaceFirst("\\s*" + entityName + "\\s*:","").trim();
-                    createdEntityName = createdEntityName.replaceAll("\\s*", " ");
                     result.add(createdEntityName);
                 }
             }else {
