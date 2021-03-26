@@ -46,7 +46,7 @@ public class EntityAndMetadataCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(2,text.length());
+        Position position = new Position(2,5);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
@@ -170,7 +170,7 @@ public class EntityAndMetadataCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(2,text.length());
+        Position position = new Position(2,5);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);

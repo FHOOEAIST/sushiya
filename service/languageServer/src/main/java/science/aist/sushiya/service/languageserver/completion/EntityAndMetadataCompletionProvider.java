@@ -186,12 +186,15 @@ public class EntityAndMetadataCompletionProvider implements ICompletionProvider 
     }
 
     private boolean checkLine(TextDocumentItem textDocumentItem, CompletionParams completionParams){
-        //TODO: expand the condition
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.trim().split("\\s").length == 1
+            String firstWord = line.trim().split("\\s")[0];
+            boolean substringOfKeyword = false;
+            for (CompletionItem item: completionItems) {
+                substringOfKeyword = substringOfKeyword || item.getLabel().contains(firstWord);
+            }
+            return (substringOfKeyword ||  line.matches("^\\s*\\n") )
                     && line.length() >= completionParams.getPosition().getCharacter();
-
         }catch (Exception exception){
             LOGGER.error(exception.getMessage());
             return false;
