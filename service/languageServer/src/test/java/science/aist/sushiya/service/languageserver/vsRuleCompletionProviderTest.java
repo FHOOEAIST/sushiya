@@ -541,7 +541,7 @@ public class vsRuleCompletionProviderTest {
                 + "ValueSet: Test \n"
                 + " Title: \n"
                 + " Description: \n"
-                + "  * include codes from codesystem ";
+                + "  * include codes from system ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 

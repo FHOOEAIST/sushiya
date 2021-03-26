@@ -464,7 +464,7 @@ public class sdRuleCompletionProviderTest {
         String text = "Profile: Test \n"
                 + " Title: \n"
                 + " Description: \n"
-                + "  * include codes from ";
+                + "  * path from ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 

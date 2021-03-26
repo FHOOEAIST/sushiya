@@ -123,7 +123,7 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
         newRule = line.matches("\\s*\\*\\s+");
         rulePathDefined = line.matches("\\s*\\*\\s+\\S+\\s+");
         cardRule = line.matches("\\s*\\*\\s+\\S+\\s+([0-9]+)?\\.\\.([0-9]+|\\*)?");
-        valueSetRule = line.matches("\\s*\\*\\s+\\S+\\s+(units)?\\s+\\S+\\s*");
+        valueSetRule = line.matches("\\s*\\*\\s+\\S+\\s+(units\\s+)?from\\s+(\\s|\\S)*");
         fixedValueRule = line.matches("\\s*\\*\\s+\\S+\\s+=\\s+\\S+\\s*");
         insertRule = line.matches("\\s*\\*\\s+insert\\s+");
         //simple version for flag rule & containsRule
