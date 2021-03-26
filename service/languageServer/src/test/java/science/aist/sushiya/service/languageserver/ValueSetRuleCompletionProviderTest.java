@@ -12,19 +12,19 @@ import science.aist.sushiya.service.languageserver.completion.ValueSetRuleComple
  * @author Sophie Bauernfeind
  */
 public class ValueSetRuleCompletionProviderTest {
+    private static final ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+    private static final String uri = "testing";
 
     @Test
     public void testActivation1() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(3,3);
@@ -41,15 +41,13 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivation2() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(3,3);
@@ -66,15 +64,13 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivation3() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet  : \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(3,3);
@@ -91,15 +87,13 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivation4() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet  : \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * include ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(3,11);
@@ -116,15 +110,13 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivation5() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet  : \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * exclude ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(3,11);
@@ -141,17 +133,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivationNewRule() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,3);
@@ -168,17 +158,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivationInRuleInclude() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * include ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,11);
@@ -195,17 +183,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivationInRuleIncludeMoreWords() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * include codes from valueset ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,31);
@@ -222,17 +208,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivationInRuleExclude() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * exclude ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,11);
@@ -249,17 +233,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testActivationInRuleExcludeMoreWords() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * exclude codes from system ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,31);
@@ -276,17 +258,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationNoValueSet() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " Profile: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,3);
@@ -303,17 +283,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationIncorrectText() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " testing ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
@@ -330,12 +308,10 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationEmptyText() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
-        String text = "";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
@@ -352,17 +328,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
@@ -377,17 +351,15 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,3);
@@ -401,22 +373,42 @@ public class ValueSetRuleCompletionProviderTest {
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Test \n"
                 + "\n"
                 + " ValueSet: \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(5,3);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationNoSetUri() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * ";
+        textDocumentItem.setText(text);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,3);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 

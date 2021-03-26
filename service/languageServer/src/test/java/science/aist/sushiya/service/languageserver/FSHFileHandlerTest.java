@@ -13,6 +13,8 @@ import org.testng.annotations.Test;
  */
 
 public class FSHFileHandlerTest{
+    private static final String uri = "testing";
+
     @BeforeMethod
     public void setUp() {
         FSHFileHandler.getInstance().clean();
@@ -23,7 +25,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -40,7 +41,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -62,7 +62,6 @@ public class FSHFileHandlerTest{
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String startText = "This is a test.";
         textDocumentItem.setText(startText);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -84,7 +83,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -102,7 +100,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -119,7 +116,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -136,7 +132,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -153,7 +148,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -170,7 +164,6 @@ public class FSHFileHandlerTest{
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         textDocumentItem.setText("This is a test.");
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -195,7 +188,6 @@ public class FSHFileHandlerTest{
                 + "Alias not = correct"
                 + "simple Alias test";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -220,7 +212,6 @@ public class FSHFileHandlerTest{
                 + "Profile notCorrect\n"
                 + "simple Profile test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -245,7 +236,6 @@ public class FSHFileHandlerTest{
                 + "Extension notCorrect\n"
                 + "simple Extension test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -270,7 +260,6 @@ public class FSHFileHandlerTest{
                 + "CodeSystem notCorrect\n"
                 + "simple CodeSystem test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -295,7 +284,6 @@ public class FSHFileHandlerTest{
                 + "ValueSet notCorrect\n"
                 + "simple ValueSet test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -320,7 +308,6 @@ public class FSHFileHandlerTest{
                 + "Alias not = correct"
                 + "simple Alias test";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -345,7 +332,6 @@ public class FSHFileHandlerTest{
                 + "Profile notCorrect\n"
                 + "simple Profile test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -370,7 +356,6 @@ public class FSHFileHandlerTest{
                 + "Extension notCorrect\n"
                 + "simple Extension test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -395,7 +380,6 @@ public class FSHFileHandlerTest{
                 + "CodeSystem notCorrect\n"
                 + "simple CodeSystem test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -420,7 +404,6 @@ public class FSHFileHandlerTest{
                 + "ValueSet notCorrect\n"
                 + "simple ValueSet test\n";
         textDocumentItem.setText(text);
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         //when
@@ -430,5 +413,20 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET).size(), 4);
+    }
+
+    @Test
+    public void testAddFileNoUriSet(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText("This is a test.");
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertNull(FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri)));
     }
 }

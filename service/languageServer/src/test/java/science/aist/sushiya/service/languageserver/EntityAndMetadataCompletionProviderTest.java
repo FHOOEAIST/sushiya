@@ -3,23 +3,23 @@ package science.aist.sushiya.service.languageserver;
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.AliasCompletionProvider;
+import science.aist.sushiya.service.languageserver.completion.EntityAndMetadataCompletionProvider;
 
 /**
- * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
- * <p>Test class for {@link AliasCompletionProvider}</p>
+ * <p>Created by Sophie Bauernfeind on 26.03.2021</p>
+ * <p>Test class for {@link EntityAndMetadataCompletionProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class AliasCompletionProviderTest {
-    private static final AliasCompletionProvider provider = new AliasCompletionProvider();
+public class EntityAndMetadataCompletionProviderTest {
+    private static final EntityAndMetadataCompletionProvider provider = new EntityAndMetadataCompletionProvider();
     private static final String uri = "testing";
 
     @Test
     public void testActivation1(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
+        String text = "Al";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -27,7 +27,7 @@ public class AliasCompletionProviderTest {
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
         //when
 
@@ -39,56 +39,17 @@ public class AliasCompletionProviderTest {
     public void testActivation2(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  Alias: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testActivation3(){
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  Alias  : ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testActivation4(){
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Alias: LNC = http://loinc.org\n"
-                + "  Alias  : ";
+                + "\n"
+                + "Profi";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(1,11);
+        Position position = new Position(2,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
         //when
 
@@ -97,47 +58,7 @@ public class AliasCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationWrongPosition() {
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,0);
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testNoActivationOutOfBound() {
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(1,0);
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testNoActivationEmptyText() {
+    public void testActivationEmptyText(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "";
@@ -148,7 +69,29 @@ public class AliasCompletionProviderTest {
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertTrue(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationOutOfBound(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profi";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(2,20);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
         //when
 
@@ -157,18 +100,18 @@ public class AliasCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationIncorrectText() {
+    public void testNoActivationNoSetPosition(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "test Alias: ";
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profi";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
         //when
 
@@ -177,16 +120,38 @@ public class AliasCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetPosition() {
+    public void testNoActivationNoSetContext(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profi";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
+        Position position = new Position(2,text.length());
+        params.setPosition(position);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationNoSetTriggerKind(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profi";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(2,text.length());
+        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 
@@ -195,34 +160,20 @@ public class AliasCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetContext() {
+    public void testNoActivationIncorrectTriggerKind(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profi";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
-        //when
-
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testNoActivationNoSetTriggerKind() {
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
+        Position position = new Position(2,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 
@@ -234,18 +185,18 @@ public class AliasCompletionProviderTest {
     public void testNoActivationNoSetUri(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: ";
+        String text = "Al";
         textDocumentItem.setText(text);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
         //when
 
         //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        Assert.assertFalse(provider.test(textDocumentItem,params));
     }
 }

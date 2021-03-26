@@ -12,15 +12,16 @@ import science.aist.sushiya.service.languageserver.completion.SourceCompletionPr
  * @author Sophie Bauernfeind
  */
 public class SourceCompletionProviderTest {
+    private static final SourceCompletionProvider provider = new SourceCompletionProvider();
+    private static final String uri = "testing";
+
     @Test
     public void testActivation1(){
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -37,12 +38,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testActivation2(){
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "  Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "  Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -59,12 +58,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testActivation3(){
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "  Source  : ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "  Source  : ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -81,12 +78,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationWrongPosition() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
@@ -103,12 +98,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationOutOfBound() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(1,0);
@@ -125,12 +118,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationEmptyText() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -147,12 +138,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationIncorrectText() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "test Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "test Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -169,12 +158,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
@@ -189,12 +176,10 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
@@ -208,17 +193,34 @@ public class SourceCompletionProviderTest {
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        SourceCompletionProvider provider = new SourceCompletionProvider();
-        String text = "Source: ";
-
         TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
         textDocumentItem.setText(text);
-        textDocumentItem.setUri("testing");
+        textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationNoSetUri(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
+        textDocumentItem.setText(text);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 

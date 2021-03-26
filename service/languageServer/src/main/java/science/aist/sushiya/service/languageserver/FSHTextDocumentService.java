@@ -18,8 +18,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
-    private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>> hoverProcessor = new HoverProcessor();
-    private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> completionProcessor = new CompletionProcessor();
+    private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>>
+            hoverProcessor = new HoverProcessor();
+    private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
+            completionProcessor = new CompletionProcessor();
 
     public void didOpen(DidOpenTextDocumentParams params) {
         FSHFileHandler.getInstance().addFile(params);

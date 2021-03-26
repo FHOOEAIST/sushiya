@@ -39,7 +39,9 @@ public class FSHFileHandler {
     public void addFile(DidOpenTextDocumentParams params){
         TextDocumentItem textDocument = params.getTextDocument();
         addAllEntities(textDocument);
-        openedDocuments.put(textDocument.getUri(),textDocument);
+        if(textDocument.getUri() != null){
+            openedDocuments.put(textDocument.getUri(),textDocument);
+        }
     }
 
     public void removeFile(DidCloseTextDocumentParams params){
@@ -50,7 +52,12 @@ public class FSHFileHandler {
     }
 
     public TextDocumentItem getFile(TextDocumentIdentifier identifier){
-        return openedDocuments.get(identifier.getUri());
+        if(openedDocuments.containsKey(identifier)){
+            return openedDocuments.get(identifier.getUri());
+        }else{
+            LOGGER.info("No file with uri: {}", identifier.getUri());
+            return null;
+        }
     }
 
     private List<String> getEntities(Entity entity,TextDocumentItem textDocument){
