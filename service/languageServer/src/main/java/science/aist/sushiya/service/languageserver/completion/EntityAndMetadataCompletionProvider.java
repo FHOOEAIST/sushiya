@@ -175,12 +175,25 @@ public class EntityAndMetadataCompletionProvider implements ICompletionProvider 
 
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        if(textDocumentItem != null
+                && completionParams != null
+                && completionParams.getContext() != null
+                && completionParams.getContext().getTriggerKind() != null) {
+            return checkLine(textDocumentItem, completionParams)
+                    && completionParams.getContext().getTriggerKind() == CompletionTriggerKind.Invoked;
+        }
+        return false;
+    }
+
+    private boolean checkLine(TextDocumentItem textDocumentItem, CompletionParams completionParams){
+        //TODO: expand the condition
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.trim().split("\\s").length == 1 && completionParams.getContext().getTriggerKind() == CompletionTriggerKind.Invoked;
+            return line.trim().split("\\s").length == 1
+                    && line.length() >= completionParams.getPosition().getCharacter();
 
-        }catch (Error error){
-            LOGGER.error(error.getMessage());
+        }catch (Exception exception){
+            LOGGER.error(exception.getMessage());
             return false;
         }
     }

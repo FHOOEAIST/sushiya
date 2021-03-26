@@ -28,11 +28,15 @@ public class FSHFileHandler {
 
     public void update(DidChangeTextDocumentParams params){
         List<TextDocumentContentChangeEvent> contentChanges = params.getContentChanges();
-        TextDocumentItem textDocument = openedDocuments.get(params.getTextDocument().getUri());
-        if (!contentChanges.isEmpty()) {
-            removeAllEntities(textDocument);
-            textDocument.setText(contentChanges.get(0).getText());
-            addAllEntities(textDocument);
+        if(openedDocuments.containsKey(params.getTextDocument().getUri())){
+            TextDocumentItem textDocument = openedDocuments.get(params.getTextDocument().getUri());
+            if (!contentChanges.isEmpty()) {
+                removeAllEntities(textDocument);
+                textDocument.setText(contentChanges.get(0).getText());
+                addAllEntities(textDocument);
+            }
+        }else{
+            LOGGER.error("No file with uri: {}", params.getTextDocument().getUri());
         }
     }
 
@@ -46,16 +50,20 @@ public class FSHFileHandler {
 
     public void removeFile(DidCloseTextDocumentParams params){
         String uri = params.getTextDocument().getUri();
-        TextDocumentItem textDocument = openedDocuments.get(uri);
-        removeAllEntities(textDocument);
-        openedDocuments.remove(uri);
+        if(openedDocuments.containsKey(uri)){
+            TextDocumentItem textDocument = openedDocuments.get(uri);
+            removeAllEntities(textDocument);
+            openedDocuments.remove(uri);
+        }else{
+            LOGGER.error("No file with uri: {}", params.getTextDocument().getUri());
+        }
     }
 
     public TextDocumentItem getFile(TextDocumentIdentifier identifier){
-        if(openedDocuments.containsKey(identifier)){
+        if(openedDocuments.containsKey(identifier.getUri())){
             return openedDocuments.get(identifier.getUri());
         }else{
-            LOGGER.info("No file with uri: {}", identifier.getUri());
+            LOGGER.error("No file with uri: {}", identifier.getUri());
             return null;
         }
     }
