@@ -231,7 +231,7 @@ public class AliasCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetUri(){
+    public void testActivationNoSetUri(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Alias: ";
@@ -246,6 +246,7 @@ public class AliasCompletionProviderTest {
         //when
 
         //then
+        //the uri does not affect the completion
         Assert.assertTrue(provider.test(textDocumentItem,params));
     }
 }

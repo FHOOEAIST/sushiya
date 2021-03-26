@@ -395,7 +395,7 @@ public class ValueSetRuleCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetUri() {
+    public void testActivationNoSetUri() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "ValueSet: \n"
@@ -413,6 +413,6 @@ public class ValueSetRuleCompletionProviderTest {
         //when
 
         //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        Assert.assertTrue(provider.test(textDocumentItem,params));
     }
 }

@@ -182,7 +182,7 @@ public class EntityAndMetadataCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetUri(){
+    public void testActivationNoSetUri(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Al";
@@ -197,6 +197,7 @@ public class EntityAndMetadataCompletionProviderTest {
         //when
 
         //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        //the uri does not affect the completion
+        Assert.assertTrue(provider.test(textDocumentItem,params));
     }
 }

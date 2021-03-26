@@ -210,7 +210,7 @@ public class SourceCompletionProviderTest {
     }
 
     @Test
-    public void testNoActivationNoSetUri(){
+    public void testActivationNoSetUri(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Source: ";
@@ -225,6 +225,7 @@ public class SourceCompletionProviderTest {
         //when
 
         //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        //the uri does not affect the completion
+        Assert.assertTrue(provider.test(textDocumentItem,params));
     }
 }
