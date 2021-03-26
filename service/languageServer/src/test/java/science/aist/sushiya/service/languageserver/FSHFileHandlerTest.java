@@ -176,6 +176,22 @@ public class FSHFileHandlerTest{
     }
 
     @Test
+    public void testGetCreatedEntitiesRuleSetEmpty() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText("This is a test.");
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET).size(),0);
+    }
+
+    @Test
     public void testGetCreatedEntitiesAliasNoDuplicates() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
@@ -296,6 +312,30 @@ public class FSHFileHandlerTest{
     }
 
     @Test
+    public void testGetCreatedEntitiesRuleSetNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "RuleSet: isCorrect\n"
+                + "  RuleSet: isCorrect\n"
+                + "  RuleSet  : isCorrect\n"
+                + "  RuleSet  :  isCorrect\n"
+                + "RuleSet: is not correct\n"
+                + "test RuleSet: notCorrect\n"
+                + "RuleSet notCorrect\n"
+                + "simple RuleSet test\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET).size(), 1);
+    }
+    
+    @Test
     public void testGetCreatedEntitiesAlias() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
@@ -413,6 +453,30 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET).size(), 4);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesRuleSet() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "RuleSet: isCorrect1\n"
+                + "  RuleSet: isCorrect2\n"
+                + "  RuleSet  : isCorrect3\n"
+                + "  RuleSet  :  isCorrect4\n"
+                + "RuleSet: is not correct\n"
+                + "test RuleSet: notCorrect\n"
+                + "RuleSet notCorrect\n"
+                + "simple RuleSet test\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET).size(), 4);
     }
 
     @Test

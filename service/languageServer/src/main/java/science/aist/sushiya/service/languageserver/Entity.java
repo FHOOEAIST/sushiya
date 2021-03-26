@@ -11,5 +11,6 @@ public enum Entity{
     EXTENSION,
     ALIAS,
     CODESYSTEM,
-    VALUESET
+    VALUESET,
+    RULESET
 }

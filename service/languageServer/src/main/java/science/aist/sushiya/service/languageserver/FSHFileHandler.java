@@ -18,6 +18,9 @@ public class FSHFileHandler {
     private List<String> createdAlias = new ArrayList<>();
     private List<String> createdCodeSystems = new ArrayList<>();
     private List<String> createdValueSets = new ArrayList<>();
+    private List<String> createdRuleSets = new ArrayList<>();
+
+    //TODO:check why every second character of saved aliases are whitespace
 
     //private constructor to make it as a singleton
     private FSHFileHandler(){}
@@ -75,6 +78,8 @@ public class FSHFileHandler {
             entityName = "CodeSystem";
         }else if(entity.equals(Entity.VALUESET)){
             entityName = "ValueSet";
+        }else if(entity.equals(Entity.RULESET)){
+            entityName = "RuleSet";
         }
         else{
             entityName = entity.name().substring(0,1) +
@@ -100,18 +105,27 @@ public class FSHFileHandler {
 
     private void addEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case RULESET:
+                for (String entityName: entityNames) {
+                    if(! createdRuleSets.contains(entityName)){
+                        createdRuleSets.add(entityName);
+                    }
+                }
+                break;
             case CODESYSTEM:
                 for (String entityName: entityNames) {
                     if(! createdCodeSystems.contains(entityName)){
                         createdCodeSystems.add(entityName);
                     }
                 }
+                break;
             case VALUESET:
                 for (String entityName: entityNames) {
                     if(! createdValueSets.contains(entityName)){
                         createdValueSets.add(entityName);
                     }
                 }
+                break;
             case ALIAS:
                 for (String entityName: entityNames) {
                     if(! createdAlias.contains(entityName)){
@@ -138,6 +152,9 @@ public class FSHFileHandler {
 
     private void removeEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case RULESET:
+                createdRuleSets.removeAll(entityNames);
+                break;
             case CODESYSTEM:
                 createdCodeSystems.removeAll(entityNames);
                 break;
@@ -158,6 +175,8 @@ public class FSHFileHandler {
 
     public List<String> getCreatedEntities(Entity entity){
         switch(entity){
+            case RULESET:
+                return createdRuleSets;
             case CODESYSTEM:
                 return createdCodeSystems;
             case VALUESET:
@@ -178,6 +197,7 @@ public class FSHFileHandler {
         addEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
         addEntities(Entity.CODESYSTEM, getEntities(Entity.CODESYSTEM,textDocument));
         addEntities(Entity.VALUESET, getEntities(Entity.VALUESET,textDocument));
+        addEntities(Entity.RULESET, getEntities(Entity.RULESET,textDocument));
     }
 
     private void removeAllEntities(TextDocumentItem textDocument){
@@ -186,6 +206,7 @@ public class FSHFileHandler {
         removeEntities(Entity.ALIAS, getEntities(Entity.ALIAS,textDocument));
         removeEntities(Entity.CODESYSTEM, getEntities(Entity.CODESYSTEM,textDocument));
         removeEntities(Entity.VALUESET, getEntities(Entity.VALUESET,textDocument));
+        removeEntities(Entity.RULESET, getEntities(Entity.RULESET,textDocument));
     }
 
     protected void clean(){
@@ -195,5 +216,6 @@ public class FSHFileHandler {
         createdAlias = new ArrayList<>();
         createdCodeSystems = new ArrayList<>();
         createdValueSets = new ArrayList<>();
+        createdRuleSets = new ArrayList<>();
     }
 }

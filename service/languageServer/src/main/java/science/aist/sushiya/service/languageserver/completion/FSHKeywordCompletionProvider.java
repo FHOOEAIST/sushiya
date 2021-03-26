@@ -21,7 +21,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("profile"));
         completionItems.add(new CompletionItem("instance"));
         completionItems.add(new CompletionItem("invariant"));
-        completionItems.add(new CompletionItem("ruleSet"));
+        completionItems.add(new CompletionItem("ruleset"));
         completionItems.add(new CompletionItem("mapping"));
         completionItems.add(new CompletionItem("id"));
         completionItems.add(new CompletionItem("title"));
@@ -34,7 +34,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("target"));
         completionItems.add(new CompletionItem("from"));
         completionItems.add(new CompletionItem("example"));
-        completionItems.add(new CompletionItem("prefered"));
+        completionItems.add(new CompletionItem("preferred"));
         completionItems.add(new CompletionItem("extensible"));
         completionItems.add(new CompletionItem("required"));
         completionItems.add(new CompletionItem("contains"));
@@ -49,7 +49,7 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("exclude"));
         completionItems.add(new CompletionItem("codes"));
         completionItems.add(new CompletionItem("where"));
-        completionItems.add(new CompletionItem("valueSet"));
+        completionItems.add(new CompletionItem("valueset"));
         completionItems.add(new CompletionItem("system"));
         completionItems.add(new CompletionItem("units"));
         completionItems.add(new CompletionItem("exactly"));

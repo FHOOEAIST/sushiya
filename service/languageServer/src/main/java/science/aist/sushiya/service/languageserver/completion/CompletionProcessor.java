@@ -28,7 +28,8 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
         completionProviders.add(new ParentCompletionProvider());
         completionProviders.add(new InstanceOfCompletionProvider());
         completionProviders.add(new EntityAndMetadataCompletionProvider());
-        completionProviders.add(new ValueSetRuleCompletionProvider());
+        completionProviders.add(new vsRuleCompletionProvider());
+        completionProviders.add(new sdRuleCompletionProvider());
     }
 
     @Override

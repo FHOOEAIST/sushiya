@@ -18,13 +18,15 @@ import java.util.stream.Collectors;
  *
  * @author SophieBauernfeind
  */
-public class ValueSetRuleCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValueSetRuleCompletionProvider.class);
+public class vsRuleCompletionProvider implements ICompletionProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(vsRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
     private boolean includeExcludeRule = false;
     private boolean valueSetRule = false;
     private boolean systemRule = false;
+
+    //TODO: improvement for 'coding' rule possible
 
     @Override
     public List<CompletionItem> get() {
@@ -68,7 +70,7 @@ public class ValueSetRuleCompletionProvider implements ICompletionProvider {
                     if(lines[i].matches("\\s*")|| i == 0){
                         //check the first line or the line after the empty line for the keyword
                         int index = i == 0 ? 0 : i +1;
-                        return lines[index].trim().matches("\\s*ValueSet\\s*:(\\s*|\\s+\\S+)");
+                        return lines[index].trim().matches("\\s*ValueSet\\s*:(\\s*|\\s+\\S+)\\s*");
                     }
                 }
             }

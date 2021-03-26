@@ -3,23 +3,23 @@ package science.aist.sushiya.service.languageserver;
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.ValueSetRuleCompletionProvider;
+import science.aist.sushiya.service.languageserver.completion.vsRuleCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
- * <p>Test class for {@link ValueSetRuleCompletionProvider}</p>
+ * <p>Test class for {@link vsRuleCompletionProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class ValueSetRuleCompletionProviderTest {
-    private static final ValueSetRuleCompletionProvider provider = new ValueSetRuleCompletionProvider();
+public class vsSdRuleCompletionProviderTest {
+    private static final vsRuleCompletionProvider provider = new vsRuleCompletionProvider();
     private static final String uri = "testing";
 
     @Test
     public void testActivation1() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "ValueSet: \n"
+        String text = "ValueSet: Test \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
@@ -42,7 +42,7 @@ public class ValueSetRuleCompletionProviderTest {
     public void testActivation2() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  ValueSet: \n"
+        String text = "  ValueSet: Test\n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
