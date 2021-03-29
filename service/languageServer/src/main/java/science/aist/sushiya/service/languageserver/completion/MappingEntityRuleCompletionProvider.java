@@ -14,35 +14,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>This is the provider for the some valueSet rules.</p>
+ * <p>This is the provider for rules for mapping.</p>
  *
  * @author SophieBauernfeind
  */
-public class vsRuleCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(vsRuleCompletionProvider.class);
+public class MappingEntityRuleCompletionProvider implements ICompletionProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MappingEntityRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
-    private boolean includeExcludeRule = false;
-    private boolean valueSetRule = false;
-    private boolean systemRule = false;
-
-    //TODO: improvement for 'coding' rule possible
+    private boolean rulePathDefined = false;
+    private boolean insertRule = false;
 
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
-        if (newRule){
-            completionItems.add(new CompletionItem("include"));
-            completionItems.add(new CompletionItem("exclude"));
-        }else if (includeExcludeRule){
-            completionItems.add(new CompletionItem("codes from valueset"));
-            completionItems.add(new CompletionItem("codes from system"));
-        }else if(valueSetRule){
-            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
+        if(newRule){
+            completionItems.add(new CompletionItem("->"));
+            completionItems.add(new CompletionItem("insert"));
+        }else if(insertRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
-        }else if(systemRule){
-            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        }else if(rulePathDefined){
+            completionItems.add(new CompletionItem("insert"));
         }
         return completionItems;
     }
@@ -53,24 +46,26 @@ public class vsRuleCompletionProvider implements ICompletionProvider {
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
-            return ValueSetRules(textDocumentItem, completionParams)
+            return checkRuleConditions(textDocumentItem, completionParams)
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
         }
         return false;
     }
 
-    private boolean ValueSetRules(TextDocumentItem textDocumentItem, CompletionParams completionParams){
+    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams){
         try{
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
-            if( (newRule(line) || inRule(line))
-                    && textDocumentItem.getText().contains("ValueSet")){
+            if(isRule(line) &&
+                    textDocumentItem.getText().contains("Mapping")){
                 String[]lines = textDocumentItem.getText().split("\\n");
+
                 //check from current line above to the next empty line or the start of the text
                 for(int i = completionParams.getPosition().getLine(); i >= 0 ; i --){
                     if(lines[i].matches("\\s*")|| i == 0){
+
                         //check the first line or the line after the empty line for the keyword
                         int index = i == 0 ? 0 : i +1;
-                        return lines[index].trim().matches("\\s*ValueSet\\s*:(\\s*|\\s+\\S+)\\s*");
+                        return lines[index].trim().matches("\\s*Mapping\\s*:(\\s*|\\s+\\S+)\\s*");
                     }
                 }
             }
@@ -81,15 +76,10 @@ public class vsRuleCompletionProvider implements ICompletionProvider {
         return false;
     }
 
-    private boolean newRule(String line){
+    private boolean isRule(String line){
         newRule = line.matches("\\s*\\*\\s+");
-        return line.matches("\\s*\\*\\s+");
-    }
-
-    private boolean inRule(String line){
-        includeExcludeRule = line.matches("\\s*\\* (include|exclude)\\s*");
-        systemRule = line.matches("\\s*\\* (include|exclude) codes from system\\s*");
-        valueSetRule = line.matches("\\s*\\* (include|exclude) codes from valueset\\s*");
-        return line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*");
+        rulePathDefined = line.matches("\\s*\\*\\s+\\S+\\s+");
+        insertRule = line.matches("\\s*\\*\\s+insert\\s+");
+        return line.matches("\\s*\\*\\s+(\\s|\\S)*");
     }
 }

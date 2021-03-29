@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
  *
  * @author SophieBauernfeind
  */
-public class sdRuleCompletionProvider implements ICompletionProvider{
-    private static final Logger LOGGER = LoggerFactory.getLogger(sdRuleCompletionProvider.class);
+public class SdRuleCompletionProvider implements ICompletionProvider{
+    private static final Logger LOGGER = LoggerFactory.getLogger(SdRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
     private boolean rulePathDefined = false;

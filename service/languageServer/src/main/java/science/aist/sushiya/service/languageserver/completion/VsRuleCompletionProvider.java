@@ -14,25 +14,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>This is the provider for rules for code systems.</p>
+ * <p>This is the provider for the some valueSet rules.</p>
  *
  * @author SophieBauernfeind
  */
-public class csRuleCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(sdRuleCompletionProvider.class);
+public class VsRuleCompletionProvider implements ICompletionProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VsRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
-    private boolean insertRule = false;
+    private boolean includeExcludeRule = false;
+    private boolean valueSetRule = false;
+    private boolean systemRule = false;
+
+    //TODO: improvement for 'coding' rule possible
 
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
-        if(newRule){
-           completionItems.add(new CompletionItem("#"));
-           completionItems.add(new CompletionItem("^"));
-           completionItems.add(new CompletionItem("insert"));
-        }else if(insertRule){
-            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
+        if (newRule){
+            completionItems.add(new CompletionItem("include"));
+            completionItems.add(new CompletionItem("exclude"));
+        }else if (includeExcludeRule){
+            completionItems.add(new CompletionItem("codes from valueset"));
+            completionItems.add(new CompletionItem("codes from system"));
+        }else if(valueSetRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        }else if(systemRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }
         return completionItems;
@@ -44,26 +53,24 @@ public class csRuleCompletionProvider implements ICompletionProvider {
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
-            return checkRuleConditions(textDocumentItem, completionParams)
+            return ValueSetRules(textDocumentItem, completionParams)
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
         }
         return false;
     }
 
-    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams){
+    private boolean ValueSetRules(TextDocumentItem textDocumentItem, CompletionParams completionParams){
         try{
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
-            if(isRule(line) &&
-                    textDocumentItem.getText().contains("CodeSystem")){
+            if( (newRule(line) || inRule(line))
+                    && textDocumentItem.getText().contains("ValueSet")){
                 String[]lines = textDocumentItem.getText().split("\\n");
-
                 //check from current line above to the next empty line or the start of the text
                 for(int i = completionParams.getPosition().getLine(); i >= 0 ; i --){
                     if(lines[i].matches("\\s*")|| i == 0){
-
                         //check the first line or the line after the empty line for the keyword
                         int index = i == 0 ? 0 : i +1;
-                        return lines[index].trim().matches("\\s*CodeSystem\\s*:(\\s*|\\s+\\S+)\\s*");
+                        return lines[index].trim().matches("\\s*ValueSet\\s*:(\\s*|\\s+\\S+)\\s*");
                     }
                 }
             }
@@ -74,9 +81,15 @@ public class csRuleCompletionProvider implements ICompletionProvider {
         return false;
     }
 
-    private boolean isRule(String line){
+    private boolean newRule(String line){
         newRule = line.matches("\\s*\\*\\s+");
-        insertRule = line.matches("\\s*\\*\\s+insert\\s+");
-        return line.matches("\\s*\\*\\s+(\\s|\\S)*");
+        return line.matches("\\s*\\*\\s+");
+    }
+
+    private boolean inRule(String line){
+        includeExcludeRule = line.matches("\\s*\\* (include|exclude)\\s*");
+        systemRule = line.matches("\\s*\\* (include|exclude) codes from system\\s*");
+        valueSetRule = line.matches("\\s*\\* (include|exclude) codes from valueset\\s*");
+        return line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*");
     }
 }

@@ -4,16 +4,16 @@ import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.csRuleCompletionProvider;
+import science.aist.sushiya.service.languageserver.completion.MappingEntityRuleCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
- * <p>Test class for {@link csRuleCompletionProvider}</p>
+ * <p>Test class for {@link MappingEntityRuleCompletionProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class csRuleCompletionProviderTest {
-    private static final csRuleCompletionProvider provider = new csRuleCompletionProvider();
+public class MappingEntityRuleCompletionProviderTest {
+    private static final MappingEntityRuleCompletionProvider provider = new MappingEntityRuleCompletionProvider();
     private static final String uri = "testing";
 
     @BeforeMethod
@@ -22,12 +22,12 @@ public class csRuleCompletionProviderTest {
     }
 
     @Test
-    public void testActivationProfileNewRule() {
+    public void testActivationNewRule() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: Test \n"
+        String text = "Mapping: Test \n"
                 + " Title: \n"
-                + " Id: \n"
+                + " Description: \n"
                 + "  * ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
@@ -45,18 +45,18 @@ public class csRuleCompletionProviderTest {
     }
 
     @Test
-    public void testActivationProfileStartedRule() {
+    public void testActivationInRule() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: Test \n"
+        String text = "Mapping: Test \n"
                 + " Title: \n"
-                + " Id: \n"
-                + "  * insert ";
+                + " Description: \n"
+                + "  * path ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,11);
+        Position position = new Position(3,9);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -94,7 +94,7 @@ public class csRuleCompletionProviderTest {
     public void testNoActivationOutOfBound() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -137,7 +137,7 @@ public class csRuleCompletionProviderTest {
     public void testNoActivationIncorrectText() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "test  * ";
@@ -160,7 +160,7 @@ public class csRuleCompletionProviderTest {
     public void testNoActivationNoSetPosition() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -181,7 +181,7 @@ public class csRuleCompletionProviderTest {
     public void testNoActivationNoSetContext() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -201,7 +201,7 @@ public class csRuleCompletionProviderTest {
     public void testNoActivationNoSetTriggerKind() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -223,7 +223,7 @@ public class csRuleCompletionProviderTest {
     public void testActivationNoSetUri() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: \n"
+        String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -246,7 +246,7 @@ public class csRuleCompletionProviderTest {
     public void testAmountCompletionItemsNewRule() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "CodeSystem: Test \n"
+        String text = "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
@@ -266,7 +266,34 @@ public class csRuleCompletionProviderTest {
         provider.test(textDocumentItem,params);
 
         //then
-        Assert.assertEquals(provider.get().size(),3);
+        Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsPathDefined() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Mapping: Test \n"
+                + " Title: \n"
+                + " Id: \n"
+                + "  * path ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,9);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),1);
     }
 
     @Test
@@ -275,7 +302,7 @@ public class csRuleCompletionProviderTest {
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "RuleSet: AnotherTest\n"
                 + "\n"
-                + "CodeSystem: Test \n"
+                + "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * insert ";
@@ -306,7 +333,7 @@ public class csRuleCompletionProviderTest {
                 + "\n"
                 + "RuleSet: AnotherTest2\n"
                 + "\n"
-                + "CodeSystem: Test \n"
+                + "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * insert ";
