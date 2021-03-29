@@ -12,5 +12,6 @@ public enum Entity{
     ALIAS,
     CODESYSTEM,
     VALUESET,
-    RULESET
+    RULESET,
+    INVARIANT
 }

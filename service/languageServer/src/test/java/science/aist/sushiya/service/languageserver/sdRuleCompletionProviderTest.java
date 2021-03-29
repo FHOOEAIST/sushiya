@@ -537,4 +537,89 @@ public class sdRuleCompletionProviderTest {
         //then
         Assert.assertEquals(provider.get().size(),8);
     }
+
+    @Test
+    public void testAmountCompletionObeysRuleOnlyKeyword() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Invariant: AnotherTest\n"
+                + "\n"
+                + "Profile: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * obeys ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,10);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),1);
+    }
+
+    @Test
+    public void testAmountCompletionObeysRuleWithDefinedPath() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Invariant: AnotherTest\n"
+                + "\n"
+                + "Profile: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * path obeys ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,15);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),1);
+    }
+
+    @Test
+    public void testAmountCompletionObeysRuleEmpty() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * obeys ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,10);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),0);
+    }
 }

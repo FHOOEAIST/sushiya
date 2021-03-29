@@ -192,6 +192,22 @@ public class FSHFileHandlerTest{
     }
 
     @Test
+    public void testGetCreatedEntitiesInvariantEmpty() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        textDocumentItem.setText("This is a test.");
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT).size(),0);
+    }
+
+    @Test
     public void testGetCreatedEntitiesAliasNoDuplicates() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
@@ -332,6 +348,30 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET).size(), 1);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesInvariantNoDuplicates() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Invariant: isCorrect\n"
+                + "  Invariant: isCorrect\n"
+                + "  Invariant  : isCorrect\n"
+                + "  Invariant  :  isCorrect\n"
+                + "Invariant: is not correct\n"
+                + "test Invariant: notCorrect\n"
+                + "Invariant notCorrect\n"
+                + "simple Invariant test\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT).size(), 1);
     }
     
     @Test
@@ -476,6 +516,30 @@ public class FSHFileHandlerTest{
 
         //then
         Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET).size(), 4);
+    }
+
+    @Test
+    public void testGetCreatedEntitiesInvariant() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Invariant: isCorrect1\n"
+                + "  Invariant: isCorrect2\n"
+                + "  Invariant  : isCorrect3\n"
+                + "  Invariant  :  isCorrect4\n"
+                + "Invariant: is not correct\n"
+                + "test Invariant: notCorrect\n"
+                + "Invariant notCorrect\n"
+                + "simple Invariant test\n";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        //when
+        DidOpenTextDocumentParams params = new DidOpenTextDocumentParams();
+        params.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(params);
+
+        //then
+        Assert.assertEquals( FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT).size(), 4);
     }
 
     @Test

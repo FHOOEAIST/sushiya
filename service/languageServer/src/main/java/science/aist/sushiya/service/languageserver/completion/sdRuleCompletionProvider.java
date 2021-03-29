@@ -27,6 +27,7 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
     private boolean valueSetRule = false;
     private boolean fixedValueRule = false;
     private boolean insertRule = false;
+    private boolean obeysRule = false;
     //simple version for flag rules and contain rules
     //TODO: contain Rules can influence other completions -> make on Completion Provider ?
     private boolean generalInRule = false;
@@ -43,6 +44,9 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
             completionItems.add(new CompletionItem("insert"));
         }else if(insertRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        }else if(obeysRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }else if(rulePathDefined){
             //valueSetRule
@@ -126,6 +130,7 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
         valueSetRule = line.matches("\\s*\\*\\s+\\S+\\s+(units\\s+)?from\\s+(\\s|\\S)*");
         fixedValueRule = line.matches("\\s*\\*\\s+\\S+\\s+=\\s+\\S+\\s*");
         insertRule = line.matches("\\s*\\*\\s+insert\\s+");
+        obeysRule = line.matches("\\s*\\*\\s+(obeys|\\S*\\s+obeys)\\s+");
         //simple version for flag rule & containsRule
         generalInRule = line.matches("\\s*\\*\\s+(\\S|\\s)*");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");

@@ -19,6 +19,7 @@ public class FSHFileHandler {
     private List<String> createdCodeSystems = new ArrayList<>();
     private List<String> createdValueSets = new ArrayList<>();
     private List<String> createdRuleSets = new ArrayList<>();
+    private List<String> createdInvariants = new ArrayList<>();
 
     //TODO:check why every second character of saved aliases are whitespace
 
@@ -86,15 +87,15 @@ public class FSHFileHandler {
                     entity.name().substring(1,entity.name().length()).toLowerCase();
         }
         String[]lines = textDocument.getText().split("\\n");
-        for (String line:lines) {
+        for (int linePos = 0; linePos <lines.length; ++linePos) {
             if(entity.equals(Entity.ALIAS)){
-                if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*=\\s*\\S+\\s*")){
-                    String createdEntityName = line.replaceFirst("\\s*" + entityName + "\\s*:","").trim();
+                if(lines[linePos].matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*=\\s*\\S+\\s*")){
+                    String createdEntityName = lines[linePos].replaceFirst("\\s*" + entityName + "\\s*:","").trim();
                     result.add(createdEntityName);
                 }
-            }else {
-                if(line.matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*")){
-                    String createdEntityName = line.trim().split("\\s")[line.trim().split("\\s").length-1];
+            } else {
+                if(lines[linePos].matches("\\s*" + entityName + "\\s*:\\s*\\w+\\s*")){
+                    String createdEntityName = lines[linePos].trim().split("\\s")[lines[linePos].trim().split("\\s").length-1];
                     result.add(createdEntityName);
                 }
             }
@@ -104,6 +105,12 @@ public class FSHFileHandler {
 
     private void addEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case INVARIANT:
+                for (String entityName: entityNames) {
+                    if(! createdInvariants.contains(entityName)){
+                        createdInvariants.add(entityName);
+                    }
+                }
             case RULESET:
                 for (String entityName: entityNames) {
                     if(! createdRuleSets.contains(entityName)){
@@ -151,6 +158,9 @@ public class FSHFileHandler {
 
     private void removeEntities(Entity entity, List<String> entityNames){
         switch(entity){
+            case INVARIANT:
+                createdInvariants.removeAll(entityNames);
+                break;
             case RULESET:
                 createdRuleSets.removeAll(entityNames);
                 break;
@@ -174,6 +184,8 @@ public class FSHFileHandler {
 
     public List<String> getCreatedEntities(Entity entity){
         switch(entity){
+            case INVARIANT:
+                return createdInvariants;
             case RULESET:
                 return createdRuleSets;
             case CODESYSTEM:
@@ -197,6 +209,7 @@ public class FSHFileHandler {
         addEntities(Entity.CODESYSTEM, getEntities(Entity.CODESYSTEM,textDocument));
         addEntities(Entity.VALUESET, getEntities(Entity.VALUESET,textDocument));
         addEntities(Entity.RULESET, getEntities(Entity.RULESET,textDocument));
+        addEntities(Entity.INVARIANT, getEntities(Entity.INVARIANT,textDocument));
     }
 
     private void removeAllEntities(TextDocumentItem textDocument){
@@ -206,6 +219,7 @@ public class FSHFileHandler {
         removeEntities(Entity.CODESYSTEM, getEntities(Entity.CODESYSTEM,textDocument));
         removeEntities(Entity.VALUESET, getEntities(Entity.VALUESET,textDocument));
         removeEntities(Entity.RULESET, getEntities(Entity.RULESET,textDocument));
+        addEntities(Entity.INVARIANT, getEntities(Entity.INVARIANT,textDocument));
     }
 
     protected void clean(){
@@ -216,5 +230,6 @@ public class FSHFileHandler {
         createdCodeSystems = new ArrayList<>();
         createdValueSets = new ArrayList<>();
         createdRuleSets = new ArrayList<>();
+        createdInvariants = new ArrayList<>();
     }
 }
