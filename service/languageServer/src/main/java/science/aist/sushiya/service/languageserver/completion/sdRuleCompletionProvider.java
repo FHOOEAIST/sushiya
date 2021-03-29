@@ -48,6 +48,13 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
         }else if(obeysRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+        }else if (valueSetRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+            completionItems.add(new CompletionItem("(example)"));
+            completionItems.add(new CompletionItem("(preferred)"));
+            completionItems.add(new CompletionItem("(extensible)"));
+            completionItems.add(new CompletionItem("(required)"));
         }else if(rulePathDefined){
             //valueSetRule
             completionItems.add(new CompletionItem("units"));
@@ -62,11 +69,6 @@ public class sdRuleCompletionProvider implements ICompletionProvider{
             completionItems.add(new CompletionItem("^"));
             //fixedValueRule
             completionItems.add(new CompletionItem("="));
-        }else if (valueSetRule){
-            completionItems.add(new CompletionItem("(example)"));
-            completionItems.add(new CompletionItem("(preferred)"));
-            completionItems.add(new CompletionItem("(extensible)"));
-            completionItems.add(new CompletionItem("(required)"));
         }else if(fixedValueRule){
             completionItems.add(new CompletionItem("(exactly)"));
         }else if(cardRule || generalInRule){

@@ -469,7 +469,7 @@ public class sdRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,33);
+        Position position = new Position(3,14);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -482,6 +482,35 @@ public class sdRuleCompletionProviderTest {
 
         //then
         Assert.assertEquals(provider.get().size(),4);
+    }
+
+    @Test
+    public void testAmountCompletionValueSetRuleDefinedValueSet() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "ValueSet: AnotherTest \n"
+                + "\n"
+                + "Profile: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * path from ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,14);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),5);
     }
 
     @Test
