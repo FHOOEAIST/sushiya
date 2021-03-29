@@ -21,8 +21,6 @@ public class FSHFileHandler {
     private List<String> createdRuleSets = new ArrayList<>();
     private List<String> createdInvariants = new ArrayList<>();
 
-    //TODO:check why every second character of saved aliases are whitespace
-
     //private constructor to make it as a singleton
     private FSHFileHandler(){}
 
@@ -72,7 +70,7 @@ public class FSHFileHandler {
         }
     }
 
-    private List<String> getEntities(Entity entity,TextDocumentItem textDocument){
+    public List<String> getEntities(Entity entity,TextDocumentItem textDocument){
         List<String> result = new ArrayList<>();
         String entityName;
         if(entity.equals(Entity.CODESYSTEM)){

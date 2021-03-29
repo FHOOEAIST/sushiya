@@ -21,12 +21,11 @@ import java.util.stream.Collectors;
 public class VsRuleCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(VsRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
+    private List<String> definedAliases = new ArrayList<>();
     private boolean newRule = false;
     private boolean includeExcludeRule = false;
     private boolean valueSetRule = false;
     private boolean systemRule = false;
-
-    //TODO: improvement for 'coding' rule possible
 
     @Override
     public List<CompletionItem> get() {
@@ -34,6 +33,9 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
         if (newRule){
             completionItems.add(new CompletionItem("include"));
             completionItems.add(new CompletionItem("exclude"));
+            completionItems.addAll(definedAliases.stream()
+                    .map(name -> new CompletionItem(name.split("\\s")[0] + "#"))
+                    .collect(Collectors.toList()));
         }else if (includeExcludeRule){
             completionItems.add(new CompletionItem("codes from valueset"));
             completionItems.add(new CompletionItem("codes from system"));
@@ -61,8 +63,9 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
 
     private boolean ValueSetRules(TextDocumentItem textDocumentItem, CompletionParams completionParams){
         try{
+            definedAliases = FSHFileHandler.getInstance().getEntities(Entity.ALIAS, textDocumentItem);
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
-            if( (newRule(line) || inRule(line))
+            if( isRule(line)
                     && textDocumentItem.getText().contains("ValueSet")){
                 String[]lines = textDocumentItem.getText().split("\\n");
                 //check from current line above to the next empty line or the start of the text
@@ -81,15 +84,12 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
         return false;
     }
 
-    private boolean newRule(String line){
+    private boolean isRule(String line){
         newRule = line.matches("\\s*\\*\\s+");
-        return line.matches("\\s*\\*\\s+");
-    }
-
-    private boolean inRule(String line){
         includeExcludeRule = line.matches("\\s*\\* (include|exclude)\\s*");
         systemRule = line.matches("\\s*\\* (include|exclude) codes from system\\s*");
         valueSetRule = line.matches("\\s*\\* (include|exclude) codes from valueset\\s*");
-        return line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*");
+        return line.matches("\\s*\\*\\s+(\\s|\\S)*");
     }
+
 }

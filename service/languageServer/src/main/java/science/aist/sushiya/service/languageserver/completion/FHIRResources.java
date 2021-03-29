@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>TODO insert documentation for this class</p>
+ * <p>Singleton to get completion Items for already defined resources based on: https://www.hl7.org/fhir/resourcelist.html (22 Oct 2020)</p>
  *
  * @author SophieBauernfeind
- *
- * completion for already defined resources based on: https://www.hl7.org/fhir/resourcelist.html (22 Oct 2020)
  *
  */
 public class FHIRResources {

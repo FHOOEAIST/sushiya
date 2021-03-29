@@ -29,7 +29,6 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
     private boolean insertRule = false;
     private boolean obeysRule = false;
     //simple version for flag rules and contain rules
-    //TODO: contain Rules can influence other completions -> make on Completion Provider ?
     private boolean generalInRule = false;
 
 

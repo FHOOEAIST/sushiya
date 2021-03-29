@@ -35,7 +35,7 @@ public class MappingEntityRuleCompletionProvider implements ICompletionProvider 
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }else if(rulePathDefined){
-            completionItems.add(new CompletionItem("insert"));
+            completionItems.add(new CompletionItem("->"));
         }
         return completionItems;
     }

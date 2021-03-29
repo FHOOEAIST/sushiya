@@ -33,7 +33,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,3);
+        Position position = new Position(3,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -56,7 +56,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,3);
+        Position position = new Position(3,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -79,7 +79,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,3);
+        Position position = new Position(3,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -102,7 +102,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,11);
+        Position position = new Position(3,12);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -125,7 +125,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,11);
+        Position position = new Position(3,12);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -150,7 +150,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,3);
+        Position position = new Position(5,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -175,7 +175,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,11);
+        Position position = new Position(5,12);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -200,7 +200,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,31);
+        Position position = new Position(5,32);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -225,7 +225,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,11);
+        Position position = new Position(5,12);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -250,7 +250,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,31);
+        Position position = new Position(5,32);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -275,7 +275,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,3);
+        Position position = new Position(5,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -368,7 +368,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,3);
+        Position position = new Position(5,4);
         params.setPosition(position);
         //when
 
@@ -390,7 +390,7 @@ public class VsRuleCompletionProviderTest {
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(5,3);
+        Position position = new Position(5,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         params.setContext(completionContext);
@@ -447,6 +447,35 @@ public class VsRuleCompletionProviderTest {
 
         //then
         Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionItemsNewRuleDefinedAlias() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: AnotherTest = testing\n"
+                + "\n"
+                + "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,4);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),3);
     }
 
     @Test

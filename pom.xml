@@ -154,7 +154,7 @@
         <system>Jenkins</system>
         <url>https://aist-intern.fh-hagenberg.at/jenkins/job/%TODO%/</url>
     </ciManagement>
-    <developers>    <!-- example %TODO% change to correct ones (can be multiple) -->
+    <developers>
         <developer>
             <id>a.pointner</id>
             <name>Andreas Pointner</name>
