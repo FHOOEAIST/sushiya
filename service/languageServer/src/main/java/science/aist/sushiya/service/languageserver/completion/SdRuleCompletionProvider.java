@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class SdRuleCompletionProvider implements ICompletionProvider{
     private static final Logger LOGGER = LoggerFactory.getLogger(SdRuleCompletionProvider.class);
     private List<CompletionItem> completionItems = new ArrayList<>();
+    private List<String> components = new ArrayList<>();
     private boolean newRule = false;
     private boolean rulePathDefined = false;
     private boolean cardRule = false;
@@ -41,6 +42,8 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
             completionItems.add(new CompletionItem("obeys"));
             //insertRule
             completionItems.add(new CompletionItem("insert"));
+            completionItems.addAll(components
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }else if(insertRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
                     .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
@@ -91,7 +94,9 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkRuleConditions(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -135,5 +140,10 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
         //simple version for flag rule & containsRule
         generalInRule = line.matches("\\s*\\*\\s+(\\S|\\s)*");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
+    }
+
+    @Override
+    public String toString() {
+        return "SdRuleCompletionProvider";
     }
 }

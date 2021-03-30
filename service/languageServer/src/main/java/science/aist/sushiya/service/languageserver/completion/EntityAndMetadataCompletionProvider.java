@@ -200,4 +200,9 @@ public class EntityAndMetadataCompletionProvider implements ICompletionProvider 
             return false;
         }
     }
+
+    @Override
+    public String toString() {
+        return "EntityAndMetadataCompletionProvider";
+    }
 }

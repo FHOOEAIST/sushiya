@@ -37,6 +37,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -60,6 +61,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -83,6 +85,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -106,6 +109,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -129,6 +133,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -152,6 +157,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -173,6 +179,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -194,6 +201,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -215,6 +223,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -238,6 +247,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -258,6 +268,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -281,6 +292,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -302,6 +314,7 @@ public class SdRuleCompletionProviderTest {
         CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -344,6 +357,30 @@ public class SdRuleCompletionProviderTest {
         Position position = new Position(3,4);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationNoSetTriggerCharacter() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile: \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(3,4);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 
@@ -366,6 +403,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -390,6 +428,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -419,6 +458,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -446,6 +486,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -473,6 +514,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -502,6 +544,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -529,6 +572,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -556,6 +600,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -585,6 +630,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -614,6 +660,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
@@ -641,6 +688,7 @@ public class SdRuleCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();

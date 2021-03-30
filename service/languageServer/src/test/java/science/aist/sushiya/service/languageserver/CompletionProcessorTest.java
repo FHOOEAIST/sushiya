@@ -32,6 +32,35 @@ public class CompletionProcessorTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+    }
+
+    @Test
+    public void testApply2(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile:     TestPatient\n"
+                + " Parent:     Patient\n"
+                + " * identifier contains \n"
+                + "     socialSecurityNumber 0..1 and \n"
+                + "     bPK 0..* and \n"
+                + "     localPatientId 0..1 \n"
+                + " * identifier[";
+        String uri = "testing";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(6,14);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter("[");
         params.setContext(completionContext);
         //when
 
@@ -53,6 +82,7 @@ public class CompletionProcessorTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -77,6 +107,7 @@ public class CompletionProcessorTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -102,6 +133,7 @@ public class CompletionProcessorTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -125,6 +157,7 @@ public class CompletionProcessorTest {
         CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 

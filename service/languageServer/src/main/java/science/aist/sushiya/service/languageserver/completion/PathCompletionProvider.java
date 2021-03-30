@@ -1,9 +1,6 @@
 package science.aist.sushiya.service.languageserver.completion;
 
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionParams;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +37,9 @@ public class PathCompletionProvider implements ICompletionProvider{
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkRuleConditions(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerCharacter() == "[";
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals("[");
         }
         return false;
     }
@@ -68,8 +67,8 @@ public class PathCompletionProvider implements ICompletionProvider{
     private boolean isRule(String line){
         String[]words = line.split("\\s");
         triggerWord = words[words.length -1];
-        triggerWord = triggerWord.substring(0,triggerWord.length()-1);
-        if(triggerWord.length() <= 0){
+        triggerWord = triggerWord.substring(0,triggerWord.length()-2);
+        if(triggerWord.length() < 0){
             LOGGER.warn("No valid trigger word.");
             return false;
         }
@@ -106,14 +105,16 @@ public class PathCompletionProvider implements ICompletionProvider{
                 }
             }
         }
-        if(contains){
+        fillComponentMap();
+        if(contains && components.containsKey(triggerWord)){
+            LOGGER.info("component words: {}", components.get(triggerWord));
+            LOGGER.info("component: {}", triggerWord);
             return true;
         }
         return false;
     }
 
     private void fillCompletionItems(){
-        fillComponentMap();
         if(components.containsKey(triggerWord)){
             completionItems.addAll(components.get(triggerWord)
                       .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
@@ -125,10 +126,11 @@ public class PathCompletionProvider implements ICompletionProvider{
         String componentName = null;
 
         flattenRuleLines();
+        components.clear();
 
         for(String ruleLine: ruleLines){
             if(ruleLine.contains("contains")){
-                String[] words = ruleLine.split("\\s");
+                String[] words = ruleLine.split("\\s+");
 
 
                 for(int wordPos = 0; wordPos < words.length-1; wordPos++){
@@ -175,5 +177,10 @@ public class PathCompletionProvider implements ICompletionProvider{
             }
         }
         ruleLines = result;
+    }
+
+    @Override
+    public String toString() {
+        return "PathCompletionProvider";
     }
 }

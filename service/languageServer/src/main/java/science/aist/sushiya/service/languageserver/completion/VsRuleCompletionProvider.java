@@ -56,7 +56,9 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return ValueSetRules(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -92,4 +94,9 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
     }
 
+
+    @Override
+    public String toString() {
+        return "VsRuleCompletionProvider";
+    }
 }

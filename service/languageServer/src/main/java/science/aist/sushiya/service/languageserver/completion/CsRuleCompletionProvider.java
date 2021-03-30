@@ -45,7 +45,9 @@ public class CsRuleCompletionProvider implements ICompletionProvider {
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkRuleConditions(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -78,5 +80,10 @@ public class CsRuleCompletionProvider implements ICompletionProvider {
         newRule = line.matches("\\s*\\*\\s+");
         insertRule = line.matches("\\s*\\*\\s+insert\\s+");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
+    }
+
+    @Override
+    public String toString() {
+        return "CsRuleCompletionProvider";
     }
 }

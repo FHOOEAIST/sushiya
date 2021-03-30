@@ -41,7 +41,9 @@ public class ParentCompletionProvider implements ICompletionProvider {
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkKeywordParent(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -58,5 +60,8 @@ public class ParentCompletionProvider implements ICompletionProvider {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "ParentCompletionProvider";
+    }
 }

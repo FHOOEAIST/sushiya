@@ -43,7 +43,9 @@ public class AliasCompletionProvider implements ICompletionProvider {
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null){
             return checkKeywordAlias(textDocumentItem,completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -58,5 +60,10 @@ public class AliasCompletionProvider implements ICompletionProvider {
             LOGGER.error(exception.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AliasCompletionProvider";
     }
 }

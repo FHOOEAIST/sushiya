@@ -34,6 +34,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -54,6 +55,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -74,6 +76,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -94,6 +97,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -114,6 +118,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -134,6 +139,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -154,6 +160,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -172,6 +179,7 @@ public class SourceCompletionProviderTest {
         CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -208,6 +216,27 @@ public class SourceCompletionProviderTest {
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertFalse(provider.test(textDocumentItem,params));
+    }
+
+    @Test
+    public void testNoActivationNoSetTriggerCharacter() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Source: ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(0,text.length());
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
         //when
 
@@ -227,6 +256,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
         //when
 
@@ -250,6 +280,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
 
         //when
@@ -279,6 +310,7 @@ public class SourceCompletionProviderTest {
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
 
         //when

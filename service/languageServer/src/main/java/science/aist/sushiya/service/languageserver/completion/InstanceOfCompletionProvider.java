@@ -43,7 +43,9 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkKeywordInstanceOf(textDocumentItem, completionParams)
-                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked;
+                    && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
+                    && completionParams.getContext().getTriggerCharacter() != null
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
         }
         return false;
     }
@@ -52,11 +54,17 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
         try{
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
             return line.replaceAll("\\s","").matches("InstanceOf:")
-                    && line.lastIndexOf("InstanceOf:") < completionParams.getPosition().getCharacter();
+                    && line.lastIndexOf("InstanceOf:") < completionParams.getPosition().getCharacter()
+                    && completionParams.getContext().getTriggerCharacter().equals(" ");
 
         }catch (Exception exception){
             LOGGER.error(exception.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "InstanceOfCompletionProvider";
     }
 }

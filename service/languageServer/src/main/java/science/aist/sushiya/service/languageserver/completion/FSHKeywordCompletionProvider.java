@@ -65,8 +65,14 @@ public class FSHKeywordCompletionProvider implements ICompletionProvider {
         return completionItems;
     }
 
+    //default completion provider
     @Override
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "FSHKeywordCompletionProvider";
     }
 }

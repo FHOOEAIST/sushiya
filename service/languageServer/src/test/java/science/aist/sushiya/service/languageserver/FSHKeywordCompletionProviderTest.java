@@ -16,7 +16,7 @@ public class FSHKeywordCompletionProviderTest {
     private static final String uri = "testing";
 
     @Test
-    public void testNoActivation(){
+    public void testActivation(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = " ";
@@ -32,7 +32,7 @@ public class FSHKeywordCompletionProviderTest {
         //when
 
         //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        Assert.assertTrue(provider.test(textDocumentItem,params));
     }
 
 }
