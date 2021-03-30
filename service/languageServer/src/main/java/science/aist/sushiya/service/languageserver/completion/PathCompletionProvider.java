@@ -91,7 +91,7 @@ public class PathCompletionProvider implements ICompletionProvider{
         boolean contains = false;
         boolean ruleStarted = false;
         boolean ruleEnded = false;
-        for(int pos = entityStartPos; pos <= lines.length-1; pos ++){
+        for(int pos = entityStartPos; pos < lines.length; pos ++){
             if(lines[pos].matches("\\s*")){
                 ruleEnded = true;
             }else{
@@ -113,7 +113,6 @@ public class PathCompletionProvider implements ICompletionProvider{
     }
 
     private void fillCompletionItems(){
-        LOGGER.info("rule lines size: {}", ruleLines.size());
         fillComponentMap();
         if(components.containsKey(triggerWord)){
             completionItems.addAll(components.get(triggerWord)
@@ -131,29 +130,30 @@ public class PathCompletionProvider implements ICompletionProvider{
             if(ruleLine.contains("contains")){
                 String[] words = ruleLine.split("\\s");
 
-                //only iterate till words.length-1 to avoid out of bound if rule is not completed yet
-                for(int wordCount = 0; wordCount < words.length-1; wordCount++){
-                    //get the componentName
-                    if(words[wordCount].matches("contains")&& wordCount != 0){
-                        componentName = words[wordCount-1];
+
+                for(int wordPos = 0; wordPos < words.length-1; wordPos++){
+                    // get the componentName
+                    // the componentName is before the keyword, with this it's not possible that contains is at position 0
+                    if(words[wordPos].matches("contains")&& wordPos != 0){
+                        componentName = words[wordPos-1];
                         containsRuleStarted = true;
                         components.put(componentName,new ArrayList<>());
 
                         //add first item of component
-                        String item = words[wordCount+1];
+                        String item = words[wordPos+1];
                         components.get(componentName).add(item);
                     }
 
                     //if the keyword "named" appeared the last inserted item name has to be replaced with the new name
-                    if(containsRuleStarted && words[wordCount].matches("named")){
-                        String item = words[wordCount+1];
+                    if(containsRuleStarted && words[wordPos].matches("named")){
+                        String item = words[wordPos+1];
                         components.get(componentName)
-                                .set(components.get(componentName).size(), item);
+                                .set(components.get(componentName).size()-1, item);
                     }
 
                     //after each keyword "and" a item will follow
-                    if(containsRuleStarted && words[wordCount].matches("and")){
-                        String item = words[wordCount+1];
+                    if(containsRuleStarted && words[wordPos].matches("and")){
+                        String item = words[wordPos+1];
                         components.get(componentName).add(item);
                     }
                 }
@@ -169,10 +169,11 @@ public class PathCompletionProvider implements ICompletionProvider{
                 result.add(ruleLine);
             }else{
                 result.set(
-                        result.size(),
-                        result.get(result.size()) + " " + ruleLine
+                        result.size()-1,
+                        result.get(result.size()-1) + " " + ruleLine
                 );
             }
         }
+        ruleLines = result;
     }
 }
