@@ -33,8 +33,7 @@ public class FSHFileHandlerTest{
         FSHFileHandler.getInstance().addFile(params);
 
         //then
-        Assert.assertNotNull(FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri)));
-        //Assert.assertEquals(textDocumentItem, FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri)));
+        Assert.assertEquals(textDocumentItem, FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri)));
     }
 
     @Test

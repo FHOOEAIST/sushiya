@@ -699,4 +699,33 @@ public class SdRuleCompletionProviderTest {
         //then
         Assert.assertEquals(provider.get().size(),0);
     }
+
+    @Test
+    public void testAmountCompletionNewRuleWithContainsRule() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Profile: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + " * test contains tryout 0..*\n"
+                + " * ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(4,3);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),3);
+    }
 }

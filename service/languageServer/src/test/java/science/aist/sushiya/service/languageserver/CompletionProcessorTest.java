@@ -13,6 +13,7 @@ import science.aist.sushiya.service.languageserver.completion.CompletionProcesso
  */
 public class CompletionProcessorTest {
     private static final CompletionProcessor processor = new CompletionProcessor();
+    private static final String uri = "testing";
 
     @Test
     public void testApply(){
@@ -23,7 +24,6 @@ public class CompletionProcessorTest {
                 + "Profile: MyWeightProfile\n"
                 + "Id: MyWeightProfile \n"
                 + "Parent: ";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -51,7 +51,6 @@ public class CompletionProcessorTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -73,7 +72,6 @@ public class CompletionProcessorTest {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -94,12 +92,6 @@ public class CompletionProcessorTest {
     public void testApplyNoSetText(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Alias: LNC = http://loinc.org\n"
-                + "\n"
-                + "Profile: MyWeightProfile\n"
-                + "Id: MyWeightProfile \n"
-                + "Parent: ";
-        String uri = "testing";
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
@@ -124,7 +116,6 @@ public class CompletionProcessorTest {
                 + "Profile: MyWeightProfile\n"
                 + "Id: MyWeightProfile \n"
                 + "Parent: ";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -150,7 +141,6 @@ public class CompletionProcessorTest {
                 + "Profile: MyWeightProfile\n"
                 + "Id: MyWeightProfile \n"
                 + "Parent: ";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -174,7 +164,6 @@ public class CompletionProcessorTest {
                 + "Profile: MyWeightProfile\n"
                 + "Id: MyWeightProfile \n"
                 + "Parent: ";
-        String uri = "testing";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -187,4 +176,49 @@ public class CompletionProcessorTest {
         Assert.assertNotNull(processor.apply(textDocumentItem,params));
     }
 
+    @Test
+    public void testApplyNoSetContextTriggerKind(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profile: MyWeightProfile\n"
+                + "Id: MyWeightProfile \n"
+                + "Parent: ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(4,8);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+    }
+
+    @Test
+    public void testApplyNoSetContextTriggerCharacter(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profile: MyWeightProfile\n"
+                + "Id: MyWeightProfile \n"
+                + "Parent: ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(4,8);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+    }
 }

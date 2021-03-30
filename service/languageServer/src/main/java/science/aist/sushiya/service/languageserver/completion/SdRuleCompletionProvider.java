@@ -32,8 +32,6 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
     //simple version for flag rules and contain rules
     private boolean generalInRule = false;
 
-
-
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
@@ -110,12 +108,25 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
                             || textDocumentItem.getText().contains("Profile"))){
                 String[]lines = textDocumentItem.getText().split("\\n");
 
+                components.clear();
+
                 //check from current line above to the next empty line or the start of the text
-                for(int i = completionParams.getPosition().getLine(); i >= 0 ; i --){
-                    if(lines[i].matches("\\s*")|| i == 0){
+                for(int linePos = completionParams.getPosition().getLine(); linePos >= 0 ; linePos --){
+                    //safe components from contains rule for better completion
+                    if(lines[linePos].contains("contains")){
+                        String[]words = lines[linePos].split("\\s+");
+                        for (int wordPos = 0; wordPos < words.length ; wordPos++){
+                            if(words[wordPos].matches("contains") && wordPos != 0){
+                                components.add(words[wordPos-1]);
+                            }
+                        }
+                    }
+
+                    if(lines[linePos].matches("\\s*")|| linePos == 0){
 
                         //check the first line or the line after the empty line for the keyword
-                        int index = i == 0 ? 0 : i +1;
+                        int index = linePos == 0 ? 0 : linePos +1;
+
                         return lines[index].trim().matches("\\s*Extension\\s*:(\\s*|\\s+\\S+)\\s*")
                                 || lines[index].trim().matches("\\s*Profile\\s*:(\\s*|\\s+\\S+)\\s*")
                                 || lines[index].trim().matches("\\s*RuleSet\\s*:(\\s*|\\s+\\S+)\\s*");
