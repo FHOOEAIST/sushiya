@@ -10,7 +10,26 @@ Right now there is no functioning client, but there is one in work [VS Code](htt
 
 ## Features
 
-Righ now there are no implemented features.
+####Code completion
+* Entity names and metadata
+![Completion for alias](./images/aliasCompletion.png "Completion for alias")
+![Completion for extension](./images/extensionCompletion.png "Completion for extension")
+![Completion for profile](./images/profileCompletion.png "Completion for profile")
+* Completion support for rules
+    * possible keywords for different rules
+![Completion for profile rules](./images/sdRuleCompletion.png "Completion for profile rule")
+![Completion for profile rules](./images/sdRuleCompletionDefinedPath.png "Completion for profile rule")
+![Completion for value set rules](./images/vsRuleCompletion.png "Completion for value set rule")
+![Completion for value set rules](./images/vsRuleCompletionCodeSystem.png "Completion for value set rule")
+    * path definition support for entities with contains rule
+![Completion with contains rule](./images/sdRuleCompletionWithContainsRule.png "Completion with contains rule")
+![Completion with contains rule](./images/sdRuleCompletionWithContainsRule2.png "Completion with contains rule")
+* Completion support for metadata 
+    * InstanceOf
+    * Parent
+    * Source
+![Completion for parent default possibilities](./images/parentCompletion.png "Completion for parent default possibilities")
+![Completion for parent with other file](./images/parentCompletionWithOtherFile.png "Completion for parent with other file")
 
 ## FAQ
 
