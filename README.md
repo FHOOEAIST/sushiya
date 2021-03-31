@@ -1,14 +1,39 @@
-# <Project name >
+# FSH-language-server
 
-<project description>
+The FSH-language-server is a languageserver implementation for 
+[HL7® FHIR® Shorthand](http://hl7.org/fhir/uv/shorthand/STU1/) 
+and implements the [language server protocol](https://microsoft.github.io/language-server-protocol/).
+It can be used with any editor, if the editor implements a client for this language server. The base structure leaned on the [camel-language-server](https://github.com/camel-tooling/camel-language-server/tree/master).
 
-## Getting Started
+## Clients
+Right now there is no functioning client, but there is one in work [VS Code](https://github.com/FHOOEAIST/Itamae).
 
-<Write how to get started. e.g. which dependencies are required, how you can build the project. and how you can start.>
+## Features
+
+###Code completion
+* Entity names and metadata
+![Completion for alias](./images/aliasCompletion.png "Completion for alias")
+![Completion for extension](./images/extensionCompletion.png "Completion for extension")
+![Completion for profile](./images/profileCompletion.png "Completion for profile")
+* Completion support for rules
+    * possible keywords for different rules
+![Completion for profile rules](./images/sdRuleCompletion.png "Completion for profile rule")
+![Completion for profile rules](./images/sdRuleCompletionDefinedPath.png "Completion for profile rule")
+![Completion for value set rules](./images/vsRuleCompletion.png "Completion for value set rule")
+![Completion for value set rules](./images/vsRuleCompletionCodeSystem.png "Completion for value set rule")
+    * path definition support for entities with contains rule
+![Completion with contains rule](./images/sdRuleCompletionWithContainsRule.png "Completion with contains rule")
+![Completion with contains rule](./images/sdRuleCompletionWithContainsRule2.png "Completion with contains rule")
+* Completion support for metadata 
+    * InstanceOf
+    * Parent
+    * Source
+![Completion for parent default possibilities](./images/parentCompletion.png "Completion for parent default possibilities")
+![Completion for parent with other file](./images/parentCompletionWithOtherFile.png "Completion for parent with other file")
 
 ## FAQ
 
-If you have any questions, please checkout our <insert FAQ link here if using maven site, otherwise write a small FAQ section here>.
+If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
 
 ## Contributing
 
