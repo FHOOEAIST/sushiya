@@ -10,7 +10,7 @@ Right now there is no functioning client, but there is one in work [VS Code](htt
 
 ## Features
 
-####Code completion
+###Code completion
 * Entity names and metadata
 ![Completion for alias](./images/aliasCompletion.png "Completion for alias")
 ![Completion for extension](./images/extensionCompletion.png "Completion for extension")
