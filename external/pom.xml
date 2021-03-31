@@ -43,8 +43,7 @@
   </dependencies>
   
   <modules>
-      
-    <module>rest</module>
+
     <module>languageServer</module>
       
   </modules>

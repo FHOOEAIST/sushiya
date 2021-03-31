@@ -33,8 +33,7 @@
   </dependencies>
   
   <modules>
-      
-    <module>core</module>
+
     <module>languageServer</module>
       
   </modules>
