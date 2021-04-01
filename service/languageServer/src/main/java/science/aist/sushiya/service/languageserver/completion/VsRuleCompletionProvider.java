@@ -27,6 +27,8 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
     private boolean valueSetRule = false;
     private boolean systemRule = false;
 
+    //TODO: include "insert rule" in completion items
+
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();

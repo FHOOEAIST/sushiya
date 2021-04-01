@@ -84,6 +84,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         capabilities.setHoverProvider(Boolean.TRUE);
+        //TODO: check if tab also possible as a completion character
         capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(" ","[")));
         return capabilities;
     }
