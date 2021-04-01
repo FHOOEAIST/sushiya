@@ -8,4 +8,6 @@ package science.aist.sushiya.service.languageserver.diagnostic;
 
 
 public class DiagnosticProvider {
+
+
 }
