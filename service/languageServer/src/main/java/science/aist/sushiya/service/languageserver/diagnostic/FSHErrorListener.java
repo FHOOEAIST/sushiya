@@ -24,8 +24,8 @@ public class FSHErrorListener extends BaseErrorListener {
         Diagnostic diagnostic = new Diagnostic();
         diagnostic.setMessage(msg);
         diagnostic.setRange(new Range(
-                new Position(line,charPositionInLine),
-                new Position(line,charPositionInLine)
+                new Position(line-1,charPositionInLine),
+                new Position(line-1,charPositionInLine)
         ));
         diagnostics.add(diagnostic);
     }
