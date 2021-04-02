@@ -11,6 +11,7 @@ package science.aist.sushiya.service.languageserver;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
+import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
 import science.aist.sushiya.service.languageserver.hover.HoverProcessor;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             hoverProcessor = new HoverProcessor();
     private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
             completionProcessor = new CompletionProcessor();
+    private static final DiagnosticProvider diagnosticProvider = new DiagnosticProvider();
 
     public void didOpen(DidOpenTextDocumentParams params) {
         FSHFileHandler.getInstance().addFile(params);
