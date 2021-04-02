@@ -19,6 +19,7 @@ package science.aist.sushiya.languageserver;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
+import science.aist.sushiya.service.languageserver.FSHLanguageServer;
 
 
 /**

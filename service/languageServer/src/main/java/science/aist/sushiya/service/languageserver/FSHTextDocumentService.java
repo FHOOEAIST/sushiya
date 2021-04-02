@@ -19,22 +19,35 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
+    private FSHLanguageServer fshLanguageServer;
+    private DiagnosticProvider diagnosticProvider;
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>>
             hoverProcessor = new HoverProcessor();
     private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
             completionProcessor = new CompletionProcessor();
-    private static final DiagnosticProvider diagnosticProvider = new DiagnosticProvider();
+
+    public FSHTextDocumentService(FSHLanguageServer server) {
+        this.fshLanguageServer = server;
+        this.diagnosticProvider = new DiagnosticProvider(server);
+    }
 
     public void didOpen(DidOpenTextDocumentParams params) {
         FSHFileHandler.getInstance().addFile(params);
+        diagnosticProvider.compileAndSendDiagnostic(
+                fshLanguageServer.getClient(),
+                FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(params.getTextDocument().getUri())));
     }
 
     public void didChange(DidChangeTextDocumentParams params) {
         FSHFileHandler.getInstance().update(params);
+        diagnosticProvider.compileAndSendDiagnostic(
+                fshLanguageServer.getClient(),
+                FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(params.getTextDocument().getUri())));
     }
 
     public void didClose(DidCloseTextDocumentParams params) {
         FSHFileHandler.getInstance().removeFile(params);
+        diagnosticProvider.clear(params.getTextDocument().getUri());
     }
 
     public void didSave(DidSaveTextDocumentParams params) {

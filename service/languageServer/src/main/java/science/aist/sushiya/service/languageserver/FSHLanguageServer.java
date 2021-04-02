@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package science.aist.sushiya.languageserver;
+package science.aist.sushiya.service.languageserver;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -23,8 +23,6 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import science.aist.sushiya.service.languageserver.FSHTextDocumentService;
-import science.aist.sushiya.service.languageserver.FSHWorkspaceService;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -45,7 +43,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
     private LanguageClient client;
 
     public FSHLanguageServer() {
-        super.setTextDocumentService(new FSHTextDocumentService());
+        super.setTextDocumentService(new FSHTextDocumentService(this));
         super.setWorkspaceService(new FSHWorkspaceService());
     }
 

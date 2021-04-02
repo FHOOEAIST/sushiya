@@ -67,12 +67,16 @@ public class PathCompletionProvider implements ICompletionProvider{
     private boolean isRule(String line){
         String[]words = line.split("\\s");
         triggerWord = words[words.length -1];
-        triggerWord = triggerWord.substring(0,triggerWord.length()-2);
-        if(triggerWord.length() < 0){
-            LOGGER.warn("No valid trigger word.");
+        if(triggerWord.length() >= 3 && line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*")){
+            triggerWord = triggerWord.substring(0,triggerWord.length()-2);
+            return true;
+        }else if(triggerWord.length() < 3 && line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*")){
+            LOGGER.info("No valid trigger word.");
             return false;
         }
-        return line.matches("\\s*\\*\\s+(\\s|\\S)*");
+        else{
+            return false;
+        }
     }
 
     private int getEntityStart(String[] lines, Position position){
@@ -90,7 +94,7 @@ public class PathCompletionProvider implements ICompletionProvider{
         boolean contains = false;
         boolean ruleStarted = false;
         boolean ruleEnded = false;
-        for(int pos = entityStartPos; pos < lines.length; pos ++){
+        for(int pos = entityStartPos; pos < lines.length-1; pos ++){
             if(lines[pos].matches("\\s*")){
                 ruleEnded = true;
             }else{
@@ -107,8 +111,6 @@ public class PathCompletionProvider implements ICompletionProvider{
         }
         fillComponentMap();
         if(contains && components.containsKey(triggerWord)){
-            LOGGER.info("component words: {}", components.get(triggerWord));
-            LOGGER.info("component: {}", triggerWord);
             return true;
         }
         return false;
