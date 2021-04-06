@@ -26,8 +26,7 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
     private boolean includeExcludeRule = false;
     private boolean valueSetRule = false;
     private boolean systemRule = false;
-
-    //TODO: include "insert rule" in completion items
+    private boolean insertRule = false;
 
     @Override
     public List<CompletionItem> get() {
@@ -35,9 +34,13 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
         if (newRule){
             completionItems.add(new CompletionItem("include"));
             completionItems.add(new CompletionItem("exclude"));
+            completionItems.add(new CompletionItem("insert"));
             completionItems.addAll(definedAliases.stream()
                     .map(name -> new CompletionItem(name.split("\\s")[0] + "#"))
                     .collect(Collectors.toList()));
+        }else if(insertRule){
+            completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
+                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
         }else if (includeExcludeRule){
             completionItems.add(new CompletionItem("codes from valueset"));
             completionItems.add(new CompletionItem("codes from system"));
@@ -93,6 +96,7 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
         includeExcludeRule = line.matches("\\s*\\* (include|exclude)\\s*");
         systemRule = line.matches("\\s*\\* (include|exclude) codes from system\\s*");
         valueSetRule = line.matches("\\s*\\* (include|exclude) codes from valueset\\s*");
+        insertRule = line.matches("\\s*\\*\\s+insert\\s+");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
     }
 

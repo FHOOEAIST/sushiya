@@ -52,12 +52,12 @@ public class VsRuleCompletionProviderTest {
         String text = "  ValueSet: Test\n"
                 + " Title: \n"
                 + " Description: \n"
-                + "  * ";
+                + "  * insert ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
         CompletionParams params = new CompletionParams();
-        Position position = new Position(3,4);
+        Position position = new Position(3,11);
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
@@ -71,30 +71,6 @@ public class VsRuleCompletionProviderTest {
 
     @Test
     public void testActivation3() {
-        //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  ValueSet  : \n"
-                + " Title: \n"
-                + " Description: \n"
-                + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(3,4);
-        params.setPosition(position);
-        CompletionContext completionContext = new CompletionContext();
-        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
-    }
-
-    @Test
-    public void testActivation4() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet  : \n"
@@ -118,7 +94,7 @@ public class VsRuleCompletionProviderTest {
     }
 
     @Test
-    public void testActivation5() {
+    public void testActivation4() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  ValueSet  : \n"
@@ -489,6 +465,36 @@ public class VsRuleCompletionProviderTest {
 
         //then
         Assert.assertEquals(provider.get().size(),2);
+    }
+
+    @Test
+    public void testAmountCompletionInsertRule() {
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "RuleSet: AnotherTest\n"
+                + "\n"
+                + "ValueSet: Test \n"
+                + " Title: \n"
+                + " Description: \n"
+                + "  * insert ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(5,11);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocumentItem);
+        FSHFileHandler.getInstance().addFile(openParams);
+        provider.test(textDocumentItem,params);
+
+        //then
+        Assert.assertEquals(provider.get().size(),1);
     }
 
     @Test
