@@ -464,7 +464,7 @@ public class VsRuleCompletionProviderTest {
         provider.test(textDocumentItem,params);
 
         //then
-        Assert.assertEquals(provider.get().size(),2);
+        Assert.assertEquals(provider.get().size(),3);
     }
 
     @Test
@@ -524,7 +524,7 @@ public class VsRuleCompletionProviderTest {
         provider.test(textDocumentItem,params);
 
         //then
-        Assert.assertEquals(provider.get().size(),3);
+        Assert.assertEquals(provider.get().size(),4);
     }
 
     @Test
