@@ -11,20 +11,24 @@ package science.aist.sushiya.service.languageserver;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
+import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
 import science.aist.sushiya.service.languageserver.hover.HoverProcessor;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
-    private FSHLanguageServer fshLanguageServer;
-    private DiagnosticProvider diagnosticProvider;
+    private final FSHLanguageServer fshLanguageServer;
+    private final DiagnosticProvider diagnosticProvider;
     private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>>
             hoverProcessor = new HoverProcessor();
     private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
             completionProcessor = new CompletionProcessor();
+    private static final Function<DefinitionParams, CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>>>
+            definitionProvider = new DefinitionProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -70,5 +74,10 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     @Override
     public CompletableFuture<CompletionItem> resolveCompletionItem(CompletionItem unresolved) {
         return CompletableFuture.completedFuture(unresolved);
+    }
+
+    @Override
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
+        return definitionProvider.apply(params);
     }
 }
