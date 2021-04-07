@@ -19,9 +19,6 @@ import java.util.List;
 public class FSHErrorListener extends BaseErrorListener {
     private List<Diagnostic> diagnostics = new ArrayList<>();
 
-    //Only the first syntaxError will generate a Diagnostic. If a entity hase more mistakes only the first one will be marked.
-    //TODO: check if it is possible to mark all errors in one entity
-
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
         Diagnostic diagnostic = new Diagnostic();

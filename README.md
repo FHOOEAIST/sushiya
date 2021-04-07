@@ -10,26 +10,31 @@ Right now there is no functioning client, but there is one in work [VS Code](htt
 
 ## Features
 
-###Code completion
+**Code completion**
 * Entity names and metadata
 ![Completion for alias](./images/aliasCompletion.png "Completion for alias")
 ![Completion for extension](./images/extensionCompletion.png "Completion for extension")
 ![Completion for profile](./images/profileCompletion.png "Completion for profile")
-* Completion support for rules
-    * possible keywords for different rules
-![Completion for profile rules](./images/sdRuleCompletion.png "Completion for profile rule")
-![Completion for profile rules](./images/sdRuleCompletionDefinedPath.png "Completion for profile rule")
-![Completion for value set rules](./images/vsRuleCompletion.png "Completion for value set rule")
-![Completion for value set rules](./images/vsRuleCompletionCodeSystem.png "Completion for value set rule")
+* Completion support for different rules
+    * value set rule
+      ![Completion for valueSet rule beginning](./images/vsRuleCompletion1.png "Completion for valueSet rule beginning")
+      ![Completion for valueSet rule including](./images/vsRuleCompletion2.png "Completion for valueSet rule including")
+      ![Completion for valueSet rule including system](./images/vsRuleCompletion3.png "Completion for valueSet rule including system")
     * path definition support for entities with contains rule
-![Completion with contains rule](./images/sdRuleCompletionWithContainsRule.png "Completion with contains rule")
-![Completion with contains rule](./images/sdRuleCompletionWithContainsRule2.png "Completion with contains rule")
-* Completion support for metadata 
+      ![Completion with contains rule](./images/sdRuleCompletionWithContainsRule.png "Completion with contains rule")
+* Completion support for metadata
     * InstanceOf
-    * Parent
     * Source
-![Completion for parent default possibilities](./images/parentCompletion.png "Completion for parent default possibilities")
-![Completion for parent with other file](./images/parentCompletionWithOtherFile.png "Completion for parent with other file")
+    * Parent
+      ![Completion for parent default possibilities](./images/parentCompletion.png "Completion for parent default possibilities")
+      ![Completion for parent with other file](./images/parentCompletionWithOtherFile.png "Completion for parent with other file")
+
+
+**Syntax checking**
+![Syntax checking with unexpected end of file](./images/syntaxCheckingEOF.png "Syntax checking with unexpected end of file")
+![Syntax checking with wrong metadata](./images/syntaxCheckingWrongMetadata.png "Syntax checking with wrong metadata")
+![Syntax checking with wrong expected token](./images/syntaxCheckingWrongToken.png "Syntax checking with wrong expected token")
+
 
 ## FAQ
 
