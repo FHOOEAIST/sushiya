@@ -63,7 +63,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -91,7 +92,7 @@ public class DefinitionProviderTest {
 
         //generate parameter to call the provider
         DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(1,8);
+        Position position = new Position(4,0);
         defParams.setPosition(position);
         defParams.setTextDocument(new TextDocumentIdentifier(uri));
 
@@ -99,7 +100,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -117,7 +119,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -135,7 +138,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -199,7 +203,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -227,7 +232,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -255,7 +261,8 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -283,6 +290,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 }

@@ -84,6 +84,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         capabilities.setHoverProvider(Boolean.TRUE);
         capabilities.setDefinitionProvider(Boolean.TRUE);
         capabilities.setImplementationProvider(Boolean.TRUE);
+        capabilities.setReferencesProvider(Boolean.TRUE);
         capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(" ","[")));
         return capabilities;
     }

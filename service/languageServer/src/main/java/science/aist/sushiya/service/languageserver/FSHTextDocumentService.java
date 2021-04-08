@@ -15,6 +15,7 @@ import science.aist.sushiya.service.languageserver.definition.DefinitionProvider
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
 import science.aist.sushiya.service.languageserver.hover.HoverProcessor;
 import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
+import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +33,8 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             definitionProvider = new DefinitionProvider();
     private static final Function<ImplementationParams, Either<List<? extends Location>, List<? extends LocationLink>>>
             implementationProvider = new ImplementationProvider();
+    private static final Function<ReferenceParams, List<? extends Location>>
+            referencesProvider = new ReferencesProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -91,5 +94,10 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     @Override
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> implementation(ImplementationParams params) {
         return CompletableFuture.completedFuture(implementationProvider.apply(params));
+    }
+
+    @Override
+    public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
+        return CompletableFuture.completedFuture(referencesProvider.apply(params));
     }
 }

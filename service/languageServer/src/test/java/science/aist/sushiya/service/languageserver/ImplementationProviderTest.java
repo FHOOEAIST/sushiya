@@ -49,7 +49,7 @@ public class ImplementationProviderTest {
     }
 
     @Test
-    public void testNoSource(){
+    public void testNoImplementation(){
         //given
         prepareForTest(text);
 
@@ -63,7 +63,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -87,20 +88,11 @@ public class ImplementationProviderTest {
     @Test
     public void testNoImplementationWrongPosition(){
         //given
-        String profile1 = "Profile: \n"
-                + "Parent: Patient \n"
-                + "Id: test \n"
-                + "* value 0..0 \n"
-                + "\n";
-        String profile2 = "Profile: AnotherTest\n"
-                + "Parent: Test \n"
-                + "Id: test \n"
-                + "* value 0..0 \n";
-        prepareForTest(profile1+profile2);
+        prepareForTest(text);
 
         //generate parameter to call the provider
         ImplementationParams implParams = new ImplementationParams();
-        Position position = new Position(0,8);
+        Position position = new Position(4,0);
         implParams.setPosition(position);
         implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
@@ -108,7 +100,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -162,7 +155,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -180,7 +174,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -208,7 +203,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -236,7 +232,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -264,7 +261,8 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 
     @Test
@@ -292,6 +290,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertEquals(result.getLeft().size(),0);
+        Assert.assertNull(result.getLeft());
+        Assert.assertNull(result.getRight());
     }
 }
