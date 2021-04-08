@@ -27,7 +27,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             hoverProcessor = new HoverProcessor();
     private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
             completionProcessor = new CompletionProcessor();
-    private static final Function<DefinitionParams, CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>>>
+    private static final Function<DefinitionParams, Either<List<? extends Location>, List<? extends LocationLink>>>
             definitionProvider = new DefinitionProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
@@ -39,14 +39,18 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
         FSHFileHandler.getInstance().addFile(params);
         diagnosticProvider.compileAndSendDiagnostic(
                 fshLanguageServer.getClient(),
-                FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(params.getTextDocument().getUri())));
+                FSHFileHandler.getInstance().getFile(
+                        new TextDocumentIdentifier(params.getTextDocument().getUri())
+                ));
     }
 
     public void didChange(DidChangeTextDocumentParams params) {
         FSHFileHandler.getInstance().update(params);
         diagnosticProvider.compileAndSendDiagnostic(
                 fshLanguageServer.getClient(),
-                FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(params.getTextDocument().getUri())));
+                FSHFileHandler.getInstance().getFile(
+                        new TextDocumentIdentifier(params.getTextDocument().getUri())
+                ));
     }
 
     public void didClose(DidCloseTextDocumentParams params) {
@@ -78,6 +82,6 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
 
     @Override
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
-        return definitionProvider.apply(params);
+        return CompletableFuture.completedFuture(definitionProvider.apply(params));
     }
 }

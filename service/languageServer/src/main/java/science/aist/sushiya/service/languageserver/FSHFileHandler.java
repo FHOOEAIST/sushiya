@@ -24,6 +24,10 @@ public class FSHFileHandler {
     //private constructor to make it as a singleton
     private FSHFileHandler(){}
 
+    public Map<String, TextDocumentItem> getOpenedDocuments() {
+        return openedDocuments;
+    }
+
     public  static FSHFileHandler getInstance(){
         return instance;
     }
