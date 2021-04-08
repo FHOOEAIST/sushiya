@@ -6,30 +6,30 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
+import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
 
 import java.util.List;
 
 /**
  * <p>Created by Sophie Bauernfeind on 08.04.2021</p>
- * <p>Test class for {@link DefinitionProvider}</p>
+ * <p>Test class for {@link ImplementationProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class DefinitionProviderTest {
-    static final DefinitionProvider provider = new DefinitionProvider();
+public class ImplementationProviderTest {
+    static final ImplementationProvider provider = new ImplementationProvider();
     private Either<List<? extends Location>, List<? extends LocationLink>> result;
     private static final String uri = "testing";
     private static final String text =
-                    "Profile: Test\n"
-                    + "Parent: Patient \n"
-                    + "Id: test \n"
-                    + "* value 0..0 \n"
-                    + "\n"
-                    + "Profile: AnotherTest\n"
-                    + "Parent: Test \n"
-                    + "Id: test \n"
-                    + "* value 0..0 \n";
+            "Profile: Test\n"
+            + "Parent: Patient \n"
+            + "Id: test \n"
+            + "* value 0..0 \n"
+            + "\n"
+            + "Profile: AnotherTest\n"
+            + "Parent: Test \n"
+            + "Id: test \n"
+            + "* value 0..0 \n";
 
     @BeforeMethod
     public void setUp() {
@@ -54,128 +54,137 @@ public class DefinitionProviderTest {
         prepareForTest(text);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(1,9);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(5,10);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
     }
 
     @Test
-    public void testOneSource(){
+    public void testOneImplementation(){
         //given
         prepareForTest(text);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(6,9);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(0,10);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),1);
     }
 
     @Test
-    public void testNoSourceWrongPosition(){
+    public void testNoImplementationWrongPosition(){
         //given
-        prepareForTest(text);
+        String profile1 = "Profile: \n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(1,8);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(0,8);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
     }
 
     @Test
-    public void testNoSourcePositionAtEndOfWord(){
+    public void testOneImplementationPositionAtEndOfWord(){
         //given
         prepareForTest(text);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(1,14);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(0,12);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
-
-        // then
-        Assert.assertEquals(result.getLeft().size(),0);
-    }
-
-    @Test
-    public void testNoSourcePositionAtStartOfWord(){
-        //given
-        prepareForTest(text);
-
-        //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(1,7);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
-
-        //when
-        result = provider.apply(defParams);
-
-        // then
-        Assert.assertEquals(result.getLeft().size(),0);
-    }
-
-    @Test
-    public void testOneSourcePositionAtEndOfWord(){
-        //given
-        prepareForTest(text);
-
-        //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(6,11);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
-
-        //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),1);
     }
 
     @Test
-    public void testOneSourcePositionAtStartOfWord(){
+    public void testOneImplementationPositionAtStartOfWord(){
         //given
         prepareForTest(text);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
-        Position position = new Position(6,7);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(0,9);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),1);
     }
 
     @Test
-    public void testNoSourceInLineOpenRoundBracket(){
+    public void testNoImplementationPositionAtStartOfWord(){
+        //given
+        prepareForTest(text);
+
+        //generate parameter to call the provider
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(5,9);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(implParams);
+
+        // then
+        Assert.assertEquals(result.getLeft().size(),0);
+    }
+
+    @Test
+    public void testNoImplementationPositionAtEndOfWord(){
+        //given
+        prepareForTest(text);
+
+        //generate parameter to call the provider
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(5,19);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(implParams);
+
+        // then
+        Assert.assertEquals(result.getLeft().size(),0);
+    }
+
+    @Test
+    public void testNoImplementationInLineOpenRoundBracket(){
         //given
         String profile1 = "Profile: Test\n"
                 + "Parent: Patient \n"
@@ -185,25 +194,25 @@ public class DefinitionProviderTest {
         String profile2 = "Profile: AnotherTest\n"
                 + "Parent: Test \n"
                 + "Id: test \n"
-                + "* subject = Reference(Patient)\n"
+                + "* subject = Reference(Try)\n"
                 + "* value 0..0 \n";
         prepareForTest(profile1+profile2);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
+        ImplementationParams implParams = new ImplementationParams();
         Position position = new Position(8,13);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
     }
 
     @Test
-    public void testNoSourceInLineRoundBrackets(){
+    public void testNoImplementationInLineRoundBrackets(){
         //given
         String profile1 = "Profile: Test\n"
                 + "Parent: Patient \n"
@@ -213,25 +222,25 @@ public class DefinitionProviderTest {
         String profile2 = "Profile: AnotherTest\n"
                 + "Parent: Test \n"
                 + "Id: test \n"
-                + "* subject = Reference(Patient)\n"
+                + "* subject = Reference(Try)\n"
                 + "* value 0..0 \n";
         prepareForTest(profile1+profile2);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
+        ImplementationParams implParams = new ImplementationParams();
         Position position = new Position(8,21);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
     }
 
     @Test
-    public void testNoSourceInLineOpenSquareBracket(){
+    public void testNoImplementationInLineOpenSquareBracket(){
         //given
         String profile1 = "Profile: Test\n"
                 + "Parent: Patient \n"
@@ -246,20 +255,20 @@ public class DefinitionProviderTest {
         prepareForTest(profile1+profile2);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
+        ImplementationParams implParams = new ImplementationParams();
         Position position = new Position(8,4);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
     }
 
     @Test
-    public void testNoSourceInLineSquareBrackets(){
+    public void testNoImplementationInLineSquareBrackets(){
         //given
         String profile1 = "Profile: Test\n"
                 + "Parent: Patient \n"
@@ -274,13 +283,13 @@ public class DefinitionProviderTest {
         prepareForTest(profile1+profile2);
 
         //generate parameter to call the provider
-        DefinitionParams defParams = new DefinitionParams();
+        ImplementationParams implParams = new ImplementationParams();
         Position position = new Position(8,7);
-        defParams.setPosition(position);
-        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
 
         //when
-        result = provider.apply(defParams);
+        result = provider.apply(implParams);
 
         // then
         Assert.assertEquals(result.getLeft().size(),0);
