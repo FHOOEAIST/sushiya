@@ -36,6 +36,16 @@ Right now there is no functioning client, but there is one in work [VS Code](htt
 ![Syntax checking with wrong expected token](./images/syntaxCheckingWrongToken.png "Syntax checking with wrong expected token")
 
 
+**Goto code** \
+Goto Definition
+![Goto Definition](./images/goToDefinition.gif "Goto Definition") \
+\
+Goto Implementation
+![Goto Implementation](./images/goToImplementation.gif "Goto Implementation")\
+\
+Goto References
+![Goto References](./images/goToReferences.gif "Goto References")
+
 ## FAQ
 
 If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
