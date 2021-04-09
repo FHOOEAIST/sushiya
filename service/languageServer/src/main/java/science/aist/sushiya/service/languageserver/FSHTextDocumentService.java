@@ -13,7 +13,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
 import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
-import science.aist.sushiya.service.languageserver.hover.HoverProcessor;
+import science.aist.sushiya.service.languageserver.hover.HoverProvider;
 import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
 import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
 
@@ -25,7 +25,7 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     private final FSHLanguageServer fshLanguageServer;
     private final DiagnosticProvider diagnosticProvider;
     private static final Function<HoverParams,Hover>
-            hoverProcessor = new HoverProcessor();
+            hoverProcessor = new HoverProvider();
     private static final Function<CompletionParams,Either<List<CompletionItem>, CompletionList>>
             completionProcessor = new CompletionProcessor();
     private static final Function<DefinitionParams, Either<List<? extends Location>, List<? extends LocationLink>>>

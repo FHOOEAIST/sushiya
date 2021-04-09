@@ -9,6 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <p>The file handler contains all uris and textDocuments which are connected to the editors workspace.</p>
+ * <p>The class also contains additional information about the content in the files, which are needed by some completion provider.</p>
+ *
+ * @author SophieBauernfeind
+ */
 public class FSHFileHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHFileHandler.class);
     private static final FSHFileHandler instance = new FSHFileHandler();

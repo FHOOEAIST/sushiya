@@ -3,7 +3,6 @@ package science.aist.sushiya.service.languageserver.implementation;
 import org.eclipse.lsp4j.ImplementationParams;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
-import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.LocationProviderHelper;
@@ -24,7 +23,7 @@ public class ImplementationProvider implements Function<ImplementationParams,
     @Override
     public Either<List<? extends Location>, List<? extends LocationLink>> apply(ImplementationParams implementationParams) {
         String searchedImplementations = locationHelper.getName(
-                FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(implementationParams.getTextDocument().getUri())),
+                FSHFileHandler.getInstance().getFile(implementationParams.getTextDocument()),
                 implementationParams.getPosition());
 
         if(searchedImplementations == null){

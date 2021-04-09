@@ -31,7 +31,7 @@ public class LocationProviderHelper {
                 if(line.charAt(startPos) == ' ' ||
                         String.valueOf(line.charAt(startPos)).matches("\\p{Punct}")){
                     startFound = true;
-                }else{
+                }else {
                     startPos --;
                 }
             }
@@ -43,11 +43,12 @@ public class LocationProviderHelper {
                     endPos ++;
                 }
             }
-            if( startFound && (endFound || endPos == line.length())){
-                String result = line.substring(startPos+1, endPos);
+            if(startFound){
+                String result = line.substring(startPos +1, endPos);
                 return result.matches("(\\s*|\\p{Punct})")? null : result;
             }
-            return null;
+            String result = line.substring(startPos , endPos).trim();
+            return result.matches("(\\s*|\\p{Punct})")? null : result;
         }catch (Exception e){
             LOGGER.error(e.getMessage());
             return null;
