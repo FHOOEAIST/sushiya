@@ -8,6 +8,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.LocationProviderHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -29,7 +30,7 @@ public class DefinitionProvider implements Function<DefinitionParams,
                 definitionParams.getPosition());
 
         if(searchedDefinition == null){
-            return Either.forLeft(null);
+            return Either.forLeft(new ArrayList<>());
         }
 
         return Either.forLeft(locationHelper.getLocations(searchedDefinition,

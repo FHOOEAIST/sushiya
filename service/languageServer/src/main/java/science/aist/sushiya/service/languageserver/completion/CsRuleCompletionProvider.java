@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class CsRuleCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(CsRuleCompletionProvider.class);
-    private List<CompletionItem> completionItems = new ArrayList<>();
+    private final List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
     private boolean insertRule = false;
 

@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
 
 
 public class DiagnosticProvider {
-    private FSHLanguageServer server;
+    private final FSHLanguageServer server;
 
     public DiagnosticProvider(FSHLanguageServer server) {
         this.server = server;

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class SourceCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParentCompletionProvider.class);
-    private List<CompletionItem> completionItems = new ArrayList<>();
+    private final List<CompletionItem> completionItems = new ArrayList<>();
 
     @Override
     public List<CompletionItem> get() {

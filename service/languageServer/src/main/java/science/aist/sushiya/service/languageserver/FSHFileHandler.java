@@ -66,6 +66,9 @@ public class FSHFileHandler {
     }
 
     public TextDocumentItem getFile(TextDocumentIdentifier identifier){
+        if(identifier == null){
+            return null;
+        }
         if(openedDocuments.containsKey(identifier.getUri())){
             return openedDocuments.get(identifier.getUri());
         }else{
@@ -85,8 +88,8 @@ public class FSHFileHandler {
             entityName = "RuleSet";
         }
         else{
-            entityName = entity.name().substring(0,1) +
-                    entity.name().substring(1,entity.name().length()).toLowerCase();
+            entityName = entity.name().charAt(0) +
+                    entity.name().substring(1).toLowerCase();
         }
         String[]lines = textDocument.getText().split("\\n");
         for (int linePos = 0; linePos <lines.length; ++linePos) {

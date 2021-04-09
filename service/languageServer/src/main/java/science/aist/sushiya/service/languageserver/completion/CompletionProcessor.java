@@ -1,17 +1,14 @@
 package science.aist.sushiya.service.languageserver.completion;
 
-import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionList;
-import org.eclipse.lsp4j.CompletionParams;
-import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
  *
  * @author SophieBauernfeind
  */
-public class CompletionProcessor implements BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>> {
+public class CompletionProcessor implements Function<CompletionParams,Either<List<CompletionItem>, CompletionList>> {
     private static final List<ICompletionProvider> completionProviders = new ArrayList<>();
     private static final ICompletionProvider defaultProvider = new FSHKeywordCompletionProvider();
     private static final Logger LOGGER = LoggerFactory.getLogger(CompletionProcessor.class);
@@ -40,10 +37,14 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
     }
 
     @Override
-    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> apply(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+    public Either<List<CompletionItem>, CompletionList> apply(CompletionParams completionParams) {
         List<List<CompletionItem>> completionItems = new ArrayList<>();
+        if(completionParams.getTextDocument() == null){
+            return null;
+        }
+        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(completionParams.getTextDocument());
         for (ICompletionProvider cp: completionProviders) {
-            if(cp.test(textDocumentItem,completionParams)){
+            if(cp.test(textDocument,completionParams)){
                 completionItems.add(cp.get());
                 LOGGER.info("completion provider {} activated.", cp.toString());
             }
@@ -52,10 +53,8 @@ public class CompletionProcessor implements BiFunction<TextDocumentItem, Complet
         if(completionItems.isEmpty()){
             completionItems.add(defaultProvider.get());
         }
-        return CompletableFuture
-                .completedFuture(Either
-                        .forLeft(completionItems.stream()
-                                .flatMap(List::stream)
-                                .collect(Collectors.toList())));
+        return Either.forLeft(completionItems.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList()));
     }
 }

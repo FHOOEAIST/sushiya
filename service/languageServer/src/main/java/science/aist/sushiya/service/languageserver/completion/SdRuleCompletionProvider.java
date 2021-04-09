@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  */
 public class SdRuleCompletionProvider implements ICompletionProvider{
     private static final Logger LOGGER = LoggerFactory.getLogger(SdRuleCompletionProvider.class);
-    private List<CompletionItem> completionItems = new ArrayList<>();
-    private List<String> components = new ArrayList<>();
+    private final List<CompletionItem> completionItems = new ArrayList<>();
+    private final List<String> components = new ArrayList<>();
     private boolean newRule = false;
     private boolean rulePathDefined = false;
     private boolean cardRule = false;

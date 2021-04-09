@@ -19,15 +19,14 @@ import science.aist.sushiya.service.languageserver.references.ReferencesProvider
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
     private final FSHLanguageServer fshLanguageServer;
     private final DiagnosticProvider diagnosticProvider;
-    private static final BiFunction<Position, TextDocumentItem,CompletableFuture<Hover>>
+    private static final Function<HoverParams,Hover>
             hoverProcessor = new HoverProcessor();
-    private static final BiFunction<TextDocumentItem, CompletionParams,CompletableFuture<Either<List<CompletionItem>, CompletionList>>>
+    private static final Function<CompletionParams,Either<List<CompletionItem>, CompletionList>>
             completionProcessor = new CompletionProcessor();
     private static final Function<DefinitionParams, Either<List<? extends Location>, List<? extends LocationLink>>>
             definitionProvider = new DefinitionProvider();
@@ -68,17 +67,13 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     }
 
     @Override
-    public CompletableFuture<Hover> hover(HoverParams hoverParams){
-        String uri = hoverParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri));
-        return hoverProcessor.apply(hoverParams.getPosition(), textDocument);
+    public CompletableFuture<Hover> hover(HoverParams params){
+        return CompletableFuture.completedFuture(hoverProcessor.apply(params));
     }
 
     @Override
-    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams completionParams) {
-        String uri = completionParams.getTextDocument().getUri();
-        TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(uri));
-        return completionProcessor.apply(textDocument, completionParams);
+    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams params) {
+        return CompletableFuture.completedFuture(completionProcessor.apply(params));
     }
 
     @Override

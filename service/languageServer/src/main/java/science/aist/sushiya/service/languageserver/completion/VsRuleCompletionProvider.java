@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class VsRuleCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(VsRuleCompletionProvider.class);
-    private List<CompletionItem> completionItems = new ArrayList<>();
+    private final List<CompletionItem> completionItems = new ArrayList<>();
     private List<String> definedAliases = new ArrayList<>();
     private boolean newRule = false;
     private boolean includeExcludeRule = false;

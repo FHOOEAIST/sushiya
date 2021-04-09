@@ -17,7 +17,7 @@ import java.util.List;
  * @author SophieBauernfeind
  */
 public class FSHErrorListener extends BaseErrorListener {
-    private List<Diagnostic> diagnostics = new ArrayList<>();
+    private final List<Diagnostic> diagnostics = new ArrayList<>();
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {

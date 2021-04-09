@@ -34,10 +34,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -61,10 +62,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -82,10 +84,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -101,10 +104,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -126,10 +130,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -149,10 +154,11 @@ public class CompletionProcessorTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -170,10 +176,11 @@ public class CompletionProcessorTest {
         CompletionParams params = new CompletionParams();
         Position position = new Position(4,8);
         params.setPosition(position);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -193,10 +200,11 @@ public class CompletionProcessorTest {
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
     }
 
     @Test
@@ -216,9 +224,35 @@ public class CompletionProcessorTest {
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         params.setContext(completionContext);
+        params.setTextDocument(new TextDocumentIdentifier(textDocumentItem.getUri()));
         //when
 
         //then
-        Assert.assertNotNull(processor.apply(textDocumentItem,params));
+        Assert.assertNotNull(processor.apply(params));
+    }
+
+    @Test
+    public void testApplyNoFileSet(){
+        //given
+        TextDocumentItem textDocumentItem = new TextDocumentItem();
+        String text = "Alias: LNC = http://loinc.org\n"
+                + "\n"
+                + "Profile: MyWeightProfile\n"
+                + "Id: MyWeightProfile \n"
+                + "Parent: ";
+        textDocumentItem.setText(text);
+        textDocumentItem.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        Position position = new Position(4,8);
+        params.setPosition(position);
+        CompletionContext completionContext = new CompletionContext();
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
+        completionContext.setTriggerCharacter(" ");
+        params.setContext(completionContext);
+        //when
+
+        //then
+        Assert.assertNull(processor.apply(params));
     }
 }

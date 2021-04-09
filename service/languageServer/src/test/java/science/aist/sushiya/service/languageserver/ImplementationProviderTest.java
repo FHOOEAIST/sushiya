@@ -63,8 +63,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -190,8 +189,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -209,8 +207,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -238,8 +235,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -267,8 +263,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -296,8 +291,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -325,7 +319,6 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 }

@@ -63,8 +63,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -136,8 +135,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -155,8 +153,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -174,8 +171,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -239,8 +235,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -268,8 +263,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -297,8 +291,7 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 
     @Test
@@ -326,7 +319,6 @@ public class DefinitionProviderTest {
         result = provider.apply(defParams);
 
         // then
-        Assert.assertNull(result.getLeft());
-        Assert.assertNull(result.getRight());
+        Assert.assertEquals(result.getLeft().size(), 0);
     }
 }

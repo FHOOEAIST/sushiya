@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
  */
 public class PathCompletionProvider implements ICompletionProvider{
     private static final Logger LOGGER = LoggerFactory.getLogger(PathCompletionProvider.class);
-    private List<CompletionItem> completionItems = new ArrayList<>();
+    private final List<CompletionItem> completionItems = new ArrayList<>();
     private List<String> ruleLines = new ArrayList<>();
-    private Map<String,List<String>> components = new HashMap<>();
+    private final Map<String,List<String>> components = new HashMap<>();
     private String triggerWord = "";
 
     @Override
@@ -110,10 +110,7 @@ public class PathCompletionProvider implements ICompletionProvider{
             }
         }
         fillComponentMap();
-        if(contains && components.containsKey(triggerWord)){
-            return true;
-        }
-        return false;
+        return contains && components.containsKey(triggerWord);
     }
 
     private void fillCompletionItems(){
