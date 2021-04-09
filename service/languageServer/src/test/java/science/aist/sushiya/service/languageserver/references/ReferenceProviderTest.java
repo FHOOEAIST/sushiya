@@ -1,11 +1,11 @@
-package science.aist.sushiya.service.languageserver;
+package science.aist.sushiya.service.languageserver.references;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.List;
 

@@ -1,9 +1,8 @@
-package science.aist.sushiya.service.languageserver;
+package science.aist.sushiya.service.languageserver.completion;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.FSHKeywordCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 26.03.2021</p>

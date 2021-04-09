@@ -227,7 +227,7 @@ public class FSHFileHandler {
         addEntities(Entity.INVARIANT, getEntities(Entity.INVARIANT,textDocument));
     }
 
-    protected void clean(){
+    public void clean(){
         openedDocuments = new HashMap<>();
         createdProfiles = new ArrayList<>();
         createdExtensions = new ArrayList<>();

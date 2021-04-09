@@ -1,31 +1,33 @@
-package science.aist.sushiya.service.languageserver;
+package science.aist.sushiya.service.languageserver.completion;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.SourceCompletionProvider;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
+import science.aist.sushiya.service.languageserver.completion.FHIRResources;
+import science.aist.sushiya.service.languageserver.completion.InstanceOfCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
- * <p>Test class for {@link SourceCompletionProvider}</p>
+ * <p>Test class for {@link InstanceOfCompletionProvider}</p>
  *
  * @author Sophie Bauernfeind
  */
-public class SourceCompletionProviderTest {
-    private static final SourceCompletionProvider provider = new SourceCompletionProvider();
+public class InstanceOfCompletionProviderTest {
+    private static final InstanceOfCompletionProvider provider = new InstanceOfCompletionProvider();
     private static final String uri = "testing";
 
     @BeforeMethod
     public void setUp() {
         FSHFileHandler.getInstance().clean();
     }
-
+    
     @Test
     public void testActivation1(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -46,7 +48,7 @@ public class SourceCompletionProviderTest {
     public void testActivation2(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  Source: ";
+        String text = "  InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -67,7 +69,7 @@ public class SourceCompletionProviderTest {
     public void testActivation3(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "  Source  : ";
+        String text = "  InstanceOf  : ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -88,7 +90,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationWrongPosition() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -109,7 +111,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationOutOfBound() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -151,7 +153,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationIncorrectText() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "test Source: ";
+        String text = "test InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -172,7 +174,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationNoSetPosition() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -191,7 +193,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationNoSetContext() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -208,7 +210,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationNoSetTriggerKind() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -228,7 +230,7 @@ public class SourceCompletionProviderTest {
     public void testNoActivationNoSetTriggerCharacter() {
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
@@ -248,7 +250,7 @@ public class SourceCompletionProviderTest {
     public void testActivationNoSetUri(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: ";
+        String text = "InstanceOf: ";
         textDocumentItem.setText(text);
 
         CompletionParams params = new CompletionParams();
@@ -269,7 +271,7 @@ public class SourceCompletionProviderTest {
     public void testAmountCompletionItems(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: \n"
+        String text = "InstanceOf: "
                 + "\n"
                 + "Profile: Test";
         textDocumentItem.setText(text);
@@ -282,7 +284,6 @@ public class SourceCompletionProviderTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
-
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
         openParams.setTextDocument(textDocumentItem);
@@ -290,16 +291,19 @@ public class SourceCompletionProviderTest {
         provider.test(textDocumentItem,params);
 
         //then
-        Assert.assertEquals(provider.get().size(),1);
+        Assert.assertEquals(provider.get().size(),
+                FHIRResources.getInstance().getAllBase().size()+
+                        FHIRResources.getInstance().getAllClinical().size() +
+                        1);
     }
 
     @Test
     public void testAmountCompletionItems2(){
         //given
         TextDocumentItem textDocumentItem = new TextDocumentItem();
-        String text = "Source: \n"
+        String text = "InstanceOf: \n"
                 + "\n"
-                + "Profile: Test"
+                + "Profile: Test\n"
                 + "\n"
                 + "Profile: Test2";
         textDocumentItem.setText(text);
@@ -312,7 +316,6 @@ public class SourceCompletionProviderTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
-
         //when
         DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
         openParams.setTextDocument(textDocumentItem);
@@ -320,6 +323,9 @@ public class SourceCompletionProviderTest {
         provider.test(textDocumentItem,params);
 
         //then
-        Assert.assertEquals(provider.get().size(),2);
+        Assert.assertEquals(provider.get().size(),
+                FHIRResources.getInstance().getAllBase().size()+
+                        FHIRResources.getInstance().getAllClinical().size() +
+                        2);
     }
 }

@@ -75,6 +75,6 @@ public class LocationProviderHelper {
 
             }
         }
-        return result.size() > 0 ? result : new ArrayList<>();
+        return result;
     }
 }

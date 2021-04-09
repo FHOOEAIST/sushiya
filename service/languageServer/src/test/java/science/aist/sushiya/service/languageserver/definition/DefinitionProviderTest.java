@@ -1,4 +1,4 @@
-package science.aist.sushiya.service.languageserver;
+package science.aist.sushiya.service.languageserver.definition;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
+import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package science.aist.sushiya.service.languageserver;
+package science.aist.sushiya.service.languageserver.diagnostic;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
