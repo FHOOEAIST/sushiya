@@ -86,6 +86,42 @@ public class DefinitionProviderTest {
     }
 
     @Test
+    public void testOneSourceOtherFiles(){
+        //given
+        //first file where the implementation is
+        String firstText = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* value 0..0 \n";
+        prepareForTest(firstText);
+
+        //generate parameter to call the provider
+        DefinitionParams defParams = new DefinitionParams();
+        Position position = new Position(1,9);
+        defParams.setPosition(position);
+        defParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //second file where the definition is
+        String secondText = "Profile: Test\n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n";
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(secondText);
+        textDocument.setUri("secondFile");
+        //register this document to the file handler
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //when
+        result = provider.apply(defParams);
+
+        // then
+        Assert.assertEquals(result.getLeft().size(),1);
+    }
+
+    @Test
     public void testNoSourceWrongPosition(){
         //given
         prepareForTest(text);

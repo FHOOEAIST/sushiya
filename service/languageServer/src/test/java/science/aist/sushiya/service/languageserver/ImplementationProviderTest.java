@@ -86,6 +86,41 @@ public class ImplementationProviderTest {
     }
 
     @Test
+    public void testOneImplementationOtherFiles(){
+        //given
+        String firstText = "Profile: Test\n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n";
+        prepareForTest(firstText);
+
+        //generate parameter to call the provider
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(0,10);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        String secondText = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* value 0..0 \n";
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(secondText);
+        textDocument.setUri("secondFile");
+
+        //register this document to the file handler
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //when
+        result = provider.apply(implParams);
+
+        // then
+        Assert.assertEquals(result.getLeft().size(),1);
+    }
+
+    @Test
     public void testNoImplementationWrongPosition(){
         //given
         prepareForTest(text);

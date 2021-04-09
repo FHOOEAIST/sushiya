@@ -94,6 +94,35 @@ public class ReferenceProviderTest {
     }
 
     @Test
+    public void testReferencesOtherFiles(){
+        //given
+        //prepare first file, where the position is set to a
+        //word where the other file have references
+        prepareForTest(textNoReference);
+
+        //generate parameter to call the provider
+        ReferenceParams refParams = new ReferenceParams();
+        Position position = new Position(0,10);
+        refParams.setPosition(position);
+        refParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //create the other file, where the references can get from
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(textReference);
+        textDocument.setUri("secondFile");
+        //register this document to the file handler
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //when
+        result = provider.apply(refParams);
+
+        // then
+        Assert.assertEquals(result.size(),5);
+    }
+
+    @Test
     public void testNoReferenceWrongPosition(){
         //given
         prepareForTest(textReference);
@@ -181,5 +210,117 @@ public class ReferenceProviderTest {
 
         // then
         Assert.assertEquals(result.size(),4);
+    }
+
+    @Test
+    public void testNoSourceInLineOpenRoundBracket(){
+        //given
+        String profile1 = "Profile: Test\n"
+                + "Parent: Testing \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* subject = Reference(Patient)\n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
+
+        //generate parameter to call the provider
+        ReferenceParams refParams = new ReferenceParams();
+        Position position = new Position(8,13);
+        refParams.setPosition(position);
+        refParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(refParams);
+
+        // then
+        Assert.assertEquals(result.size(),1);
+    }
+
+    @Test
+    public void testNoSourceInLineRoundBrackets(){
+        //given
+        String profile1 = "Profile: Test\n"
+                + "Parent: Testing \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* subject = Reference(Patient)\n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
+
+        //generate parameter to call the provider
+        ReferenceParams refParams = new ReferenceParams();
+        Position position = new Position(8,21);
+        refParams.setPosition(position);
+        refParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(refParams);
+
+        // then
+        Assert.assertEquals(result.size(),1);
+    }
+
+    @Test
+    public void testNoSourceInLineOpenSquareBracket(){
+        //given
+        String profile1 = "Profile: Test\n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* path[try]\n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
+
+        //generate parameter to call the provider
+        ReferenceParams refParams = new ReferenceParams();
+        Position position = new Position(8,4);
+        refParams.setPosition(position);
+        refParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(refParams);
+
+        // then
+        Assert.assertEquals(result.size(), 1);
+    }
+
+    @Test
+    public void testNoSourceInLineSquareBracket(){
+        //given
+        String profile1 = "Profile: Test\n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* path[try]\n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
+
+        //generate parameter to call the provider
+        ReferenceParams refParams = new ReferenceParams();
+        Position position = new Position(8,7);
+        refParams.setPosition(position);
+        refParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(refParams);
+
+        // then
+        Assert.assertEquals(result.size(), 1);
     }
 }
