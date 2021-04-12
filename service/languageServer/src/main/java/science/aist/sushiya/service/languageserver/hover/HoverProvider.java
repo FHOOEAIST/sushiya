@@ -1,8 +1,8 @@
 package science.aist.sushiya.service.languageserver.hover;
 
-import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.lsp4j.Hover;
+import org.eclipse.lsp4j.HoverParams;
+import org.eclipse.lsp4j.MarkupContent;
 import science.aist.sushiya.service.languageserver.*;
 
 import java.util.Locale;
@@ -15,7 +15,6 @@ import java.util.function.Function;
  */
 
 public class HoverProvider implements Function<HoverParams,Hover> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HoverProvider.class);
     private static final ProviderHelper HELPER = new ProviderHelper();
     private static String infoText;
 

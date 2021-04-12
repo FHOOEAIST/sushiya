@@ -46,6 +46,11 @@ Goto Implementation
 Goto References
 ![Goto References](./images/goToReferences.gif "Goto References")
 
+**Hover information**
+![Alias Hover](./images/aliasHover.png "Alias Hover")
+![CodeSystem Hover](./images/codeSystemHover.png "CodeSystem Hover")
+![ValueSet Hover](./images/valueSetHover.png "ValueSet Hover")
+
 ## FAQ
 
 If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
@@ -66,6 +71,4 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 ## Research
 
 If you are going to use this project as part of a research paper, we would ask you to reference this project by citing
-it. 
-
-<TODO zenodo doi>
+it.
