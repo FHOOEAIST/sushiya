@@ -16,6 +16,7 @@ import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider
 import science.aist.sushiya.service.languageserver.hover.HoverProvider;
 import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
 import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
+import science.aist.sushiya.service.languageserver.rename.RenameProvider;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -34,6 +35,8 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             implementationProvider = new ImplementationProvider();
     private static final Function<ReferenceParams, List<? extends Location>>
             referencesProvider = new ReferencesProvider();
+    private static final Function<RenameParams, WorkspaceEdit>
+            renameProvider = new RenameProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -94,5 +97,10 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
         return CompletableFuture.completedFuture(referencesProvider.apply(params));
+    }
+
+    @Override
+    public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
+        return CompletableFuture.completedFuture(renameProvider.apply(params));
     }
 }
