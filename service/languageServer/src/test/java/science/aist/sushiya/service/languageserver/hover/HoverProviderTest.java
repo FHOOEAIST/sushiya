@@ -94,7 +94,7 @@ public class HoverProviderTest {
                     solution = AdditionalInformation.idInformation;
                     break;
                 case INSTANCEOF:
-                    solution = AdditionalInformation.instanceInformation;
+                    solution = AdditionalInformation.instanceOfInformation;
                     break;
                 case PARENT:
                     solution = AdditionalInformation.parentInformation;
@@ -239,5 +239,4 @@ public class HoverProviderTest {
         ActivationTest("Usage",
                 Metadata.USAGE.name());
     }
-
 }

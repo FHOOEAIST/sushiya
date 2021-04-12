@@ -17,8 +17,8 @@ import java.util.Map;
  *
  * @author SophieBauernfeind
  */
-public class LocationProviderHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LocationProviderHelper.class);
+public class ProviderHelper {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderHelper.class);
 
     public String getName(@NotNull TextDocumentItem textDocument, @NotNull Position position){
         try{

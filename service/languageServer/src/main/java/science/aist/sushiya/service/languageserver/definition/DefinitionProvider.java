@@ -6,7 +6,7 @@ import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
-import science.aist.sushiya.service.languageserver.LocationProviderHelper;
+import science.aist.sushiya.service.languageserver.ProviderHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class DefinitionProvider implements Function<DefinitionParams,
         Either<List<? extends Location>, List<? extends LocationLink>>>{
     private static final String regexEntities = "(Alias|Profile|Extension|Invariant|Instance|ValueSet|CodeSystem|RuleSet|Mapping)";
-    private static final LocationProviderHelper locationHelper = new LocationProviderHelper();
+    private static final ProviderHelper locationHelper = new ProviderHelper();
 
     @Override
     public Either<List<? extends Location>, List<? extends LocationLink>> apply(DefinitionParams definitionParams) {

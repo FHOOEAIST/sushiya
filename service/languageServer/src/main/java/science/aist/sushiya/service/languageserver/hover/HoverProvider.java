@@ -1,8 +1,6 @@
 package science.aist.sushiya.service.languageserver.hover;
 
-import org.eclipse.lsp4j.Hover;
-import org.eclipse.lsp4j.HoverParams;
-import org.eclipse.lsp4j.MarkupContent;
+import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.*;
@@ -18,7 +16,7 @@ import java.util.function.Function;
 
 public class HoverProvider implements Function<HoverParams,Hover> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HoverProvider.class);
-    private static final LocationProviderHelper HELPER = new LocationProviderHelper();
+    private static final ProviderHelper HELPER = new ProviderHelper();
     private static String infoText;
 
     @Override
@@ -101,7 +99,7 @@ public class HoverProvider implements Function<HoverParams,Hover> {
                     infoText = AdditionalInformation.idInformation;
                     break;
                 case INSTANCEOF:
-                    infoText = AdditionalInformation.instanceInformation;
+                    infoText = AdditionalInformation.instanceOfInformation;
                     break;
                 case PARENT:
                     infoText = AdditionalInformation.parentInformation;
