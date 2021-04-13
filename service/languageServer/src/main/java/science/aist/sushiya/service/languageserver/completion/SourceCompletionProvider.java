@@ -27,7 +27,7 @@ public class SourceCompletionProvider implements ICompletionProvider {
         completionItems.clear();
 
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
-                .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                .stream().map(CompletionItem::new).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }

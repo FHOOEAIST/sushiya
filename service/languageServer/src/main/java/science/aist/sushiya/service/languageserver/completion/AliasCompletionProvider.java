@@ -31,7 +31,7 @@ public class AliasCompletionProvider implements ICompletionProvider {
         completionItems.add(new CompletionItem("LNC = http://loinc.org"));
         completionItems.add(new CompletionItem("SCT = http://snomed.info/sct"));
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS)
-                .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                .stream().map(CompletionItem::new).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }

@@ -30,7 +30,7 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
         completionItems.addAll(FHIRResources.getInstance().getAllBase());
         completionItems.addAll(FHIRResources.getInstance().getAllClinical());
         completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
-                .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                .stream().map(CompletionItem::new).collect(Collectors.toList()));
 
         return completionItems.stream().distinct().collect(Collectors.toList());
     }

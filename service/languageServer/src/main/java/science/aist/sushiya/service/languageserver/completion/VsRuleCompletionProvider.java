@@ -40,16 +40,16 @@ public class VsRuleCompletionProvider implements ICompletionProvider {
                     .collect(Collectors.toList()));
         }else if(insertRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }else if (includeExcludeRule){
             completionItems.add(new CompletionItem("codes from valueset"));
             completionItems.add(new CompletionItem("codes from system"));
         }else if(valueSetRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }else if(systemRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.CODESYSTEM)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }
         return completionItems;
     }

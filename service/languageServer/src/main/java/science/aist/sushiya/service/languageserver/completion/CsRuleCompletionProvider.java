@@ -33,7 +33,7 @@ public class CsRuleCompletionProvider implements ICompletionProvider {
            completionItems.add(new CompletionItem("insert"));
         }else if(insertRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }
         return completionItems;
     }

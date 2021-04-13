@@ -41,16 +41,16 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
             //insertRule
             completionItems.add(new CompletionItem("insert"));
             completionItems.addAll(components
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }else if(insertRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }else if(obeysRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }else if (valueSetRule){
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
-                    .stream().map(name -> new CompletionItem(name)).collect(Collectors.toList()));
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
             completionItems.add(new CompletionItem("(example)"));
             completionItems.add(new CompletionItem("(preferred)"));
             completionItems.add(new CompletionItem("(extensible)"));

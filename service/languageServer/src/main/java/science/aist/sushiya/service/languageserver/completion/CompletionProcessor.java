@@ -4,6 +4,7 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import science.aist.sushiya.service.languageserver.Entity;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
 import java.util.ArrayList;
@@ -52,6 +53,10 @@ public class CompletionProcessor implements Function<CompletionParams,Either<Lis
         //if no other completion provider is in charge use default provider
         if(completionItems.isEmpty()){
             completionItems.add(defaultProvider.get());
+            completionItems.add(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
+            completionItems.add(FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION)
+                    .stream().map(CompletionItem::new).collect(Collectors.toList()));
         }
         return Either.forLeft(completionItems.stream()
                 .flatMap(List::stream)
