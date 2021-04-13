@@ -13,6 +13,7 @@ import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
 import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
+import science.aist.sushiya.service.languageserver.formatting.FormattingProvider;
 import science.aist.sushiya.service.languageserver.hover.HoverProvider;
 import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
 import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
@@ -37,6 +38,8 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             referencesProvider = new ReferencesProvider();
     private static final Function<RenameParams, WorkspaceEdit>
             renameProvider = new RenameProvider();
+    private static final Function<DocumentFormattingParams, List<? extends TextEdit>>
+            formattingProvider = new FormattingProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -102,5 +105,10 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     @Override
     public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
         return CompletableFuture.completedFuture(renameProvider.apply(params));
+    }
+
+    @Override
+    public CompletableFuture<List<? extends TextEdit>> formatting(DocumentFormattingParams params) {
+        return CompletableFuture.completedFuture(formattingProvider.apply(params));
     }
 }
