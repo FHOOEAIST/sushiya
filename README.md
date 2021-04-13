@@ -51,6 +51,10 @@ Goto References
 ![CodeSystem Hover](./images/codeSystemHover.png "CodeSystem Hover")
 ![ValueSet Hover](./images/valueSetHover.png "ValueSet Hover")
 
+**Rename** 
+![rename](./images/rename.gif "rename")
+If the renaming entity is the last word, renaming won't work.
+
 ## FAQ
 
 If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
