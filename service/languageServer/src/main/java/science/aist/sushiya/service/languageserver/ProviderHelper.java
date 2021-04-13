@@ -58,22 +58,21 @@ public class ProviderHelper {
     public List<Location> getLocations(@NotNull String searchedName, @NotNull String RegexLine){
         List<Location> result = new ArrayList<>();
         for (Map.Entry<String,TextDocumentItem> document : FSHFileHandler.getInstance().getOpenedDocuments().entrySet()) {
-            if(document.getValue().getText().contains(searchedName)){
-                String text = document.getValue().getText();
-                int characterPos = 0;
+            String text = document.getValue().getText();
 
+            if(text.contains(searchedName)){
                 String[] lines = text.split("\n");
                 for (int pos = 0; pos < lines.length; pos++) {
+
                     if(lines[pos].matches(RegexLine)){
-                        characterPos = lines[pos].indexOf(searchedName);
+                        int characterPos = lines[pos].indexOf(searchedName);
 
                         Position start = new Position(pos, characterPos);
-                        Position end = new Position(pos, characterPos + searchedName.length());
+                        Position end = new Position(pos, characterPos + searchedName.length()-1);
                         result.add(new Location(document.getKey(),
                                 new Range(start,end)));
                     }
                 }
-
             }
         }
         return result;
