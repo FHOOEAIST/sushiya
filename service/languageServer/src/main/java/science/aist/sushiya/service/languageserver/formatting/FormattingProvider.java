@@ -1,8 +1,6 @@
 package science.aist.sushiya.service.languageserver.formatting;
 
-import org.eclipse.lsp4j.DocumentFormattingParams;
-import org.eclipse.lsp4j.TextDocumentItem;
-import org.eclipse.lsp4j.TextEdit;
+import org.eclipse.lsp4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.Entity;
@@ -29,59 +27,56 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
         TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(documentFormattingParams.getTextDocument());
 
         String[] lines = textDocument.getText().split("\\n");
-        for (int pos = 0; pos < lines.length; pos++) {
-            String line = lines[pos].toUpperCase(Locale.ROOT);
+        StringBuilder newText = new StringBuilder();
+        for (String s : lines) {
+            String line = s;
 
-            if(firstWordIsEntity(line) || line.replaceFirst("\\s*","").startsWith("//")){
-                if(line.matches("\\s(\\s|\\S)*")){
-                    lines[pos] = lines[pos].replaceFirst("\\s*","");
-                    TextEdit textEdit = new TextEdit();
-                    textEdit.setNewText(lines[pos].replaceFirst("\\s*",""));
-                    result.add(textEdit);
+            if (firstWordIsMetadata(line) || line.replaceFirst("\\s*", "").startsWith("*")) {
+                if (!line.matches("\\s{4}(\\s|\\S)*")) {
+                    line = s.replaceFirst("\\s*", "    ");
                 }
-            }else if(firstWordIsMetadata(line) || line.replaceFirst("\\s*","").startsWith("*")){
-                if(! line.matches("\\t(\\s|\\S)*")){
-                    TextEdit textEdit = new TextEdit();
-                    textEdit.setNewText(line.replaceFirst("\\s*","\t"));
-                    result.add(textEdit);
-                }else{
-                    LOGGER.info("Starts with Tab.");
+            } else if (firstWordIsEntity(line) || line.replaceFirst("\\s*", "").startsWith("//")) {
+                if (line.matches("\\s(\\s|\\S)*")) {
+                    line = s.replaceFirst("\\s*", "");
                 }
             }
+            newText.append(line);
         }
+        TextEdit textEdit = new TextEdit();
+        textEdit.setNewText(newText.toString());
+        textEdit.setRange(new Range(new Position(0,0),
+                new Position(lines.length-1,lines[lines.length-1].length()-1)));
+        result.add(textEdit);
 
         return result;
     }
 
     private boolean firstWordIsEntity(String line){
-        line = line.replaceFirst("\\s*","");
-
-        return line.startsWith(Entity.ALIAS.name())
-                || line.startsWith(Entity.PROFILE.name())
-                || line.startsWith(Entity.EXTENSION.name())
-                || line.startsWith(Entity.INVARIANT.name())
-                || line.startsWith(Entity.INSTANCE.name())
-                || line.startsWith(Entity.VALUESET.name())
-                || line.startsWith(Entity.CODESYSTEM.name())
-                || line.startsWith(Entity.RULESET.name())
-                || line.startsWith(Entity.MAPPING.name());
+        return line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.ALIAS.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.PROFILE.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.EXTENSION.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.INVARIANT.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.INSTANCE.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.VALUESET.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.CODESYSTEM.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.RULESET.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Entity.MAPPING.name())
+                ;
     }
 
     private boolean firstWordIsMetadata(String line){
-        line = line.replaceFirst("\\s*","");
-
-        return line.startsWith(Metadata.DESCRIPTION.name())
-                || line.startsWith(Metadata.EXPRESSION.name())
-                || line.startsWith(Metadata.ID.name())
-                || line.startsWith(Metadata.INSTANCEOF.name())
-                || line.startsWith(Metadata.PARENT.name())
-                || line.startsWith(Metadata.SEVERITY.name())
-                || line.startsWith(Metadata.SOURCE.name())
-                || line.startsWith(Metadata.TARGET.name())
-                || line.startsWith(Metadata.TITLE.name())
-                || line.startsWith(Metadata.USAGE.name())
-                || line.startsWith(Metadata.XPATH.name())
-                || line.startsWith(Metadata.MIXINS.name())
+        return line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.DESCRIPTION.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.EXPRESSION.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.ID.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.INSTANCEOF.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.PARENT.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.SEVERITY.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.SOURCE.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.TARGET.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.TITLE.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.USAGE.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.XPATH.name())
+                || line.toUpperCase(Locale.ROOT).replaceFirst("\\s*","").startsWith(Metadata.MIXINS.name())
                 ;
     }
 }

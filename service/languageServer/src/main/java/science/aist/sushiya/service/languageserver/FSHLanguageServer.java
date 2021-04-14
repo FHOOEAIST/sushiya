@@ -37,9 +37,7 @@ import java.util.concurrent.CompletableFuture;
  */
 
 public class FSHLanguageServer extends AbstractLanguageServer implements LanguageServer, LanguageClientAware {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(FSHLanguageServer.class);
-
     private LanguageClient client;
 
     public FSHLanguageServer() {

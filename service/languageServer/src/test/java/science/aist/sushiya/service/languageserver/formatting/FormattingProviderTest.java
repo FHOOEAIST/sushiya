@@ -47,7 +47,7 @@ public class FormattingProviderTest {
         // then
         Assert.assertNotNull(result);
         Assert.assertEquals(result.size(), 1);
-        Assert.assertNotEquals(result.get(0).getNewText().length(),text.length());
+        Assert.assertNotEquals(result.get(0).getNewText(),text);
     }
 
     @Parameters({"text"})
@@ -70,7 +70,8 @@ public class FormattingProviderTest {
 
         // then
         Assert.assertNotNull(result);
-        Assert.assertEquals(result.size(), 0);
+        Assert.assertEquals(result.size(), 1);
+        Assert.assertEquals(result.get(0).getNewText(),text);
     }
 
     @Test
@@ -181,8 +182,39 @@ public class FormattingProviderTest {
     @Test
     public void testAmountChangesEntity(){
         //given
-        //TODO: make useful test
-        Assert.assertTrue(Boolean.TRUE);
-    }
+        String text = "Instance: EveAnyperson\n"
+                + "InstanceOf: TestPatient\n"
+                + "Usage: #inline // #inline means this instance should not be exported as a separate example\n"
+                + "* name.given[0] = \"Eve\"\n"
+                + "* name.family = \"Anyperson\"";
 
+        String expectedText = "Instance: EveAnyperson\n"
+                + "    InstanceOf: TestPatient\n"
+                + "    Usage: #inline // #inline means this instance should not be exported as a separate example\n"
+                + "    * name.given[0] = \"Eve\"\n"
+                + "    * name.family = \"Anyperson\"\"";
+
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(text);
+        textDocument.setUri(uri);
+
+        //register this document to the file handler
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //generate parameter to call the provider
+        DocumentFormattingParams formattingParams = new DocumentFormattingParams();
+        formattingParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(formattingParams);
+
+        // then
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result.size(), 1);
+        Assert.assertNotEquals(result.get(0).getNewText(),expectedText);
+
+
+    }
 }

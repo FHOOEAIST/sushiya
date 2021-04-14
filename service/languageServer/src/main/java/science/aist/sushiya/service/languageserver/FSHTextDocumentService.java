@@ -10,6 +10,8 @@ package science.aist.sushiya.service.languageserver;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
 import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
@@ -19,11 +21,14 @@ import science.aist.sushiya.service.languageserver.implementation.Implementation
 import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
 import science.aist.sushiya.service.languageserver.rename.RenameProvider;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FSHLanguageServer.class);
     private final FSHLanguageServer fshLanguageServer;
     private final DiagnosticProvider diagnosticProvider;
     private static final Function<HoverParams,Hover>
@@ -109,6 +114,21 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
 
     @Override
     public CompletableFuture<List<? extends TextEdit>> formatting(DocumentFormattingParams params) {
-        return CompletableFuture.completedFuture(formattingProvider.apply(params));
+        ApplyWorkspaceEditParams workspaceEditParams = new ApplyWorkspaceEditParams();
+        WorkspaceEdit workspaceEdit = new WorkspaceEdit();
+        Map<String,List<TextEdit>> editMap = new HashMap<>();
+
+        List<? extends TextEdit> textEditsReturnValue = formattingProvider.apply(params);
+        try{
+            List<TextEdit> textEdits = (List<TextEdit>) textEditsReturnValue;
+            editMap.put(params.getTextDocument().getUri(), textEdits);
+            workspaceEdit.setChanges(editMap);
+            workspaceEditParams.setEdit(workspaceEdit);
+            fshLanguageServer.getClient().applyEdit(workspaceEditParams);
+        }catch (Exception e){
+            LOGGER.info(e.getMessage());
+        }
+
+        return CompletableFuture.completedFuture(textEditsReturnValue);
     }
 }
