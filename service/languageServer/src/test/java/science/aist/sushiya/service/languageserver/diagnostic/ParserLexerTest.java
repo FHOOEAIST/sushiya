@@ -5,8 +5,8 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHLexer;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHParser;
+import science.aist.sushiya.service.languageserver.parser.FSHLexer;
+import science.aist.sushiya.service.languageserver.parser.FSHParser;
 
 /**
  * <p>Created by Sophie Bauernfeind on 01.04.2021</p>

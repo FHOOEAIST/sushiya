@@ -1,5 +1,5 @@
 // Generated from FSHLexer.g4 by ANTLR 4.9.1
- package science.aist.sushiya.service.languageserver.diagnostic.parser;
+ package science.aist.sushiya.service.languageserver.parser;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATN;
 import org.antlr.v4.runtime.atn.ATNDeserializer;

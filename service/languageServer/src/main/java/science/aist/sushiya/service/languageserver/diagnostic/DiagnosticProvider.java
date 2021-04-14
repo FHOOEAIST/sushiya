@@ -5,8 +5,8 @@ import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.services.LanguageClient;
 import science.aist.sushiya.service.languageserver.FSHLanguageServer;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHLexer;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHParser;
+import science.aist.sushiya.service.languageserver.parser.FSHLexer;
+import science.aist.sushiya.service.languageserver.parser.FSHParser;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collections;

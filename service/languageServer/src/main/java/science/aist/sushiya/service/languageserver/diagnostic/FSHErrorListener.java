@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHParser;
+import science.aist.sushiya.service.languageserver.parser.FSHParser;
 
 import java.util.ArrayList;
 import java.util.List;

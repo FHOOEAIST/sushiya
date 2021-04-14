@@ -7,8 +7,8 @@ import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import science.aist.sushiya.service.languageserver.diagnostic.FSHErrorListener;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHLexer;
-import science.aist.sushiya.service.languageserver.diagnostic.parser.FSHParser;
+import science.aist.sushiya.service.languageserver.parser.FSHLexer;
+import science.aist.sushiya.service.languageserver.parser.FSHParser;
 
 /**
  * <p>Created by Sophie Bauernfeind on 06.04.2021</p>
