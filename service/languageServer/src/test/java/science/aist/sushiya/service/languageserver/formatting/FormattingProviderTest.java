@@ -77,7 +77,7 @@ public class FormattingProviderTest {
     @Test
     public void testExtension(){
         //given
-        String text = "Extension: Test";
+        String text = "Extension: Test ";
         noChangeTest(text);
     }
 
@@ -91,7 +91,7 @@ public class FormattingProviderTest {
     @Test
     public void testExtensionEndsWithSpace(){
         //given
-        String text = "Extension: Test   ";
+        String text = "Extension: Test ";
         noChangeTest(text);
     }
 
@@ -105,7 +105,7 @@ public class FormattingProviderTest {
     @Test
     public void testProfileEndsWithSpace(){
         //given
-        String text = "Profile: Test   ";
+        String text = "Profile: Test ";
         noChangeTest(text);
     }
 
@@ -138,27 +138,6 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testComment(){
-        //given
-        String text = "// Test";
-        noChangeTest(text);
-    }
-
-    @Test
-    public void testCommentStartWithSpace(){
-        //given
-        String text = "    // Test";
-        changeTest(text);
-    }
-
-    @Test
-    public void testCommentEndsWithSpace(){
-        //given
-        String text = "// Test   ";
-        noChangeTest(text);
-    }
-
-    @Test
     public void testRule(){
         //given
         String text = "* Test";
@@ -180,41 +159,13 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testAmountChangesEntity(){
+    public void testInstanceEntity(){
         //given
         String text = "Instance: EveAnyperson\n"
                 + "InstanceOf: TestPatient\n"
-                + "Usage: #inline // #inline means this instance should not be exported as a separate example\n"
+                + "Usage: #inline\n"
                 + "* name.given[0] = \"Eve\"\n"
                 + "* name.family = \"Anyperson\"";
-
-        String expectedText = "Instance: EveAnyperson\n"
-                + "    InstanceOf: TestPatient\n"
-                + "    Usage: #inline // #inline means this instance should not be exported as a separate example\n"
-                + "    * name.given[0] = \"Eve\"\n"
-                + "    * name.family = \"Anyperson\"\"";
-
-        TextDocumentItem textDocument = new TextDocumentItem();
-        textDocument.setText(text);
-        textDocument.setUri(uri);
-
-        //register this document to the file handler
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocument);
-        FSHFileHandler.getInstance().addFile(openParams);
-
-        //generate parameter to call the provider
-        DocumentFormattingParams formattingParams = new DocumentFormattingParams();
-        formattingParams.setTextDocument(new TextDocumentIdentifier(uri));
-
-        //when
-        result = provider.apply(formattingParams);
-
-        // then
-        Assert.assertNotNull(result);
-        Assert.assertEquals(result.size(), 1);
-        Assert.assertNotEquals(result.get(0).getNewText(),expectedText);
-
-
+        changeTest(text);
     }
 }
