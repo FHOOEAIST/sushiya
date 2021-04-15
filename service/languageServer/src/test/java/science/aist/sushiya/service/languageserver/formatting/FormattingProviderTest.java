@@ -161,11 +161,45 @@ public class FormattingProviderTest {
     @Test
     public void testInstanceEntity(){
         //given
-        String text = "Instance: EveAnyperson\n"
-                + "InstanceOf: TestPatient\n"
-                + "Usage: #inline\n"
-                + "* name.given[0] = \"Eve\"\n"
-                + "* name.family = \"Anyperson\"";
+        String text = "Instance: EveAnyperson \n"
+                + "InstanceOf: TestPatient \n"
+                + "Usage: #inline \n"
+                + "* name.given[0] = \"Eve\"\n "
+                + "* name.family = \"Anyperson\" ";
         changeTest(text);
+    }
+    //TODO:write correct test
+
+    @Test
+    public void testCommentInEntity(){
+        //given
+        String text = "Instance: EveAnyperson \n"
+                + "InstanceOf: TestPatient \n"
+                + "Usage: #inline \n"
+                + "//just a test\n"
+                + "* name.given[0] = \"Eve\"\n "
+                + "* name.family = \"Anyperson\" ";
+    }
+
+    @Test
+    public void testBlockCommentInEntity(){
+        //given
+        String text = "Instance: EveAnyperson \n"
+                + "InstanceOf: TestPatient \n"
+                + "Usage: #inline \n"
+                + "/*just \na\n test\n*/"
+                + "* name.given[0] = \"Eve\"\n "
+                + "* name.family = \"Anyperson\" ";
+    }
+
+    @Test
+    public void testBlockCommentInEntityOneLine(){
+        //given
+        String text = "Instance: EveAnyperson \n"
+                + "InstanceOf: TestPatient \n"
+                + "Usage: #inline \n"
+                + "/*just a test*/"
+                + "* name.given[0] = \"Eve\"\n "
+                + "* name.family = \"Anyperson\" ";
     }
 }
