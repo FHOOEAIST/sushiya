@@ -14,55 +14,55 @@ import java.util.List;
  * @author SophieBauernfeind
  */
 public class FSHKeywordCompletionProvider implements ICompletionProvider {
-    private static final List<CompletionItem> completionItems = new ArrayList<>();
+    private static final List<CompletionItem> COMPLETION_ITEMS = new ArrayList<>();
 
     public FSHKeywordCompletionProvider() {
-        completionItems.add(new CompletionItem("alias"));
-        completionItems.add(new CompletionItem("profile"));
-        completionItems.add(new CompletionItem("instance"));
-        completionItems.add(new CompletionItem("invariant"));
-        completionItems.add(new CompletionItem("ruleset"));
-        completionItems.add(new CompletionItem("mapping"));
-        completionItems.add(new CompletionItem("id"));
-        completionItems.add(new CompletionItem("title"));
-        completionItems.add(new CompletionItem("description"));
-        completionItems.add(new CompletionItem("expression"));
-        completionItems.add(new CompletionItem("xPath"));
-        completionItems.add(new CompletionItem("severity"));
-        completionItems.add(new CompletionItem("usage"));
-        completionItems.add(new CompletionItem("source"));
-        completionItems.add(new CompletionItem("target"));
-        completionItems.add(new CompletionItem("from"));
-        completionItems.add(new CompletionItem("example"));
-        completionItems.add(new CompletionItem("preferred"));
-        completionItems.add(new CompletionItem("extensible"));
-        completionItems.add(new CompletionItem("required"));
-        completionItems.add(new CompletionItem("contains"));
-        completionItems.add(new CompletionItem("named"));
-        completionItems.add(new CompletionItem("and"));
-        completionItems.add(new CompletionItem("only"));
-        completionItems.add(new CompletionItem("or"));
-        completionItems.add(new CompletionItem("obeys"));
-        completionItems.add(new CompletionItem("true"));
-        completionItems.add(new CompletionItem("false"));
-        completionItems.add(new CompletionItem("include"));
-        completionItems.add(new CompletionItem("exclude"));
-        completionItems.add(new CompletionItem("codes"));
-        completionItems.add(new CompletionItem("where"));
-        completionItems.add(new CompletionItem("valueset"));
-        completionItems.add(new CompletionItem("system"));
-        completionItems.add(new CompletionItem("units"));
-        completionItems.add(new CompletionItem("exactly"));
-        completionItems.add(new CompletionItem("insert"));
-        completionItems.add(new CompletionItem("reference"));
-        completionItems.add(new CompletionItem("extension"));
-        completionItems.add(new CompletionItem("code"));
-        completionItems.add(new CompletionItem("value"));
+        COMPLETION_ITEMS.add(new CompletionItem("alias"));
+        COMPLETION_ITEMS.add(new CompletionItem("profile"));
+        COMPLETION_ITEMS.add(new CompletionItem("instance"));
+        COMPLETION_ITEMS.add(new CompletionItem("invariant"));
+        COMPLETION_ITEMS.add(new CompletionItem("ruleset"));
+        COMPLETION_ITEMS.add(new CompletionItem("mapping"));
+        COMPLETION_ITEMS.add(new CompletionItem("id"));
+        COMPLETION_ITEMS.add(new CompletionItem("title"));
+        COMPLETION_ITEMS.add(new CompletionItem("description"));
+        COMPLETION_ITEMS.add(new CompletionItem("expression"));
+        COMPLETION_ITEMS.add(new CompletionItem("xPath"));
+        COMPLETION_ITEMS.add(new CompletionItem("severity"));
+        COMPLETION_ITEMS.add(new CompletionItem("usage"));
+        COMPLETION_ITEMS.add(new CompletionItem("source"));
+        COMPLETION_ITEMS.add(new CompletionItem("target"));
+        COMPLETION_ITEMS.add(new CompletionItem("from"));
+        COMPLETION_ITEMS.add(new CompletionItem("example"));
+        COMPLETION_ITEMS.add(new CompletionItem("preferred"));
+        COMPLETION_ITEMS.add(new CompletionItem("extensible"));
+        COMPLETION_ITEMS.add(new CompletionItem("required"));
+        COMPLETION_ITEMS.add(new CompletionItem("contains"));
+        COMPLETION_ITEMS.add(new CompletionItem("named"));
+        COMPLETION_ITEMS.add(new CompletionItem("and"));
+        COMPLETION_ITEMS.add(new CompletionItem("only"));
+        COMPLETION_ITEMS.add(new CompletionItem("or"));
+        COMPLETION_ITEMS.add(new CompletionItem("obeys"));
+        COMPLETION_ITEMS.add(new CompletionItem("true"));
+        COMPLETION_ITEMS.add(new CompletionItem("false"));
+        COMPLETION_ITEMS.add(new CompletionItem("include"));
+        COMPLETION_ITEMS.add(new CompletionItem("exclude"));
+        COMPLETION_ITEMS.add(new CompletionItem("codes"));
+        COMPLETION_ITEMS.add(new CompletionItem("where"));
+        COMPLETION_ITEMS.add(new CompletionItem("valueset"));
+        COMPLETION_ITEMS.add(new CompletionItem("system"));
+        COMPLETION_ITEMS.add(new CompletionItem("units"));
+        COMPLETION_ITEMS.add(new CompletionItem("exactly"));
+        COMPLETION_ITEMS.add(new CompletionItem("insert"));
+        COMPLETION_ITEMS.add(new CompletionItem("reference"));
+        COMPLETION_ITEMS.add(new CompletionItem("extension"));
+        COMPLETION_ITEMS.add(new CompletionItem("code"));
+        COMPLETION_ITEMS.add(new CompletionItem("value"));
     }
 
     @Override
     public List<CompletionItem> get() {
-        return completionItems;
+        return COMPLETION_ITEMS;
     }
 
     //default completion provider

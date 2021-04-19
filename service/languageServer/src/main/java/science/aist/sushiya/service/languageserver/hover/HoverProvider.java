@@ -14,7 +14,7 @@ import java.util.function.Function;
  * @author SophieBauernfeind
  */
 
-public class HoverProvider implements Function<HoverParams,Hover> {
+public class HoverProvider implements Function<HoverParams, Hover> {
     private static final ProviderHelper HELPER = new ProviderHelper();
     private static String infoText;
 
@@ -27,16 +27,16 @@ public class HoverProvider implements Function<HoverParams,Hover> {
                 FSHFileHandler.getInstance().getFile(params.getTextDocument()),
                 params.getPosition());
 
-        if(searchedInformation == null){
+        if (searchedInformation == null) {
             return new Hover(markupContent);
         }
 
         searchedInformation = searchedInformation.toUpperCase(Locale.ROOT);
 
-        if(checkForEntity(searchedInformation)){
+        if (checkForEntity(searchedInformation)) {
             markupContent.setValue(infoText);
             return new Hover(markupContent);
-        }else if(checkForMetadata(searchedInformation)){
+        } else if (checkForMetadata(searchedInformation)) {
             markupContent.setValue(infoText);
             return new Hover(markupContent);
         }
@@ -44,91 +44,91 @@ public class HoverProvider implements Function<HoverParams,Hover> {
         return new Hover(markupContent);
     }
 
-    private boolean checkForEntity(String name){
-        try{
+    private boolean checkForEntity(String name) {
+        try {
             Entity searchedInformationEntity = Entity.valueOf(name);
-            switch (searchedInformationEntity){
+            switch (searchedInformationEntity) {
                 case ALIAS:
-                    infoText = AdditionalInformation.aliasInformation;
+                    infoText = AdditionalInformation.ALIAS_INFORMATION;
                     break;
                 case PROFILE:
-                    infoText = AdditionalInformation.profileInformation;
+                    infoText = AdditionalInformation.PROFILE_INFORMATION;
                     break;
                 case EXTENSION:
-                    infoText = AdditionalInformation.extensionInformation;
+                    infoText = AdditionalInformation.EXTENSION_INFORMATION;
                     break;
                 case INVARIANT:
-                    infoText = AdditionalInformation.invariantInformation;
+                    infoText = AdditionalInformation.INVARIANT_INFORMATION;
                     break;
                 case INSTANCE:
-                    infoText = AdditionalInformation.instanceInformation;
+                    infoText = AdditionalInformation.INSTANCE_INFORMATION;
                     break;
                 case VALUESET:
-                    infoText = AdditionalInformation.valueSetInformation;
+                    infoText = AdditionalInformation.VALUE_SET_INFORMATION;
                     break;
                 case CODESYSTEM:
-                    infoText = AdditionalInformation.codeSystemInformation;
+                    infoText = AdditionalInformation.CODE_SYSTEM_INFORMATION;
                     break;
                 case RULESET:
-                    infoText = AdditionalInformation.ruleSetInformation;
+                    infoText = AdditionalInformation.RULE_SET_INFORMATION;
                     break;
                 case MAPPING:
-                    infoText = AdditionalInformation.mappingInformation;
+                    infoText = AdditionalInformation.MAPPING_INFORMATION;
                     break;
                 default:
                     return false;
             }
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    private boolean checkForMetadata(String name){
-        try{
+    private boolean checkForMetadata(String name) {
+        try {
             Metadata searchedInformationEntity = Metadata.valueOf(name);
-            switch (searchedInformationEntity){
+            switch (searchedInformationEntity) {
                 case DESCRIPTION:
-                    infoText = AdditionalInformation.descriptionInformation;
+                    infoText = AdditionalInformation.DESCRIPTION_INFORMATION;
                     break;
                 case EXPRESSION:
-                    infoText = AdditionalInformation.extensionInformation;
+                    infoText = AdditionalInformation.EXTENSION_INFORMATION;
                     break;
                 case ID:
-                    infoText = AdditionalInformation.idInformation;
+                    infoText = AdditionalInformation.ID_INFORMATION;
                     break;
                 case INSTANCEOF:
-                    infoText = AdditionalInformation.instanceOfInformation;
+                    infoText = AdditionalInformation.INSTANCE_OF_INFORMATION;
                     break;
                 case PARENT:
-                    infoText = AdditionalInformation.parentInformation;
+                    infoText = AdditionalInformation.PARENT_INFORMATION;
                     break;
                 case SEVERITY:
-                    infoText = AdditionalInformation.severityInformation;
+                    infoText = AdditionalInformation.SEVERITY_INFORMATION;
                     break;
                 case SOURCE:
-                    infoText = AdditionalInformation.sourceInformation;
+                    infoText = AdditionalInformation.SOURCE_INFORMATION;
                     break;
                 case TARGET:
-                    infoText = AdditionalInformation.targetInformation;
+                    infoText = AdditionalInformation.TARGET_INFORMATION;
                     break;
                 case TITLE:
-                    infoText = AdditionalInformation.titleInformation;
+                    infoText = AdditionalInformation.TITLE_INFORMATION;
                     break;
                 case USAGE:
-                    infoText = AdditionalInformation.usageInformation;
+                    infoText = AdditionalInformation.USAGE_INFORMATION;
                     break;
                 case XPATH:
-                    infoText = AdditionalInformation.xpathInformation;
+                    infoText = AdditionalInformation.XPATH_INFORMATION;
                     break;
                 case MIXINS:
-                    infoText = AdditionalInformation.mixinsInformation;
+                    infoText = AdditionalInformation.MIXINS_INFORMATION;
                     break;
                 default:
                     return false;
             }
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

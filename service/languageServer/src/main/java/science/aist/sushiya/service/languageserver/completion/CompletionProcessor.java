@@ -19,40 +19,41 @@ import java.util.stream.Collectors;
  *
  * @author SophieBauernfeind
  */
-public class CompletionProcessor implements Function<CompletionParams,Either<List<CompletionItem>, CompletionList>> {
-    private static final List<ICompletionProvider> completionProviders = new ArrayList<>();
-    private static final ICompletionProvider defaultProvider = new FSHKeywordCompletionProvider();
+public class CompletionProcessor implements Function<CompletionParams, Either<List<CompletionItem>, CompletionList>> {
+    private static final List<ICompletionProvider> COMPLETION_PROVIDERS = new ArrayList<>();
+    private static final ICompletionProvider DEFAULT_PROVIDER = new FSHKeywordCompletionProvider();
     private static final Logger LOGGER = LoggerFactory.getLogger(CompletionProcessor.class);
 
-    public CompletionProcessor(){
-        completionProviders.add(new AliasCompletionProvider());
-        completionProviders.add(new CsRuleCompletionProvider());
-        completionProviders.add(new EntityAndMetadataCompletionProvider());
-        completionProviders.add(new InstanceOfCompletionProvider());
-        completionProviders.add(new MappingEntityRuleCompletionProvider());
-        completionProviders.add(new ParentCompletionProvider());
-        completionProviders.add(new PathCompletionProvider());
-        completionProviders.add(new SourceCompletionProvider());
-        completionProviders.add(new VsRuleCompletionProvider());
-        completionProviders.add(new SdRuleCompletionProvider());
+    public CompletionProcessor() {
+        COMPLETION_PROVIDERS.add(new AliasCompletionProvider());
+        COMPLETION_PROVIDERS.add(new CsRuleCompletionProvider());
+        COMPLETION_PROVIDERS.add(new EntityAndMetadataCompletionProvider());
+        COMPLETION_PROVIDERS.add(new InstanceOfCompletionProvider());
+        COMPLETION_PROVIDERS.add(new MappingEntityRuleCompletionProvider());
+        COMPLETION_PROVIDERS.add(new ParentCompletionProvider());
+        COMPLETION_PROVIDERS.add(new PathCompletionProvider());
+        COMPLETION_PROVIDERS.add(new SourceCompletionProvider());
+        COMPLETION_PROVIDERS.add(new VsRuleCompletionProvider());
+        COMPLETION_PROVIDERS.add(new SdRuleCompletionProvider());
     }
 
     @Override
     public Either<List<CompletionItem>, CompletionList> apply(CompletionParams completionParams) {
         List<List<CompletionItem>> completionItems = new ArrayList<>();
-        if(completionParams.getTextDocument() == null){
+        if (completionParams.getTextDocument() == null) {
             return null;
         }
         TextDocumentItem textDocument = FSHFileHandler.getInstance().getFile(completionParams.getTextDocument());
-        for (ICompletionProvider cp: completionProviders) {
-            if(cp.test(textDocument,completionParams)){
+        for (ICompletionProvider cp : COMPLETION_PROVIDERS) {
+            if (cp.test(textDocument, completionParams)) {
                 completionItems.add(cp.get());
                 LOGGER.info("completion provider {} activated.", cp.toString());
             }
         }
         //if no other completion provider is in charge use default provider
-        if(completionItems.isEmpty()){
-            completionItems.add(defaultProvider.get());
+        if (completionItems.isEmpty()) {
+            completionItems.add(DEFAULT_PROVIDER.get());
+            //add names of defined profiles or extensions, which are also often used
             completionItems.add(FSHFileHandler.getInstance().getCreatedEntities(Entity.PROFILE)
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
             completionItems.add(FSHFileHandler.getInstance().getCreatedEntities(Entity.EXTENSION)

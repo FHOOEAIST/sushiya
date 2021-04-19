@@ -33,12 +33,14 @@ public class SourceCompletionProvider implements ICompletionProvider {
     }
 
     @Override
+    //test if this provider is responsible. Only if this function returns true the List of Completion make sense for the completion.
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        if(textDocumentItem != null
+        if (textDocumentItem != null
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
-            return checkKeywordParent(textDocumentItem,completionParams)
+            return checkKeywordSource(textDocumentItem, completionParams)
+                    //check if the trigger character is space, then this provider is responsible
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
                     && completionParams.getContext().getTriggerCharacter() != null
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
@@ -46,20 +48,16 @@ public class SourceCompletionProvider implements ICompletionProvider {
         return false;
     }
 
-    private boolean checkKeywordParent(TextDocumentItem textDocumentItem, CompletionParams completionParams){
-        try{
+    //check if the current line contains the keyword "Source". If it does this completion provider is responsible.
+    private boolean checkKeywordSource(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        try {
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.replaceAll("\\s","").matches("Source:")
+            return line.replaceAll("\\s", "").matches("Source:")
                     && line.lastIndexOf("Source:") < completionParams.getPosition().getCharacter();
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage());
             return false;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "SourceCompletionProvider";
     }
 }

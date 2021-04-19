@@ -1,8 +1,9 @@
 package science.aist.sushiya.service.languageserver.rename;
 
-import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.lsp4j.Location;
+import org.eclipse.lsp4j.RenameParams;
+import org.eclipse.lsp4j.TextEdit;
+import org.eclipse.lsp4j.WorkspaceEdit;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.ProviderHelper;
 
@@ -18,7 +19,6 @@ import java.util.function.Function;
  * @author SophieBauernfeind
  */
 public class RenameProvider implements Function<RenameParams, WorkspaceEdit> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RenameProvider.class);
     private static final ProviderHelper HELPER = new ProviderHelper();
 
     @Override
@@ -28,7 +28,7 @@ public class RenameProvider implements Function<RenameParams, WorkspaceEdit> {
         String newWord = renameParams.getNewName();
 
         WorkspaceEdit workspaceEdit = new WorkspaceEdit();
-        Map<String,List<TextEdit>> changesMap = new HashMap<>();
+        Map<String, List<TextEdit>> changesMap = new HashMap<>();
         List<Location> locations = HELPER.getLocations(renamingWord,
                 "((\\S|\\s)*\\s+|\\p{Punct})*" + renamingWord + "(\\s+(\\S|\\s)*|\\p{Punct})*");
         for (Location location : locations) {
@@ -36,7 +36,7 @@ public class RenameProvider implements Function<RenameParams, WorkspaceEdit> {
             textEdit.setNewText(newWord);
             textEdit.setRange(location.getRange());
 
-            if(! changesMap.containsKey(location.getUri())){
+            if (!changesMap.containsKey(location.getUri())) {
                 changesMap.put(location.getUri(), new ArrayList<>());
             }
             changesMap.get(location.getUri()).add(textEdit);

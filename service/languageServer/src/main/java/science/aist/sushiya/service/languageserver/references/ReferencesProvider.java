@@ -16,19 +16,19 @@ import java.util.function.Function;
  */
 public class ReferencesProvider implements Function<ReferenceParams,
         List<? extends Location>> {
-    private static final ProviderHelper locationHelper = new ProviderHelper();
+    private static final ProviderHelper HELPER = new ProviderHelper();
 
     @Override
     public List<? extends Location> apply(ReferenceParams referenceParams) {
-        String searchedReference = locationHelper.getName(
+        String searchedReference = HELPER.getName(
                 FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(referenceParams.getTextDocument().getUri())),
                 referenceParams.getPosition());
 
-        if(searchedReference == null){
+        if (searchedReference == null) {
             return null;
         }
 
-        return locationHelper.getLocations(searchedReference,
+        return HELPER.getLocations(searchedReference,
                 "(\\S*|\\s*)*(\\p{Punct}|\\s)+" + searchedReference + "(\\p{Punct}|\\s|)+(\\S*|\\s*)*");
     }
 

@@ -36,12 +36,14 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
     }
 
     @Override
+    //test if this provider is responsible. Only if this function returns true the List of Completion make sense for the completion.
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        if(textDocumentItem != null
+        if (textDocumentItem != null
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkKeywordInstanceOf(textDocumentItem, completionParams)
+                    //check if the trigger character is space, then this provider is responsible
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
                     && completionParams.getContext().getTriggerCharacter() != null
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
@@ -49,21 +51,17 @@ public class InstanceOfCompletionProvider implements ICompletionProvider {
         return false;
     }
 
+    //check if the current line contains the keyword "InstanceOf". If it does this completion provider is responsible.
     private boolean checkKeywordInstanceOf(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        try{
+        try {
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.replaceAll("\\s","").matches("InstanceOf:")
+            return line.replaceAll("\\s", "").matches("InstanceOf:")
                     && line.lastIndexOf("InstanceOf:") < completionParams.getPosition().getCharacter()
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage());
             return false;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "InstanceOfCompletionProvider";
     }
 }

@@ -7,7 +7,7 @@ package science.aist.sushiya.service.languageserver;
  * @author SophieBauernfeind
  */
 
-public enum Entity{
+public enum Entity {
     ALIAS,
     PROFILE,
     EXTENSION,

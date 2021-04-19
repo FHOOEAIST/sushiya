@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
     <bannerLeft>
-        <name>%TODO%</name>
+        <name>Sushiya - FIHR Shorthand language server</name>
         <src>images/logo.png</src>
     </bannerLeft>
     <skin>
@@ -12,7 +12,7 @@
         <version>1.8</version>
     </skin>
     <body>
-        <menu name="%TODO%">
+        <menu name="Sushiya menu">
             <item name="Overview" href="index.html"/>
             <item name="Documentation" href="documentation.html"/>
             <item name="Javadoc" href="apidocs/index.html" />

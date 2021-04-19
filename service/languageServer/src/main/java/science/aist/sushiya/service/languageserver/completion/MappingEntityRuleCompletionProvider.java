@@ -28,25 +28,27 @@ public class MappingEntityRuleCompletionProvider implements ICompletionProvider 
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
-        if(newRule){
+        if (newRule) {
             completionItems.add(new CompletionItem("->"));
             completionItems.add(new CompletionItem("insert"));
-        }else if(insertRule){
+        } else if (insertRule) {
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
-        }else if(rulePathDefined){
+        } else if (rulePathDefined) {
             completionItems.add(new CompletionItem("->"));
         }
         return completionItems;
     }
 
     @Override
+    //test if this provider is responsible. Only if this function returns true the List of Completion make sense for the completion.
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        if(textDocumentItem != null
+        if (textDocumentItem != null
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkRuleConditions(textDocumentItem, completionParams)
+                    //check if the trigger character is space, then this provider is responsible
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
                     && completionParams.getContext().getTriggerCharacter() != null
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
@@ -54,39 +56,34 @@ public class MappingEntityRuleCompletionProvider implements ICompletionProvider 
         return false;
     }
 
-    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams){
-        try{
+    //check if the current entity is a Mapping. If it is a Code System the completion provider is responsible.
+    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        try {
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
-            if(isRule(line) &&
-                    textDocumentItem.getText().contains("Mapping")){
-                String[]lines = textDocumentItem.getText().split("\\n");
+            if (isRule(line) &&
+                    textDocumentItem.getText().contains("Mapping")) {
+                String[] lines = textDocumentItem.getText().split("\\n");
 
                 //check from current line above to the next empty line or the start of the text
-                for(int i = completionParams.getPosition().getLine(); i >= 0 ; i --){
-                    if(lines[i].matches("\\s*")|| i == 0){
-
+                for (int i = completionParams.getPosition().getLine(); i >= 0; i--) {
+                    if (lines[i].matches("\\s*") || i == 0) {
                         //check the first line or the line after the empty line for the keyword
-                        int index = i == 0 ? 0 : i +1;
+                        int index = i == 0 ? 0 : i + 1;
                         return lines[index].trim().matches("\\s*Mapping\\s*:(\\s*|\\s+\\S+)\\s*");
                     }
                 }
             }
-        }catch (Exception exception){
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage());
             return false;
         }
         return false;
     }
 
-    private boolean isRule(String line){
+    private boolean isRule(String line) {
         newRule = line.matches("\\s*\\*\\s+");
         rulePathDefined = line.matches("\\s*\\*\\s+\\S+\\s+");
         insertRule = line.matches("\\s*\\*\\s+insert\\s+");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
-    }
-
-    @Override
-    public String toString() {
-        return "MappingEntityRuleCompletionProvider";
     }
 }

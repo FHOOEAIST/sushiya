@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author lhein
+ * @author lhein - https://github.com/camel-tooling/camel-language-server
  *
  * <p>This is the actual server implementation.</p>
  * <p>The server capabilites specify which features such as hover or autocompletion, will be supported by the server.</p>
@@ -61,7 +61,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
         Integer processId = params.getProcessId();
-        if(processId != null) {
+        if (processId != null) {
             setParentProcessId(processId.longValue());
         } else {
             LOGGER.info("Missing Parent process ID!!");
@@ -86,7 +86,7 @@ public class FSHLanguageServer extends AbstractLanguageServer implements Languag
         capabilities.setImplementationProvider(Boolean.TRUE);
         capabilities.setReferencesProvider(Boolean.TRUE);
         capabilities.setRenameProvider(Boolean.TRUE);
-        capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(" ","[")));
+        capabilities.setCompletionProvider(new CompletionOptions(Boolean.TRUE, Arrays.asList(" ", "[")));
         return capabilities;
     }
 

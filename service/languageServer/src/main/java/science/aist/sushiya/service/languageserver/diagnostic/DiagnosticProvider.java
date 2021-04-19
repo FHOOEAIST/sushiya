@@ -26,10 +26,10 @@ public class DiagnosticProvider {
         this.server = server;
     }
 
-    public void compileAndSendDiagnostic(LanguageClient client, @NotNull TextDocumentItem textDocument){
+    public void compileAndSendDiagnostic(LanguageClient client, @NotNull TextDocumentItem textDocument) {
         FSHErrorListener errorListener = new FSHErrorListener();
 
-        CompletableFuture.runAsync(()-> {
+        CompletableFuture.runAsync(() -> {
             String text = textDocument.getText();
             CharStream input = CharStreams.fromString(text);
             FSHLexer lexer = new FSHLexer(input);
@@ -39,15 +39,15 @@ public class DiagnosticProvider {
             parser.addErrorListener(errorListener);
             parser.doc();
 
-            if(client == null || textDocument.getUri() == null){
+            if (client == null || textDocument.getUri() == null) {
                 return;
             }
 
-            client.publishDiagnostics(new PublishDiagnosticsParams(textDocument.getUri(),errorListener.getDiagnostics()));
+            client.publishDiagnostics(new PublishDiagnosticsParams(textDocument.getUri(), errorListener.getDiagnostics()));
         });
     }
 
-    public void clear(String uri){
+    public void clear(String uri) {
         server.getClient().publishDiagnostics(new PublishDiagnosticsParams(uri, Collections.emptyList()));
     }
 }

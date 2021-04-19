@@ -17,21 +17,21 @@ import java.util.function.Function;
  */
 public class ImplementationProvider implements Function<ImplementationParams,
         Either<List<? extends Location>, List<? extends LocationLink>>> {
-    private static final String regexUsingMetadata= "(Expression|InstanceOf|Parent|Source)";
-    private static final ProviderHelper locationHelper = new ProviderHelper();
+    private static final String REGEX_USING_METADATA = "(Expression|InstanceOf|Parent|Source)";
+    private static final ProviderHelper HELPER = new ProviderHelper();
 
     @Override
     public Either<List<? extends Location>, List<? extends LocationLink>> apply(ImplementationParams implementationParams) {
-        String searchedImplementations = locationHelper.getName(
+        String searchedImplementations = HELPER.getName(
                 FSHFileHandler.getInstance().getFile(implementationParams.getTextDocument()),
                 implementationParams.getPosition());
 
-        if(searchedImplementations == null){
+        if (searchedImplementations == null) {
             return Either.forLeft(null);
         }
 
-        return Either.forLeft(locationHelper.getLocations(searchedImplementations,
-                "\\s*"+ regexUsingMetadata +"\\s*:\\s+" + searchedImplementations + "\\s*"));
+        return Either.forLeft(HELPER.getLocations(searchedImplementations,
+                "\\s*" + REGEX_USING_METADATA + "\\s*:\\s+" + searchedImplementations + "\\s*"));
     }
 
 }

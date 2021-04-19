@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  *
  * @author SophieBauernfeind
  */
-public class SdRuleCompletionProvider implements ICompletionProvider{
+public class SdRuleCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(SdRuleCompletionProvider.class);
     private final List<CompletionItem> completionItems = new ArrayList<>();
     private final List<String> components = new ArrayList<>();
@@ -35,27 +35,27 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
     @Override
     public List<CompletionItem> get() {
         completionItems.clear();
-        if (newRule){
+        if (newRule) {
             //obeysRule
             completionItems.add(new CompletionItem("obeys"));
             //insertRule
             completionItems.add(new CompletionItem("insert"));
             completionItems.addAll(components
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
-        }else if(insertRule){
+        } else if (insertRule) {
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.RULESET)
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
-        }else if(obeysRule){
+        } else if (obeysRule) {
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.INVARIANT)
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
-        }else if (valueSetRule){
+        } else if (valueSetRule) {
             completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.VALUESET)
                     .stream().map(CompletionItem::new).collect(Collectors.toList()));
             completionItems.add(new CompletionItem("(example)"));
             completionItems.add(new CompletionItem("(preferred)"));
             completionItems.add(new CompletionItem("(extensible)"));
             completionItems.add(new CompletionItem("(required)"));
-        }else if(rulePathDefined){
+        } else if (rulePathDefined) {
             //valueSetRule
             completionItems.add(new CompletionItem("units"));
             completionItems.add(new CompletionItem("from"));
@@ -69,9 +69,9 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
             completionItems.add(new CompletionItem("^"));
             //fixedValueRule
             completionItems.add(new CompletionItem("="));
-        }else if(fixedValueRule){
+        } else if (fixedValueRule) {
             completionItems.add(new CompletionItem("(exactly)"));
-        }else if(cardRule || generalInRule){
+        } else if (cardRule || generalInRule) {
             //completions for flag rules, contain rules and card rules
             completionItems.add(new CompletionItem("?!"));
             completionItems.add(new CompletionItem("MS"));
@@ -86,12 +86,14 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
     }
 
     @Override
+    //test if this provider is responsible. Only if this function returns true the List of Completion make sense for the completion.
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        if(textDocumentItem != null
+        if (textDocumentItem != null
                 && completionParams != null
                 && completionParams.getContext() != null
                 && completionParams.getContext().getTriggerKind() != null) {
             return checkRuleConditions(textDocumentItem, completionParams)
+                    //check if the trigger character is space, then this provider is responsible
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
                     && completionParams.getContext().getTriggerCharacter() != null
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
@@ -99,33 +101,35 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
         return false;
     }
 
-    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams){
-        try{
+    //check if the current entity is a Extension, RulesSet or Profile. If one of them is correct the completion provider is responsible.
+    private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        try {
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
-            if(isRule(line) &&
+            if (isRule(line) &&
                     (textDocumentItem.getText().contains("Extension")
                             || textDocumentItem.getText().contains("RuleSet")
-                            || textDocumentItem.getText().contains("Profile"))){
-                String[]lines = textDocumentItem.getText().split("\\n");
+                            || textDocumentItem.getText().contains("Profile"))) {
+                String[] lines = textDocumentItem.getText().split("\\n");
 
                 components.clear();
 
                 //check from current line above to the next empty line or the start of the text
-                for(int linePos = completionParams.getPosition().getLine(); linePos >= 0 ; linePos --){
-                    //safe components from contains rule for better completion
-                    if(lines[linePos].contains("contains")){
-                        String[]words = lines[linePos].split("\\s+");
-                        for (int wordPos = 0; wordPos < words.length ; wordPos++){
-                            if(words[wordPos].matches("contains") && wordPos != 0){
-                                components.add(words[wordPos-1]);
+                for (int linePos = completionParams.getPosition().getLine(); linePos >= 0; linePos--) {
+                    //safe components/extension names from contains rule for better completion
+                    if (lines[linePos].contains("contains")) {
+                        String[] words = lines[linePos].split("\\s+");
+                        for (int wordPos = 0; wordPos < words.length; wordPos++) {
+                            if (words[wordPos].matches("contains") && wordPos != 0) {
+                                //the name of the component/extension is one before the keyword "contains"
+                                components.add(words[wordPos - 1]);
                             }
                         }
                     }
 
-                    if(lines[linePos].matches("\\s*")|| linePos == 0){
+                    if (lines[linePos].matches("\\s*") || linePos == 0) {
 
                         //check the first line or the line after the empty line for the keyword
-                        int index = linePos == 0 ? 0 : linePos +1;
+                        int index = linePos == 0 ? 0 : linePos + 1;
 
                         return lines[index].trim().matches("\\s*Extension\\s*:(\\s*|\\s+\\S+)\\s*")
                                 || lines[index].trim().matches("\\s*Profile\\s*:(\\s*|\\s+\\S+)\\s*")
@@ -133,14 +137,14 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
                     }
                 }
             }
-        }catch (Exception exception){
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage());
             return false;
         }
         return false;
     }
 
-    private boolean isRule(String line){
+    private boolean isRule(String line) {
         newRule = line.matches("\\s*\\*\\s+");
         rulePathDefined = line.matches("\\s*\\*\\s+\\S+\\s+");
         cardRule = line.matches("\\s*\\*\\s+\\S+\\s+([0-9]+)?\\.\\.([0-9]+|\\*)?");
@@ -151,10 +155,5 @@ public class SdRuleCompletionProvider implements ICompletionProvider{
         //simple version for flag rule & containsRule
         generalInRule = line.matches("\\s*\\*\\s+(\\S|\\s)*");
         return line.matches("\\s*\\*\\s+(\\s|\\S)*");
-    }
-
-    @Override
-    public String toString() {
-        return "SdRuleCompletionProvider";
     }
 }

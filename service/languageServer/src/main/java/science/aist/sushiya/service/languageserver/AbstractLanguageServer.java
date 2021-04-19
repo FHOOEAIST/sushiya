@@ -5,9 +5,9 @@
  * The ASF licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * https://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * @author lhein
+ * @author lhein - https://github.com/camel-tooling/camel-language-server
  *
  * <p>This is the base structure for the server.</p>
  *
@@ -63,7 +63,7 @@ public abstract class AbstractLanguageServer {
     /**
      * starts the language server process
      *
-     * @return	the exit code of the process
+     * @return the exit code of the process
      */
     public int startServer() {
         runner = new Thread(new FSHServerRunnable(), "FSH Language Client Watcher");
@@ -131,7 +131,7 @@ public abstract class AbstractLanguageServer {
     /**
      * returns the parent process id
      *
-     * @return	the parent process id
+     * @return the parent process id
      */
     protected synchronized long getParentProcessId() {
         return parentProcessId;
@@ -140,7 +140,7 @@ public abstract class AbstractLanguageServer {
     /**
      * sets the parent process id
      *
-     * @param processId	the process id
+     * @param processId    the process id
      */
     protected synchronized void setParentProcessId(long processId) {
         LOGGER.info("Setting client pid to {}", processId);

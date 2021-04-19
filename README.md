@@ -1,6 +1,6 @@
-# FSH-language-server
+# FSH language server
 
-The FSH-language-server is a languageserver implementation for 
+The FSH language server is a language server implementation for 
 [HL7® FHIR® Shorthand](http://hl7.org/fhir/uv/shorthand/STU1/) 
 and implements the [language server protocol](https://microsoft.github.io/language-server-protocol/).
 It can be used with any editor, if the editor implements a client for this language server. The base structure leaned on the [camel-language-server](https://github.com/camel-tooling/camel-language-server/tree/master).
@@ -55,9 +55,6 @@ Goto References
 ![rename](./images/rename.gif "rename")
 If the renaming entity is the last word, renaming won't work.
 
-## FAQ
-
-If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
 
 ## Contributing
 

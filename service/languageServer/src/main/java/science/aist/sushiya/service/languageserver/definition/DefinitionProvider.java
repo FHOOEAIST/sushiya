@@ -18,23 +18,23 @@ import java.util.function.Function;
  * @author SophieBauernfeind
  */
 public class DefinitionProvider implements Function<DefinitionParams,
-        Either<List<? extends Location>, List<? extends LocationLink>>>{
-    private static final String regexEntities = "(Alias|Profile|Extension|Invariant|Instance|ValueSet|CodeSystem|RuleSet|Mapping)";
-    private static final ProviderHelper locationHelper = new ProviderHelper();
+        Either<List<? extends Location>, List<? extends LocationLink>>> {
+    private static final String REGEX_ENTITIES = "(Alias|Profile|Extension|Invariant|Instance|ValueSet|CodeSystem|RuleSet|Mapping)";
+    private static final ProviderHelper HELPER = new ProviderHelper();
 
     @Override
     public Either<List<? extends Location>, List<? extends LocationLink>> apply(DefinitionParams definitionParams) {
 
-        String searchedDefinition = locationHelper.getName(
+        String searchedDefinition = HELPER.getName(
                 FSHFileHandler.getInstance().getFile(new TextDocumentIdentifier(definitionParams.getTextDocument().getUri())),
                 definitionParams.getPosition());
 
-        if(searchedDefinition == null){
+        if (searchedDefinition == null) {
             return Either.forLeft(new ArrayList<>());
         }
 
-        return Either.forLeft(locationHelper.getLocations(searchedDefinition,
-                "\\s*"+ regexEntities +"\\s*:\\s+" + searchedDefinition + "\\s*"));
+        return Either.forLeft(HELPER.getLocations(searchedDefinition,
+                "\\s*" + REGEX_ENTITIES + "\\s*:\\s+" + searchedDefinition + "\\s*"));
     }
 
 }

@@ -23,7 +23,7 @@ import science.aist.sushiya.service.languageserver.FSHLanguageServer;
 
 
 /**
- * @author lhein
+ * @author lhein - https://github.com/camel-tooling/camel-language-server
  *
  * <p>Function which is executed with the jar file.</p>
  *

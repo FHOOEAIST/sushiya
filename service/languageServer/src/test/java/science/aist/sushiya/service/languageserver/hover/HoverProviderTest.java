@@ -52,31 +52,31 @@ public class HoverProviderTest {
             Entity searchedInformationEntity = Entity.valueOf(testType);
             switch (searchedInformationEntity){
                 case ALIAS:
-                    solution = AdditionalInformation.aliasInformation;
+                    solution = AdditionalInformation.ALIAS_INFORMATION;
                     break;
                 case PROFILE:
-                    solution = AdditionalInformation.profileInformation;
+                    solution = AdditionalInformation.PROFILE_INFORMATION;
                     break;
                 case EXTENSION:
-                    solution = AdditionalInformation.extensionInformation;
+                    solution = AdditionalInformation.EXTENSION_INFORMATION;
                     break;
                 case INVARIANT:
-                    solution = AdditionalInformation.invariantInformation;
+                    solution = AdditionalInformation.INVARIANT_INFORMATION;
                     break;
                 case INSTANCE:
-                    solution = AdditionalInformation.instanceInformation;
+                    solution = AdditionalInformation.INSTANCE_INFORMATION;
                     break;
                 case VALUESET:
-                    solution = AdditionalInformation.valueSetInformation;
+                    solution = AdditionalInformation.VALUE_SET_INFORMATION;
                     break;
                 case CODESYSTEM:
-                    solution = AdditionalInformation.codeSystemInformation;
+                    solution = AdditionalInformation.CODE_SYSTEM_INFORMATION;
                     break;
                 case RULESET:
-                    solution = AdditionalInformation.ruleSetInformation;
+                    solution = AdditionalInformation.RULE_SET_INFORMATION;
                     break;
                 case MAPPING:
-                    solution = AdditionalInformation.mappingInformation;
+                    solution = AdditionalInformation.MAPPING_INFORMATION;
                     break;
             }
         }catch (Exception ignored){ }
@@ -85,40 +85,40 @@ public class HoverProviderTest {
             Metadata searchedInformationEntity = Metadata.valueOf(testType);
             switch (searchedInformationEntity){
                 case DESCRIPTION:
-                    solution = AdditionalInformation.descriptionInformation;
+                    solution = AdditionalInformation.DESCRIPTION_INFORMATION;
                     break;
                 case EXPRESSION:
-                    solution = AdditionalInformation.extensionInformation;
+                    solution = AdditionalInformation.EXTENSION_INFORMATION;
                     break;
                 case ID:
-                    solution = AdditionalInformation.idInformation;
+                    solution = AdditionalInformation.ID_INFORMATION;
                     break;
                 case INSTANCEOF:
-                    solution = AdditionalInformation.instanceOfInformation;
+                    solution = AdditionalInformation.INSTANCE_OF_INFORMATION;
                     break;
                 case PARENT:
-                    solution = AdditionalInformation.parentInformation;
+                    solution = AdditionalInformation.PARENT_INFORMATION;
                     break;
                 case SEVERITY:
-                    solution = AdditionalInformation.severityInformation;
+                    solution = AdditionalInformation.SEVERITY_INFORMATION;
                     break;
                 case SOURCE:
-                    solution = AdditionalInformation.sourceInformation;
+                    solution = AdditionalInformation.SOURCE_INFORMATION;
                     break;
                 case TARGET:
-                    solution = AdditionalInformation.targetInformation;
+                    solution = AdditionalInformation.TARGET_INFORMATION;
                     break;
                 case TITLE:
-                    solution = AdditionalInformation.titleInformation;
+                    solution = AdditionalInformation.TITLE_INFORMATION;
                     break;
                 case USAGE:
-                    solution = AdditionalInformation.usageInformation;
+                    solution = AdditionalInformation.USAGE_INFORMATION;
                     break;
                 case XPATH:
-                    solution = AdditionalInformation.xpathInformation;
+                    solution = AdditionalInformation.XPATH_INFORMATION;
                     break;
                 case MIXINS:
-                    solution = AdditionalInformation.mixinsInformation;
+                    solution = AdditionalInformation.MIXINS_INFORMATION;
                     break;
             }
         }catch (Exception ignored){  }

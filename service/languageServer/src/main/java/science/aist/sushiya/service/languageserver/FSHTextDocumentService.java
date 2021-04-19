@@ -25,18 +25,18 @@ import java.util.function.Function;
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
     private final FSHLanguageServer fshLanguageServer;
     private final DiagnosticProvider diagnosticProvider;
-    private static final Function<HoverParams,Hover>
-            hoverProcessor = new HoverProvider();
-    private static final Function<CompletionParams,Either<List<CompletionItem>, CompletionList>>
-            completionProcessor = new CompletionProcessor();
+    private static final Function<HoverParams, Hover>
+            HOVER_PROVIDER = new HoverProvider();
+    private static final Function<CompletionParams, Either<List<CompletionItem>, CompletionList>>
+            COMPLETION_PROCESSOR = new CompletionProcessor();
     private static final Function<DefinitionParams, Either<List<? extends Location>, List<? extends LocationLink>>>
-            definitionProvider = new DefinitionProvider();
+            DEFINITION_PROVIDER = new DefinitionProvider();
     private static final Function<ImplementationParams, Either<List<? extends Location>, List<? extends LocationLink>>>
-            implementationProvider = new ImplementationProvider();
+            IMPLEMENTATION_PROVIDER = new ImplementationProvider();
     private static final Function<ReferenceParams, List<? extends Location>>
-            referencesProvider = new ReferencesProvider();
+            REFERENCES_PROVIDER = new ReferencesProvider();
     private static final Function<RenameParams, WorkspaceEdit>
-            renameProvider = new RenameProvider();
+            RENAME_PROVIDER = new RenameProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -70,13 +70,13 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
     }
 
     @Override
-    public CompletableFuture<Hover> hover(HoverParams params){
-        return CompletableFuture.completedFuture(hoverProcessor.apply(params));
+    public CompletableFuture<Hover> hover(HoverParams params) {
+        return CompletableFuture.completedFuture(HOVER_PROVIDER.apply(params));
     }
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams params) {
-        return CompletableFuture.completedFuture(completionProcessor.apply(params));
+        return CompletableFuture.completedFuture(COMPLETION_PROCESSOR.apply(params));
     }
 
     @Override
@@ -86,21 +86,21 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
 
     @Override
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(DefinitionParams params) {
-        return CompletableFuture.completedFuture(definitionProvider.apply(params));
+        return CompletableFuture.completedFuture(DEFINITION_PROVIDER.apply(params));
     }
 
     @Override
     public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> implementation(ImplementationParams params) {
-        return CompletableFuture.completedFuture(implementationProvider.apply(params));
+        return CompletableFuture.completedFuture(IMPLEMENTATION_PROVIDER.apply(params));
     }
 
     @Override
     public CompletableFuture<List<? extends Location>> references(ReferenceParams params) {
-        return CompletableFuture.completedFuture(referencesProvider.apply(params));
+        return CompletableFuture.completedFuture(REFERENCES_PROVIDER.apply(params));
     }
 
     @Override
     public CompletableFuture<WorkspaceEdit> rename(RenameParams params) {
-        return CompletableFuture.completedFuture(renameProvider.apply(params));
+        return CompletableFuture.completedFuture(RENAME_PROVIDER.apply(params));
     }
 }

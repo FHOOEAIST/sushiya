@@ -22,27 +22,29 @@ import java.util.stream.Collectors;
  */
 public class AliasCompletionProvider implements ICompletionProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(AliasCompletionProvider.class);
-    private static final List<CompletionItem> completionItems = new ArrayList<>();
+    private static final List<CompletionItem> COMPLETION_ITEMS = new ArrayList<>();
 
     @Override
     public List<CompletionItem> get() {
-        completionItems.clear();
+        COMPLETION_ITEMS.clear();
 
-        completionItems.add(new CompletionItem("LNC = http://loinc.org"));
-        completionItems.add(new CompletionItem("SCT = http://snomed.info/sct"));
-        completionItems.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS)
+        COMPLETION_ITEMS.add(new CompletionItem("LNC = http://loinc.org"));
+        COMPLETION_ITEMS.add(new CompletionItem("SCT = http://snomed.info/sct"));
+        COMPLETION_ITEMS.addAll(FSHFileHandler.getInstance().getCreatedEntities(Entity.ALIAS)
                 .stream().map(CompletionItem::new).collect(Collectors.toList()));
 
-        return completionItems.stream().distinct().collect(Collectors.toList());
+        return COMPLETION_ITEMS.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
+    //test if this provider is responsible. Only if this function returns true the List of Completion make sense for the completion.
     public boolean test(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
-        if(textDocumentItem != null
+        if (textDocumentItem != null
                 && completionParams != null
                 && completionParams.getContext() != null
-                && completionParams.getContext().getTriggerKind() != null){
-            return checkKeywordAlias(textDocumentItem,completionParams)
+                && completionParams.getContext().getTriggerKind() != null) {
+            return checkKeywordAlias(textDocumentItem, completionParams)
+                    //check if the trigger character is space, then this provider is responsible
                     && completionParams.getContext().getTriggerKind() != CompletionTriggerKind.Invoked
                     && completionParams.getContext().getTriggerCharacter() != null
                     && completionParams.getContext().getTriggerCharacter().equals(" ");
@@ -50,20 +52,16 @@ public class AliasCompletionProvider implements ICompletionProvider {
         return false;
     }
 
-    private boolean checkKeywordAlias(TextDocumentItem textDocumentItem, CompletionParams completionParams){
-        try{
+    //check if the current line contains the keyword "Alias". If it does this completion provider is responsible.
+    private boolean checkKeywordAlias(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
+        try {
             String line = textDocumentItem.getText().split("\n")[completionParams.getPosition().getLine()];
-            return line.replaceAll("\\s","").matches("Alias:")
+            return line.replaceAll("\\s", "").matches("Alias:")
                     && line.lastIndexOf("Alias:") < completionParams.getPosition().getCharacter();
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             LOGGER.error(exception.getMessage());
             return false;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "AliasCompletionProvider";
     }
 }
