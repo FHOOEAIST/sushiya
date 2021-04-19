@@ -10,8 +10,6 @@
 package science.aist.sushiya.service.languageserver.rename;
 
 import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -25,7 +23,6 @@ import science.aist.sushiya.service.languageserver.FSHFileHandler;
  * @author Sophie Bauernfeind
  */
 public class RenameProviderTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RenameProviderTest.class);
     static final RenameProvider provider = new RenameProvider();
     static final String uri = "testing";
 
@@ -78,14 +75,7 @@ public class RenameProviderTest {
                 "    Id: Test\n" +
                 "    * example contains testing 1..*\n" +
                 "    * example[testing] = test";
-        TextDocumentItem textDocument = new TextDocumentItem();
-        textDocument.setText(text);
-        textDocument.setUri(uri);
-
-        //register this document to the file handler
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocument);
-        FSHFileHandler.getInstance().addFile(openParams);
+        prepareForTest(text);
 
         //generate parameter to call the provider
         RenameParams renameParams = new RenameParams();
@@ -114,14 +104,7 @@ public class RenameProviderTest {
                 "    Id: Test\n" +
                 "    * example contains testing 1..*\n" +
                 "    * example[testing] = test";
-        TextDocumentItem textDocument = new TextDocumentItem();
-        textDocument.setText(text);
-        textDocument.setUri(uri);
-
-        //register this document to the file handler
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocument);
-        FSHFileHandler.getInstance().addFile(openParams);
+        prepareForTest(text);
 
         //generate parameter to call the provider
         RenameParams renameParams = new RenameParams();
@@ -160,14 +143,7 @@ public class RenameProviderTest {
                 "\n" +
                 "ValueSet: ValueTest\n" +
                 "    * include codes from system SystemTest";
-        TextDocumentItem textDocument = new TextDocumentItem();
-        textDocument.setText(text);
-        textDocument.setUri(uri);
-
-        //register this document to the file handler
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocument);
-        FSHFileHandler.getInstance().addFile(openParams);
+        prepareForTest(text);
 
         //add the second file
         String text2 = "Profile: Test\n" +
@@ -198,5 +174,4 @@ public class RenameProviderTest {
         Assert.assertEquals(result.getChanges().get(uri).size(), 2);
         Assert.assertEquals(result.getChanges().get("test2").size(), 1);
     }
-
 }
