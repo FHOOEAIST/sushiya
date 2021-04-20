@@ -1,6 +1,8 @@
 package science.aist.sushiya.service.languageserver.formatting;
 
 import org.eclipse.lsp4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -16,6 +18,7 @@ import java.util.List;
  * @author Sophie Bauernfeind
  */
 public class FormattingProviderTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FormattingProviderTest.class);
     static final FormattingProvider provider = new FormattingProvider();
     static final String uri = "testing";
     private List<? extends TextEdit> result;
@@ -47,7 +50,16 @@ public class FormattingProviderTest {
         // then
         Assert.assertNotNull(result);
         Assert.assertEquals(result.size(), 1);
-        Assert.assertNotEquals(result.get(0).getNewText(),text);
+
+        String[] newTextLines = result.get(0).getNewText().split("\n");
+        String[] originalTextLines = text.split("\n");
+
+        Assert.assertEquals(newTextLines.length, originalTextLines.length);
+        boolean containsOneNotEqual = false;
+        for (int linePos = 0; linePos < newTextLines.length && !containsOneNotEqual; linePos++){
+            containsOneNotEqual = ! originalTextLines[linePos].equals(newTextLines[linePos]);
+        }
+        Assert.assertTrue(containsOneNotEqual);
     }
 
     @Parameters({"text"})
@@ -71,13 +83,22 @@ public class FormattingProviderTest {
         // then
         Assert.assertNotNull(result);
         Assert.assertEquals(result.size(), 1);
-        Assert.assertEquals(result.get(0).getNewText(),text);
+
+        String[] newTextLines = result.get(0).getNewText().split("\n");
+        String[] originalTextLines = text.split("\n");
+        LOGGER.info("original:{}",text);
+        LOGGER.info("newtest2:{}",result.get(0).getNewText());
+
+        Assert.assertEquals(newTextLines.length, originalTextLines.length);
+        for (int linePos = 0; linePos < newTextLines.length; linePos++){
+            Assert.assertEquals(originalTextLines[linePos] ,newTextLines[linePos]);
+        }
     }
 
     @Test
     public void testExtension(){
         //given
-        String text = "Extension: Test ";
+        String text = "Extension: Test \n";
         noChangeTest(text);
     }
 
@@ -168,38 +189,115 @@ public class FormattingProviderTest {
                 + "* name.family = \"Anyperson\" ";
         changeTest(text);
     }
-    //TODO:write correct test
 
     @Test
     public void testCommentInEntity(){
         //given
         String text = "Instance: EveAnyperson \n"
-                + "InstanceOf: TestPatient \n"
-                + "Usage: #inline \n"
-                + "//just a test\n"
-                + "* name.given[0] = \"Eve\"\n "
-                + "* name.family = \"Anyperson\" ";
+                + "\tInstanceOf: TestPatient \n"
+                + "\tUsage: #inline \n"
+                + "\t//just a test \n"
+                + "\t* name.given[0] = \"Eve\" \n"
+                + "\t* name.family = \"Anyperson\" ";
+        noChangeTest(text);
+    }
+
+    @Test
+    public void testTwoCommentInEntity(){
+        //given
+        String originalText = "Instance: EveAnyperson \n"
+                + "\tInstanceOf: TestPatient \n"
+                + "\tUsage: #inline \n"
+                + "\t//just a test \n"
+                + "\t* name.given[0] = \"Eve\" \n"
+                + "\t//another test \n"
+                + "\t* name.family = \"Anyperson\" ";
+        noChangeTest(originalText);
     }
 
     @Test
     public void testBlockCommentInEntity(){
         //given
         String text = "Instance: EveAnyperson \n"
-                + "InstanceOf: TestPatient \n"
-                + "Usage: #inline \n"
-                + "/*just \na\n test\n*/"
-                + "* name.given[0] = \"Eve\"\n "
-                + "* name.family = \"Anyperson\" ";
+                + "\tInstanceOf: TestPatient \n"
+                + "\tUsage: #inline \n"
+                + "\t/*just\n"
+                + "\ta \n"
+                + "\ttest\n"
+                + "\t*/\n"
+                + "\t* name.given[0] = \"Eve\" \n"
+                + "\t* name.family = \"Anyperson\" \n";
+        noChangeTest(text);
     }
 
     @Test
     public void testBlockCommentInEntityOneLine(){
         //given
         String text = "Instance: EveAnyperson \n"
-                + "InstanceOf: TestPatient \n"
-                + "Usage: #inline \n"
-                + "/*just a test*/"
-                + "* name.given[0] = \"Eve\"\n "
-                + "* name.family = \"Anyperson\" ";
+                + "\tInstanceOf: TestPatient \n"
+                + "\tUsage: #inline \n"
+                + "\t/*just a test*/\n"
+                + "\t* name.given[0] = \"Eve\" \n"
+                + "\t* name.family = \"Anyperson\" \n";
+        noChangeTest(text);
+    }
+
+    @Test
+    public void testInstance(){
+        //given
+        String originalText = "Instance: EveAnyperson \n" +
+                "InstanceOf: TestPatient \n" +
+                "Usage: #inline \n" +
+                "// #inline means this instance should not be exported as a separate example \n" +
+                "* name.given[0] = \"Eve\" \n" +
+                "* name.family = \"Anyperson\" \n";
+        changeTest(originalText);
+    }
+
+    @Test
+    public void testValueSet(){
+        //given
+        String originalText = "ValueSet: BodyWeightPreconditionVS \n" +
+                "Title: \"Body weight preconditions.\" \n" +
+                "Description:  \"Circumstances for body weight measurement.\" \n" +
+                "* SCT#971000205103 \"Wearing street clothes with shoes\" \n" +
+                "* SCT#961000205106 \"Wearing street clothes, no shoes\" \n" +
+                "* SCT#951000205108 \"Wearing underwear or less\" \n";
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(originalText);
+        textDocument.setUri(uri);
+
+        //register this document to the file handler
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //generate parameter to call the provider
+        DocumentFormattingParams formattingParams = new DocumentFormattingParams();
+        formattingParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        String expectingText = "ValueSet: BodyWeightPreconditionVS \n" +
+                "\tTitle: \"Body weight preconditions.\" \n" +
+                "\tDescription:  \"Circumstances for body weight measurement.\" \n" +
+                "\t* SCT#971000205103 \"Wearing street clothes with shoes\" \n" +
+                "\t* SCT#961000205106 \"Wearing street clothes, no shoes\" \n" +
+                "\t* SCT#951000205108 \"Wearing underwear or less\" \n";
+
+        //when
+        result = provider.apply(formattingParams);
+
+        // then
+        Assert.assertNotNull(result);
+        Assert.assertEquals(result.size(), 1);
+
+        String[] newTextLines = result.get(0).getNewText().split("\n");
+        String[] expectingTextLines = expectingText.split("\n");
+
+        Assert.assertEquals(newTextLines.length,expectingTextLines.length);
+        for (int linePos = 1; linePos < newTextLines.length && linePos < expectingTextLines.length; linePos++){
+            LOGGER.info("expectedTextLine:{}",newTextLines[linePos]);
+            LOGGER.info("     newTextLine:{}",newTextLines[linePos]);
+            Assert.assertEquals(expectingTextLines[linePos] ,newTextLines[linePos]);
+        }
     }
 }
