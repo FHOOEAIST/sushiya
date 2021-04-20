@@ -16,7 +16,6 @@ import science.aist.sushiya.service.languageserver.completion.CompletionProcesso
 import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
 import science.aist.sushiya.service.languageserver.formatting.FormattingProvider;
-import science.aist.sushiya.service.languageserver.formatting.RangeFormattingProvider;
 import science.aist.sushiya.service.languageserver.hover.HoverProvider;
 import science.aist.sushiya.service.languageserver.implementation.ImplementationProvider;
 import science.aist.sushiya.service.languageserver.references.ReferencesProvider;
@@ -46,8 +45,6 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
             renameProvider = new RenameProvider();
     private static final Function<DocumentFormattingParams, List<? extends TextEdit>>
             formattingProvider = new FormattingProvider();
-    private static final Function<DocumentRangeFormattingParams, List<? extends TextEdit>>
-            rangeFormattingProvider = new RangeFormattingProvider();
 
     public FSHTextDocumentService(FSHLanguageServer server) {
         this.fshLanguageServer = server;
@@ -133,10 +130,5 @@ public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDo
         }
 
         return CompletableFuture.completedFuture(textEditsReturnValue);
-    }
-
-    @Override
-    public CompletableFuture<List<? extends TextEdit>> rangeFormatting(DocumentRangeFormattingParams params) {
-        return CompletableFuture.completedFuture(rangeFormattingProvider.apply(params));
     }
 }
