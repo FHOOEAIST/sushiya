@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2021 the original author or authors.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * original Licenced by Apache Software Foundation (ASF)
+ */
+
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,6 +27,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package science.aist.sushiya.service.languageserver;
 
 import org.eclipse.lsp4j.*;

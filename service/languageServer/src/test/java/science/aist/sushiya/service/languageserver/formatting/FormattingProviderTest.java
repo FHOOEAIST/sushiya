@@ -1,8 +1,15 @@
+/*
+ * Copyright (c) 2021 the original author or authors.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package science.aist.sushiya.service.languageserver.formatting;
 
 import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
@@ -18,7 +25,6 @@ import java.util.List;
  * @author Sophie Bauernfeind
  */
 public class FormattingProviderTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FormattingProviderTest.class);
     static final FormattingProvider provider = new FormattingProvider();
     static final String uri = "testing";
     private List<? extends TextEdit> result;
@@ -29,7 +35,7 @@ public class FormattingProviderTest {
     }
 
     @Parameters({"text"})
-    public void changeTest(String text){
+    public void changeTest(String text) {
         //given
         TextDocumentItem textDocument = new TextDocumentItem();
         textDocument.setText(text);
@@ -56,14 +62,14 @@ public class FormattingProviderTest {
 
         Assert.assertEquals(newTextLines.length, originalTextLines.length);
         boolean containsOneNotEqual = false;
-        for (int linePos = 0; linePos < newTextLines.length && !containsOneNotEqual; linePos++){
-            containsOneNotEqual = ! originalTextLines[linePos].equals(newTextLines[linePos]);
+        for (int linePos = 0; linePos < newTextLines.length && !containsOneNotEqual; linePos++) {
+            containsOneNotEqual = !originalTextLines[linePos].equals(newTextLines[linePos]);
         }
         Assert.assertTrue(containsOneNotEqual);
     }
 
     @Parameters({"text"})
-    public void noChangeTest(String text){
+    public void noChangeTest(String text) {
         TextDocumentItem textDocument = new TextDocumentItem();
         textDocument.setText(text);
         textDocument.setUri(uri);
@@ -86,101 +92,99 @@ public class FormattingProviderTest {
 
         String[] newTextLines = result.get(0).getNewText().split("\n");
         String[] originalTextLines = text.split("\n");
-        LOGGER.info("original:{}",text);
-        LOGGER.info("newtest2:{}",result.get(0).getNewText());
 
         Assert.assertEquals(newTextLines.length, originalTextLines.length);
-        for (int linePos = 0; linePos < newTextLines.length; linePos++){
-            Assert.assertEquals(originalTextLines[linePos] ,newTextLines[linePos]);
+        for (int linePos = 0; linePos < newTextLines.length; linePos++) {
+            Assert.assertEquals(originalTextLines[linePos], newTextLines[linePos]);
         }
     }
 
     @Test
-    public void testExtension(){
+    public void testExtension() {
         //given
         String text = "Extension: Test \n";
         noChangeTest(text);
     }
 
     @Test
-    public void testExtensionStartWithSpace(){
+    public void testExtensionStartWithSpace() {
         //given
         String text = "    Extension: Test";
         changeTest(text);
     }
 
     @Test
-    public void testExtensionEndsWithSpace(){
+    public void testExtensionEndsWithSpace() {
         //given
         String text = "Extension: Test ";
         noChangeTest(text);
     }
 
     @Test
-    public void testProfileStartWithSpace(){
+    public void testProfileStartWithSpace() {
         //given
         String text = " Profile: Test";
         changeTest(text);
     }
 
     @Test
-    public void testProfileEndsWithSpace(){
+    public void testProfileEndsWithSpace() {
         //given
         String text = "Profile: Test ";
         noChangeTest(text);
     }
 
     @Test
-    public void testParentStartWithSpace(){
+    public void testParentStartWithSpace() {
         //given
         String text = " Parent: Test";
         changeTest(text);
     }
 
     @Test
-    public void testParentEndsWithSpace(){
+    public void testParentEndsWithSpace() {
         //given
         String text = "Parent: Test   ";
         changeTest(text);
     }
 
     @Test
-    public void testSourceStartWithSpace(){
+    public void testSourceStartWithSpace() {
         //given
         String text = " Source: Test";
         changeTest(text);
     }
 
     @Test
-    public void testSourceEndsWithSpace(){
+    public void testSourceEndsWithSpace() {
         //given
         String text = "Source: Test   ";
         changeTest(text);
     }
 
     @Test
-    public void testRule(){
+    public void testRule() {
         //given
         String text = "* Test";
         changeTest(text);
     }
 
     @Test
-    public void testRuleStartWithSpace(){
+    public void testRuleStartWithSpace() {
         //given
         String text = " * Test";
         changeTest(text);
     }
 
     @Test
-    public void testRuleEndsWithSpace(){
+    public void testRuleEndsWithSpace() {
         //given
         String text = "* Test   ";
         changeTest(text);
     }
 
     @Test
-    public void testInstanceEntity(){
+    public void testInstanceEntity() {
         //given
         String text = "Instance: EveAnyperson \n"
                 + "InstanceOf: TestPatient \n"
@@ -191,7 +195,7 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testCommentInEntity(){
+    public void testCommentInEntity() {
         //given
         String text = "Instance: EveAnyperson \n"
                 + "\tInstanceOf: TestPatient \n"
@@ -203,7 +207,7 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testTwoCommentInEntity(){
+    public void testTwoCommentInEntity() {
         //given
         String originalText = "Instance: EveAnyperson \n"
                 + "\tInstanceOf: TestPatient \n"
@@ -216,7 +220,7 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testBlockCommentInEntity(){
+    public void testBlockCommentInEntity() {
         //given
         String text = "Instance: EveAnyperson \n"
                 + "\tInstanceOf: TestPatient \n"
@@ -231,7 +235,7 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testBlockCommentInEntityOneLine(){
+    public void testBlockCommentInEntityOneLine() {
         //given
         String text = "Instance: EveAnyperson \n"
                 + "\tInstanceOf: TestPatient \n"
@@ -243,7 +247,7 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testInstance(){
+    public void testInstance() {
         //given
         String originalText = "Instance: EveAnyperson \n" +
                 "InstanceOf: TestPatient \n" +
@@ -255,11 +259,11 @@ public class FormattingProviderTest {
     }
 
     @Test
-    public void testValueSet(){
+    public void testValueSet() {
         //given
         String originalText = "ValueSet: BodyWeightPreconditionVS \n" +
                 "Title: \"Body weight preconditions.\" \n" +
-                "Description:  \"Circumstances for body weight measurement.\" \n" +
+                "Description: \"Circumstances for body weight measurement.\" \n" +
                 "* SCT#971000205103 \"Wearing street clothes with shoes\" \n" +
                 "* SCT#961000205106 \"Wearing street clothes, no shoes\" \n" +
                 "* SCT#951000205108 \"Wearing underwear or less\" \n";
@@ -278,7 +282,7 @@ public class FormattingProviderTest {
 
         String expectingText = "ValueSet: BodyWeightPreconditionVS \n" +
                 "\tTitle: \"Body weight preconditions.\" \n" +
-                "\tDescription:  \"Circumstances for body weight measurement.\" \n" +
+                "\tDescription: \"Circumstances for body weight measurement.\" \n" +
                 "\t* SCT#971000205103 \"Wearing street clothes with shoes\" \n" +
                 "\t* SCT#961000205106 \"Wearing street clothes, no shoes\" \n" +
                 "\t* SCT#951000205108 \"Wearing underwear or less\" \n";
@@ -287,17 +291,16 @@ public class FormattingProviderTest {
         result = provider.apply(formattingParams);
 
         // then
+
         Assert.assertNotNull(result);
         Assert.assertEquals(result.size(), 1);
 
         String[] newTextLines = result.get(0).getNewText().split("\n");
         String[] expectingTextLines = expectingText.split("\n");
 
-        Assert.assertEquals(newTextLines.length,expectingTextLines.length);
-        for (int linePos = 1; linePos < newTextLines.length && linePos < expectingTextLines.length; linePos++){
-            LOGGER.info("expectedTextLine:{}",newTextLines[linePos]);
-            LOGGER.info("     newTextLine:{}",newTextLines[linePos]);
-            Assert.assertEquals(expectingTextLines[linePos] ,newTextLines[linePos]);
+        Assert.assertEquals(newTextLines.length, expectingTextLines.length);
+        for (int linePos = 1; linePos < newTextLines.length && linePos < expectingTextLines.length; linePos++) {
+            Assert.assertEquals(expectingTextLines[linePos], newTextLines[linePos]);
         }
     }
 }

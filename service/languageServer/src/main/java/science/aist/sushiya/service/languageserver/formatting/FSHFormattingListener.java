@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021 the original author or authors.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package science.aist.sushiya.service.languageserver.formatting;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -20,7 +29,7 @@ public class FSHFormattingListener extends FSHBaseListener {
     public void visitTerminal(TerminalNode node) {
         //Token with type -1 is a end of file token,
         // which can be ignored when creating a text
-        if(node.getSymbol().getType() != -1){
+        if (node.getSymbol().getType() != -1) {
             formattedText += node.getText() + " ";
         }
     }
@@ -101,6 +110,11 @@ public class FSHFormattingListener extends FSHBaseListener {
     }
 
     @Override
+    public void enterVsRule(FSHParser.VsRuleContext ctx) {
+        formattedText += "\n\t";
+    }
+
+    @Override
     public void enterFixedValueRule(FSHParser.FixedValueRuleContext ctx) {
         formattedText += "\n\t";
     }
@@ -143,7 +157,7 @@ public class FSHFormattingListener extends FSHBaseListener {
     @Override
     public void enterEntity(FSHParser.EntityContext ctx) {
         //if its not the start of the new text
-        if(formattedText.length() != 0){
+        if (formattedText.length() != 0) {
             formattedText += "\n\n";
         }
     }

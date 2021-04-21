@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021 the original author or authors.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
 package science.aist.sushiya.service.languageserver.formatting;
 
 import org.antlr.v4.runtime.CharStream;
@@ -29,31 +38,31 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
 
         //save comments before refactoring, because the parser steps over comments and
         //the formatting listener can't build a new string with the comments
-        Thread saveComments = new Thread(()-> {
+        Thread saveComments = new Thread(() -> {
             String[] lines = textDocument.getText().split("\n");
             boolean inComment = false;
             int startCommentPosition = 0;
             //move over the lines and search for comments, which will be saved
-            for(int pos = 0; pos < lines.length; pos++){
+            for (int pos = 0; pos < lines.length; pos++) {
                 String line = lines[pos];
                 //is a simple one line comment
                 //to not mistake a url as comment, there have to be a space before the slashes or
                 //the line begins with slashes
-                if(line.contains(" //")||line.matches("(^|\t)//(\\S|\\s)*")){
+                if (line.contains(" //") || line.matches("(^|\t)//(\\S|\\s)*")) {
                     int startIndex = line.indexOf("//");
                     String subString = line.substring(startIndex);
                     comments.put(pos, subString);
                 }
                 //if line contains begin and no end for block comment
-                if(line.contains("/*") && !line.contains("*/")){
+                if (line.contains("/*") && !line.contains("*/")) {
                     int startIndex = line.indexOf("/*");
                     String subString = line.substring(startIndex);
                     startCommentPosition = pos;
                     inComment = true;
-                    comments.put(startCommentPosition,subString + "\n");
+                    comments.put(startCommentPosition, subString + "\n");
                 }
                 //if line contains no begin and but end for block comment
-                if(!line.contains("/*") && line.contains("*/")){
+                if (!line.contains("/*") && line.contains("*/")) {
                     int endIndex = line.indexOf("*/");
                     String subString = line.substring(0, endIndex + 2);
                     comments.replace(startCommentPosition,
@@ -62,16 +71,16 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
                     startCommentPosition = 0;
                 }
                 //if line contains a start and end for block comment
-                if(line.contains("/*") && line.contains("*/")){
+                if (line.contains("/*") && line.contains("*/")) {
                     int startIndex = line.indexOf("/*");
                     int endIndex = line.indexOf("*/");
 
                     //this else if is to prevent wrong commenting, if in the line "*/*"
-                    if(endIndex < startIndex){
+                    if (endIndex < startIndex) {
                         String subString = line.substring(0, endIndex + 2);
                         comments.replace(startCommentPosition,
                                 comments.get(startCommentPosition) + subString);
-                    }else{
+                    } else {
                         startCommentPosition = pos;
                         String subString = line.substring(startIndex, endIndex + 2);
                         comments.put(startCommentPosition, subString);
@@ -80,7 +89,7 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
                     startCommentPosition = 0;
                 }
                 //if a block comment has started, but there is no begin or end
-                if(inComment && !line.contains("/*") && !line.contains("*/")){
+                if (inComment && !line.contains("/*") && !line.contains("*/")) {
                     comments.replace(startCommentPosition,
                             comments.get(startCommentPosition) + line + "\n");
                 }
@@ -90,7 +99,8 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
 
         FSHFormattingListener formattingListener = new FSHFormattingListener();
 
-        Thread parsing= new Thread(() -> {String text = textDocument.getText();
+        Thread parsing = new Thread(() -> {
+            String text = textDocument.getText();
             CharStream input = CharStreams.fromString(text);
             FSHLexer lexer = new FSHLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -98,7 +108,8 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
             //diagnostic provider is responsible for error checking, not the formatting provider
             parser.removeErrorListeners();
             parser.addParseListener(formattingListener);
-            parser.doc();});
+            parser.doc();
+        });
         parsing.start();
 
 
@@ -108,28 +119,28 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
             parsing.join();
 
             String formattedText = formattingListener.getFormattedText();
-            String[]lines = formattedText.split("\n");
+            String[] lines = formattedText.split("\n");
             StringBuilder newText = new StringBuilder();
             int insertedComments = 0;
             int newLinePos = 1;
-            for(int lineNumber = 0; lineNumber < formattedText.length() && newLinePos != 0; lineNumber++){
-                if(comments.containsKey(lineNumber+insertedComments)){
+            for (int lineNumber = 0; lineNumber < formattedText.length() && newLinePos != 0; lineNumber++) {
+                if (comments.containsKey(lineNumber + insertedComments)) {
                     newText.append("\t").append(comments.get(lineNumber + insertedComments)).append("\n");
                     insertedComments++;
                 }
                 newText.append(lines[lineNumber]).append("\n");
                 formattedText = formattedText.substring(newLinePos);
-                newLinePos = formattedText.indexOf("\n") +1;
+                newLinePos = formattedText.indexOf("\n") + 1;
             }
             String[] newLines = newText.toString().split("\n");
 
             TextEdit textEdit = new TextEdit();
             textEdit.setNewText(newText.toString());
-            textEdit.setRange(new Range(new Position(0,0),
-                    new Position(newLines.length-1,newLines[newLines.length-1].length()-1)));
+            textEdit.setRange(new Range(new Position(0, 0),
+                    new Position(newLines.length - 1, newLines[newLines.length - 1].length() - 1)));
             result.add(textEdit);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
 
