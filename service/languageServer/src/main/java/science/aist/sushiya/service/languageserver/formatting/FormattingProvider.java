@@ -37,7 +37,9 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
             for(int pos = 0; pos < lines.length; pos++){
                 String line = lines[pos];
                 //is a simple one line comment
-                if(line.contains("//")){
+                //to not mistake a url as comment, there have to be a space before the slashes or
+                //the line begins with slashes
+                if(line.contains(" //")||line.matches("(^|\t)//(\\S|\\s)*")){
                     int startIndex = line.indexOf("//");
                     String subString = line.substring(startIndex);
                     comments.put(pos, subString);
@@ -119,11 +121,12 @@ public class FormattingProvider implements Function<DocumentFormattingParams, Li
                 formattedText = formattedText.substring(newLinePos);
                 newLinePos = formattedText.indexOf("\n") +1;
             }
+            String[] newLines = newText.toString().split("\n");
 
             TextEdit textEdit = new TextEdit();
             textEdit.setNewText(newText.toString());
             textEdit.setRange(new Range(new Position(0,0),
-                    new Position(lines.length-1,lines[lines.length-1].length()-1)));
+                    new Position(newLines.length-1,newLines[newLines.length-1].length()-1)));
             result.add(textEdit);
 
         }catch (Exception e){

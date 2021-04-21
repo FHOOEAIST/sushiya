@@ -211,7 +211,7 @@ public class FormattingProviderTest {
                 + "\t//just a test \n"
                 + "\t* name.given[0] = \"Eve\" \n"
                 + "\t//another test \n"
-                + "\t* name.family = \"Anyperson\" ";
+                + "\t* name.family = \"Anyperson\" \n";
         noChangeTest(originalText);
     }
 
