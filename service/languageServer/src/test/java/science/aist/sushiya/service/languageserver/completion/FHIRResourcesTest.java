@@ -22,51 +22,26 @@ public class FHIRResourcesTest {
 
     @Test
     public void testGetAllFoundation(){
-        //given
-
-        //when
-
-        //then
         Assert.assertNotNull(FHIRResources.getInstance().getAllFinancial());
     }
 
     @Test
     public void testGetAllBase(){
-        //given
-
-        //when
-
-        //then
         Assert.assertNotNull(FHIRResources.getInstance().getAllBase());
     }
 
     @Test
     public void testGetAllClinical(){
-        //given
-
-        //when
-
-        //then
         Assert.assertNotNull(FHIRResources.getInstance().getAllClinical());
     }
 
     @Test
     public void testGetAllFinancial(){
-        //given
-
-        //when
-
-        //then
         Assert.assertNotNull(FHIRResources.getInstance().getAllFinancial());
     }
 
     @Test
     public void testGetAllSpecialized(){
-        //given
-
-        //when
-
-        //then
         Assert.assertNotNull(FHIRResources.getInstance().getAllSpecialized());
     }
 }

@@ -12,9 +12,9 @@ package science.aist.sushiya.service.languageserver.completion;
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
-import science.aist.sushiya.service.languageserver.completion.MappingEntityRuleCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
@@ -31,233 +31,171 @@ public class MappingEntityRuleCompletionProviderTest {
         FSHFileHandler.getInstance().clean();
     }
 
+    @Parameters({"text", "position", "completionContext", "expectedActivation"})
+    public void test(String text, Position position, CompletionContext completionContext, boolean expectedActivation){
+        //when
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(text);
+        textDocument.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        if(position != null){
+            params.setPosition(position);
+        }if(completionContext != null){
+            params.setContext(completionContext);
+        }
+
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //then
+        if(expectedActivation){
+            Assert.assertTrue(provider.test(textDocument,params));
+        }else{
+            Assert.assertFalse(provider.test(textDocument,params));
+        }
+    }
+
     @Test
     public void testActivationNewRule() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: Test \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testActivationInRule() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: Test \n"
                 + " Title: \n"
                 + " Description: \n"
                 + "  * path ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,9);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testNoActivationWrongEntity() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,11);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationOutOfBound() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(5,20);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationEmptyText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationIncorrectText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "test  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,null,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,null,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerCharacter() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
@@ -287,26 +225,16 @@ public class MappingEntityRuleCompletionProviderTest {
     @Test
     public void testAmountCompletionItemsNewRule() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),2);
@@ -315,26 +243,16 @@ public class MappingEntityRuleCompletionProviderTest {
     @Test
     public void testAmountCompletionItemsPathDefined() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * path ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(3,9);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),1);
@@ -343,28 +261,18 @@ public class MappingEntityRuleCompletionProviderTest {
     @Test
     public void testAmountCompletionInsertRule() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "RuleSet: AnotherTest\n"
                 + "\n"
                 + "Mapping: Test \n"
                 + " Title: \n"
                 + " Id: \n"
                 + "  * insert ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(5,11);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),1);
@@ -373,7 +281,6 @@ public class MappingEntityRuleCompletionProviderTest {
     @Test
     public void testAmountCompletionInsertRuleMoreEntities() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "RuleSet: AnotherTest\n"
                 + "\n"
                 + "RuleSet: AnotherTest2\n"
@@ -382,21 +289,12 @@ public class MappingEntityRuleCompletionProviderTest {
                 + " Title: \n"
                 + " Id: \n"
                 + "  * insert ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(7,11);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),2);

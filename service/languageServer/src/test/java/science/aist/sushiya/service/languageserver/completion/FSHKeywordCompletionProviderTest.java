@@ -31,13 +31,13 @@ public class FSHKeywordCompletionProviderTest {
         textDocumentItem.setText(text);
         textDocumentItem.setUri(uri);
 
+        //when
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
         params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.Invoked);
         params.setContext(completionContext);
-        //when
 
         //then
         Assert.assertTrue(provider.test(textDocumentItem,params));

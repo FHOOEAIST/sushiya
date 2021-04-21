@@ -11,8 +11,8 @@ package science.aist.sushiya.service.languageserver.completion;
 
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-import science.aist.sushiya.service.languageserver.completion.PathCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
@@ -24,10 +24,31 @@ public class PathCompletionProviderTest {
     private static final PathCompletionProvider provider = new PathCompletionProvider();
     private static final String uri = "testing";
 
+    @Parameters({"text", "position", "completionContext", "expectedActivation"})
+    public void test(String text, Position position, CompletionContext completionContext, boolean expectedActivation){
+        //when
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(text);
+        textDocument.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        if(position != null){
+            params.setPosition(position);
+        }if(completionContext != null){
+            params.setContext(completionContext);
+        }
+
+        //then
+        if(expectedActivation){
+            Assert.assertTrue(provider.test(textDocument,params));
+        }else{
+            Assert.assertFalse(provider.test(textDocument,params));
+        }
+    }
+
     @Test
     public void testActivation() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -35,28 +56,17 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-
-
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testActivationMoreEntities() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile: AnotherTest\n"
                 + "\n"
                 + "Profile:     TestPatient\n"
@@ -66,28 +76,17 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-
-
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(8,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testActivationMoreContainsRules() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile: AnotherTest\n"
                 + "\n"
                 + "Profile:     TestPatient\n"
@@ -98,22 +97,12 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-
-
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(9,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
@@ -146,7 +135,6 @@ public class PathCompletionProviderTest {
     @Test
     public void testNoActivationOutOfBound() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -154,47 +142,29 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(9,20);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationEmptyText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationIncorrectText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -202,26 +172,17 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " test  * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,19);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -229,24 +190,16 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,null,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -254,22 +207,14 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,null,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -277,25 +222,16 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerCharacter() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -303,18 +239,11 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
-        params.setContext(completionContext);
-        //when
+        completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
@@ -347,7 +276,6 @@ public class PathCompletionProviderTest {
     @Test
     public void testAmountCompletionItems() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -355,18 +283,12 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),3);
@@ -375,7 +297,6 @@ public class PathCompletionProviderTest {
     @Test
     public void testAmountCompletionItemsOneItemNamed() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -383,18 +304,12 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),3);
@@ -403,7 +318,6 @@ public class PathCompletionProviderTest {
     @Test
     public void testAmountCompletionItemsAllItemsNamed() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -411,18 +325,12 @@ public class PathCompletionProviderTest {
                 + "     bPK named bp 0..* and \n"
                 + "     localPatientId named lp 0..1 \n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,14);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),3);
@@ -431,30 +339,20 @@ public class PathCompletionProviderTest {
     @Test
     public void testNoActivationNoContainsRule() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(3,14);
-        params.setPosition(position);
+        Position position = new Position(2,14);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationWrongComponentName() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -462,26 +360,17 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * testing[]";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,8);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoComponentName() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "Profile:     TestPatient\n"
                 + " Parent:     Patient\n"
                 + " * identifier contains \n"
@@ -489,19 +378,11 @@ public class PathCompletionProviderTest {
                 + "     bPK 0..* and \n"
                 + "     localPatientId 0..1 \n"
                 + " * []";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(6,4);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter("[");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 }

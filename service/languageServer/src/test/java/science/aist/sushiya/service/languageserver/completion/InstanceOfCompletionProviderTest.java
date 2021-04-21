@@ -12,10 +12,9 @@ package science.aist.sushiya.service.languageserver.completion;
 import org.eclipse.lsp4j.*;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
-import science.aist.sushiya.service.languageserver.completion.FHIRResources;
-import science.aist.sushiya.service.languageserver.completion.InstanceOfCompletionProvider;
 
 /**
  * <p>Created by Sophie Bauernfeind on 25.03.2021</p>
@@ -31,228 +30,158 @@ public class InstanceOfCompletionProviderTest {
     public void setUp() {
         FSHFileHandler.getInstance().clean();
     }
-    
+
+    @Parameters({"text", "position", "completionContext", "expectedActivation"})
+    public void test(String text, Position position, CompletionContext completionContext, boolean expectedActivation){
+        //when
+        TextDocumentItem textDocument = new TextDocumentItem();
+        textDocument.setText(text);
+        textDocument.setUri(uri);
+
+        CompletionParams params = new CompletionParams();
+        if(position != null){
+            params.setPosition(position);
+        }if(completionContext != null){
+            params.setContext(completionContext);
+        }
+
+        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
+        openParams.setTextDocument(textDocument);
+        FSHFileHandler.getInstance().addFile(openParams);
+
+        //then
+        if(expectedActivation){
+            Assert.assertTrue(provider.test(textDocument,params));
+        }else{
+            Assert.assertFalse(provider.test(textDocument,params));
+        }
+    }
+
+
     @Test
     public void testActivation1(){
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testActivation2(){
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testActivation3(){
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "  InstanceOf  : ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertTrue(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,true);
     }
 
     @Test
     public void testNoActivationWrongPosition() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,0);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationOutOfBound() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(1,0);
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationEmptyText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationIncorrectText() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "test InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetPosition() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,null,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetContext() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,null,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerKind() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
     public void testNoActivationNoSetTriggerCharacter() {
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: ";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
-        params.setPosition(position);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
-        params.setContext(completionContext);
-        //when
 
-        //then
-        Assert.assertFalse(provider.test(textDocumentItem,params));
+        test(text,position,completionContext,false);
     }
 
     @Test
@@ -262,6 +191,7 @@ public class InstanceOfCompletionProviderTest {
         String text = "InstanceOf: ";
         textDocumentItem.setText(text);
 
+        //when
         CompletionParams params = new CompletionParams();
         Position position = new Position(0,text.length());
         params.setPosition(position);
@@ -269,7 +199,7 @@ public class InstanceOfCompletionProviderTest {
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
         params.setContext(completionContext);
-        //when
+
 
         //then
         //the uri does not affect the completion
@@ -279,25 +209,15 @@ public class InstanceOfCompletionProviderTest {
     @Test
     public void testAmountCompletionItems(){
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: "
                 + "\n"
                 + "Profile: Test";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
+        Position position = new Position(0,11);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),
@@ -309,27 +229,17 @@ public class InstanceOfCompletionProviderTest {
     @Test
     public void testAmountCompletionItems2(){
         //given
-        TextDocumentItem textDocumentItem = new TextDocumentItem();
         String text = "InstanceOf: \n"
                 + "\n"
                 + "Profile: Test\n"
                 + "\n"
                 + "Profile: Test2";
-        textDocumentItem.setText(text);
-        textDocumentItem.setUri(uri);
-
-        CompletionParams params = new CompletionParams();
-        Position position = new Position(0,text.length());
-        params.setPosition(position);
+        Position position = new Position(0,11);
         CompletionContext completionContext = new CompletionContext();
         completionContext.setTriggerKind(CompletionTriggerKind.TriggerCharacter);
         completionContext.setTriggerCharacter(" ");
-        params.setContext(completionContext);
-        //when
-        DidOpenTextDocumentParams openParams = new DidOpenTextDocumentParams();
-        openParams.setTextDocument(textDocumentItem);
-        FSHFileHandler.getInstance().addFile(openParams);
-        provider.test(textDocumentItem,params);
+
+        test(text,position,completionContext,true);
 
         //then
         Assert.assertEquals(provider.get().size(),
