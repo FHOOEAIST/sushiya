@@ -87,7 +87,7 @@ public class PathCompletionProvider implements ICompletionProvider {
             triggerWord = triggerWord.substring(0, triggerWord.length() - 2);
             return true;
         }
-        //if the size of the trigger word is smaller than 2 and the line has to be a rule, the trigger word is not valid
+        //if the size of the trigger word is smaller than 2 and the line is a rule, the trigger word is not valid
         else if (triggerWord.length() < 2
                 && line.matches("\\s*\\*\\s+\\S+(\\s|\\S)*")) {
             LOGGER.info("No valid trigger word.");

@@ -65,7 +65,7 @@ public class MappingEntityRuleCompletionProvider implements ICompletionProvider 
         return false;
     }
 
-    //check if the current entity is a Mapping. If it is a Code System the completion provider is responsible.
+    //check if the current entity is a Mapping Entity. If it is, the completion provider is responsible.
     private boolean checkRuleConditions(TextDocumentItem textDocumentItem, CompletionParams completionParams) {
         try {
             String line = textDocumentItem.getText().split("\\n")[completionParams.getPosition().getLine()];
