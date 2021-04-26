@@ -31,7 +31,11 @@ public class ProviderHelper {
 
     public String getName(@NotNull TextDocumentItem textDocument, @NotNull Position position){
         try{
-            String line = textDocument.getText().split("\n")[position.getLine()];
+            String[] lines = textDocument.getText().split("\n");
+            String line = lines.length > position.getLine() ? lines[position.getLine()] : null;
+            if(line == null){
+                return null;
+            }
             boolean startFound = false;
             boolean endFound = false;
             int startPos = position.getCharacter();
@@ -55,6 +59,9 @@ public class ProviderHelper {
             if(startFound){
                 String result = line.substring(startPos +1, endPos);
                 return result.matches("(\\s*|\\p{Punct})")? null : result;
+            }
+            if(endPos > line.length()){
+                return null;
             }
             String result = line.substring(startPos , endPos).trim();
             return result.matches("(\\s*|\\p{Punct})")? null : result;

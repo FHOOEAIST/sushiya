@@ -129,7 +129,7 @@ public class ImplementationProviderTest {
     }
 
     @Test
-    public void testNoImplementationWrongPosition(){
+    public void testNoImplementationEmptyLine(){
         //given
         prepareForTest(text);
 
@@ -143,7 +143,7 @@ public class ImplementationProviderTest {
         result = provider.apply(implParams);
 
         // then
-        Assert.assertNull(result.getLeft());
+        Assert.assertEquals(result.getLeft().size(), 0);
         Assert.assertNull(result.getRight());
     }
 
@@ -321,6 +321,34 @@ public class ImplementationProviderTest {
         //generate parameter to call the provider
         ImplementationParams implParams = new ImplementationParams();
         Position position = new Position(8,7);
+        implParams.setPosition(position);
+        implParams.setTextDocument(new TextDocumentIdentifier(uri));
+
+        //when
+        result = provider.apply(implParams);
+
+        // then
+        Assert.assertEquals(result.getLeft().size(), 0);
+    }
+
+    @Test
+    public void testEmptyLineBetween(){
+        //given
+        String profile1 = "Profile: Test\n"
+                + "Parent: Patient \n"
+                + "Id: test \n"
+                + "* value 0..0 \n"
+                + "\n";
+        String profile2 = "Profile: AnotherTest\n"
+                + "Parent: Test \n"
+                + "Id: test \n"
+                + "* path[test]\n"
+                + "* value 0..0 \n";
+        prepareForTest(profile1+profile2);
+
+        //generate parameter to call the provider
+        ImplementationParams implParams = new ImplementationParams();
+        Position position = new Position(4,0);
         implParams.setPosition(position);
         implParams.setTextDocument(new TextDocumentIdentifier(uri));
 

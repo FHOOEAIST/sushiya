@@ -146,7 +146,7 @@ public class ReferenceProviderTest {
         result = provider.apply(refParams);
 
         // then
-        Assert.assertNull(result);
+        Assert.assertEquals(result.size(),0);
     }
 
     @Test

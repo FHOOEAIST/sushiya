@@ -15,6 +15,7 @@ import org.eclipse.lsp4j.TextDocumentIdentifier;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.ProviderHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -34,7 +35,7 @@ public class ReferencesProvider implements Function<ReferenceParams,
                 referenceParams.getPosition());
 
         if(searchedReference == null){
-            return null;
+            return new ArrayList<>();
         }
 
         return locationHelper.getLocations(searchedReference,
