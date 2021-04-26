@@ -9,9 +9,10 @@
 
 package science.aist.sushiya.service.languageserver.rename;
 
-import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eclipse.lsp4j.Location;
+import org.eclipse.lsp4j.RenameParams;
+import org.eclipse.lsp4j.TextEdit;
+import org.eclipse.lsp4j.WorkspaceEdit;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.ProviderHelper;
 
@@ -27,7 +28,6 @@ import java.util.function.Function;
  * @author SophieBauernfeind
  */
 public class RenameProvider implements Function<RenameParams, WorkspaceEdit> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RenameProvider.class);
     private static final ProviderHelper HELPER = new ProviderHelper();
 
     @Override

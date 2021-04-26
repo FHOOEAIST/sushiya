@@ -30,10 +30,9 @@
 
 package science.aist.sushiya.service.languageserver;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -66,7 +65,7 @@ public abstract class AbstractLanguageServer {
         }
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractLanguageServer.class);
+    private static final Logger LOGGER = Logger.getInstance(AbstractLanguageServer.class);
 
     private Thread runner;
     private volatile boolean shutdown;

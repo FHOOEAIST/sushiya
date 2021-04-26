@@ -9,9 +9,8 @@
 
 package science.aist.sushiya.service.languageserver.completion;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
  * @author SophieBauernfeind
  */
 public class PathCompletionProvider implements ICompletionProvider{
-    private static final Logger LOGGER = LoggerFactory.getLogger(PathCompletionProvider.class);
+    private static final Logger LOGGER = Logger.getInstance(PathCompletionProvider.class);
     private final List<CompletionItem> completionItems = new ArrayList<>();
     private List<String> ruleLines = new ArrayList<>();
     private final Map<String,List<String>> components = new HashMap<>();

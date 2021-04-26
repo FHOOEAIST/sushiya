@@ -30,13 +30,12 @@
 
 package science.aist.sushiya.service.languageserver;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -51,7 +50,7 @@ import java.util.concurrent.CompletableFuture;
  */
 
 public class FSHLanguageServer extends AbstractLanguageServer implements LanguageServer, LanguageClientAware {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHLanguageServer.class);
+    private static final Logger LOGGER = Logger.getInstance(FSHLanguageServer.class);
     private LanguageClient client;
 
     public FSHLanguageServer() {

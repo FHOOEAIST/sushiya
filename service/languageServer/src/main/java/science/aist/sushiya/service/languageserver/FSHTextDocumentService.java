@@ -17,10 +17,9 @@
 package science.aist.sushiya.service.languageserver;
 
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.completion.CompletionProcessor;
 import science.aist.sushiya.service.languageserver.definition.DefinitionProvider;
 import science.aist.sushiya.service.languageserver.diagnostic.DiagnosticProvider;
@@ -37,7 +36,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 public class FSHTextDocumentService implements org.eclipse.lsp4j.services.TextDocumentService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHLanguageServer.class);
+    private static final Logger LOGGER = Logger.getInstance(FSHLanguageServer.class);
     private final FSHLanguageServer fshLanguageServer;
     private final DiagnosticProvider diagnosticProvider;
     private static final Function<HoverParams,Hover>

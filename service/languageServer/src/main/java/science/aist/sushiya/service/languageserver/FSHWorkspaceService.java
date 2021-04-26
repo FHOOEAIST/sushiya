@@ -9,11 +9,10 @@
 
 package science.aist.sushiya.service.languageserver;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Other requests/messages will be processed here.</p>
@@ -22,7 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class FSHWorkspaceService implements WorkspaceService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHWorkspaceService.class);
+    private static final Logger LOGGER = Logger.getInstance(FSHWorkspaceService.class);
 
     public void didChangeConfiguration(DidChangeConfigurationParams didChangeConfigurationParams) {
         LOGGER.info("SERVER: changeConfig");

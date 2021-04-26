@@ -13,8 +13,6 @@ import org.eclipse.lsp4j.ImplementationParams;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 import science.aist.sushiya.service.languageserver.ProviderHelper;
 
@@ -29,7 +27,6 @@ import java.util.function.Function;
  */
 public class ImplementationProvider implements Function<ImplementationParams,
         Either<List<? extends Location>, List<? extends LocationLink>>> {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImplementationParams.class);
     private static final String regexUsingMetadata= "(Expression|InstanceOf|Parent|Source|Target)";
     private static final ProviderHelper locationHelper = new ProviderHelper();
 

@@ -9,10 +9,9 @@
 
 package science.aist.sushiya.service.languageserver.completion;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.Entity;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
 public class CompletionProcessor implements Function<CompletionParams,Either<List<CompletionItem>, CompletionList>> {
     private static final List<ICompletionProvider> completionProviders = new ArrayList<>();
     private static final ICompletionProvider defaultProvider = new FSHKeywordCompletionProvider();
-    private static final Logger LOGGER = LoggerFactory.getLogger(CompletionProcessor.class);
+    private static final Logger LOGGER = Logger.getInstance(CompletionProcessor.class);
 
     public CompletionProcessor(){
         completionProviders.add(new AliasCompletionProvider());

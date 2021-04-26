@@ -9,9 +9,8 @@
 
 package science.aist.sushiya.service.languageserver;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ import java.util.Map;
  * @author SophieBauernfeind
  */
 public class FSHFileHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FSHFileHandler.class);
+    private static final Logger LOGGER = Logger.getInstance(FSHFileHandler.class);
     private static final FSHFileHandler instance = new FSHFileHandler();
     private Map<String,TextDocumentItem> openedDocuments = new HashMap<>();
     private List<String> createdProfiles = new ArrayList<>();

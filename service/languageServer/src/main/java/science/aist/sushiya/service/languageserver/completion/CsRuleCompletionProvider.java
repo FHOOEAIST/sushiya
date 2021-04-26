@@ -9,12 +9,11 @@
 
 package science.aist.sushiya.service.languageserver.completion;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.CompletionTriggerKind;
 import org.eclipse.lsp4j.TextDocumentItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import science.aist.sushiya.service.languageserver.Entity;
 import science.aist.sushiya.service.languageserver.FSHFileHandler;
 
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
  * @author SophieBauernfeind
  */
 public class CsRuleCompletionProvider implements ICompletionProvider {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CsRuleCompletionProvider.class);
+    private static final Logger LOGGER = Logger.getInstance(CsRuleCompletionProvider.class);
     private final List<CompletionItem> completionItems = new ArrayList<>();
     private boolean newRule = false;
     private boolean insertRule = false;

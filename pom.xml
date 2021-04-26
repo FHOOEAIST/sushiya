@@ -35,7 +35,6 @@
     </distributionManagement>  <!-- variables -->
     <properties>    <!-- aist dependencies -->
         <seshat.version>1.1</seshat.version>
-        <jfuck.version>1.1</jfuck.version>    <!-- further dependencies -->
         <swagger.ui.version>2.9.2</swagger.ui.version>
         <h2database.version>1.4.200</h2database.version>
         <postgresql.version>42.2.8</postgresql.version>
@@ -154,7 +153,7 @@
         </dependency>
     </dependencies>
     <name>sushiya</name>
-    <description>%TODO%</description>
+    <description>language server for FHIR Shorthand</description>
     <issueManagement>
         <system>Gitlab</system>
         <url>https://aist.fh-hagenberg.at/git/Development/%TODO%</url>
@@ -165,13 +164,9 @@
     </ciManagement>
     <developers>
         <developer>
-            <id>a.pointner</id>
-            <name>Andreas Pointner</name>
-            <email>andreas.pointner@fh-hagenberg.at</email>
-            <roles>
-                <role>Research Associate</role>
-            </roles>
-            <url>https://research.fh-ooe.at/de/staff/39812</url>
+            <id>s.bauernfeind</id>
+            <name>SophieBauernfeind</name>
+            <email>S1810458002@students.fh-hagenberg.at</email>
             <organization>AIST – Advanced Information Systems and Technology</organization>
             <organizationUrl>https://aist.fh-hagenberg.at</organizationUrl>
         </developer>

@@ -9,12 +9,11 @@
 
 package science.aist.sushiya.service.languageserver;
 
+import at.fh.hagenberg.aist.seshat.Logger;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentItem;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.Map;
  * @author SophieBauernfeind
  */
 public class ProviderHelper {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderHelper.class);
+    private static final Logger LOGGER = Logger.getInstance(ProviderHelper.class);
 
     public String getName(@NotNull TextDocumentItem textDocument, @NotNull Position position){
         try{
