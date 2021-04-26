@@ -1,0 +1,31 @@
+<!--
+  ~ Copyright (c) 2021 the original author or authors.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  ~
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at https://mozilla.org/MPL/2.0/.
+  -->
+
+<project name="%TODO%"
+         xmlns="http://maven.apache.org/DECORATION/1.8.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.8.0 http://maven.apache.org/xsd/decoration-1.8.0.xsd">
+    <bannerLeft>
+        <name>Sushiya - FIHR Shorthand language server</name>
+        <src>images/logo.png</src>
+    </bannerLeft>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.8</version>
+    </skin>
+    <body>
+        <menu name="Sushiya menu">
+            <item name="Overview" href="index.html"/>
+            <item name="Documentation" href="documentation.html"/>
+            <item name="Javadoc" href="apidocs/index.html" />
+        </menu>
+        <menu ref="reports"/>
+    </body>
+</project>

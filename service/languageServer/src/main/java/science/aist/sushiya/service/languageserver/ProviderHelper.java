@@ -1,0 +1,94 @@
+/*
+ * Copyright (c) 2021 the original author or authors.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+package science.aist.sushiya.service.languageserver;
+
+import org.eclipse.lsp4j.Location;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.TextDocumentItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * <p>This Helper class is for providers which are working with incoming requests with a list of location response.</p>
+ *
+ * @author SophieBauernfeind
+ */
+public class ProviderHelper {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProviderHelper.class);
+
+    //this function returns the word of the current position
+    public String getName(@NotNull TextDocumentItem textDocument, @NotNull Position position) {
+        try {
+            String line = textDocument.getText().split("\n")[position.getLine()];
+            boolean startFound = false;
+            boolean endFound = false;
+            int startPos = position.getCharacter();
+            int endPos = position.getCharacter() + 1;
+            //get the start of the word
+            while (!startFound && startPos > 0) {
+                if (line.charAt(startPos) == ' ' ||
+                        String.valueOf(line.charAt(startPos)).matches("\\p{Punct}")) {
+                    startFound = true;
+                } else {
+                    startPos--;
+                }
+            }
+            //get the end of the word
+            while (!endFound && endPos < line.length()) {
+                if (line.charAt(endPos) == ' ' ||
+                        String.valueOf(line.charAt(endPos)).matches("\\p{Punct}")) {
+                    endFound = true;
+                } else {
+                    endPos++;
+                }
+            }
+            if (startFound) {
+                String result = line.substring(startPos + 1, endPos);
+                return result.matches("(\\s*|\\p{Punct})") ? null : result;
+            }
+            String result = line.substring(startPos, endPos).trim();
+            //if the substring is empty line or just contains character like !"#$ return null for no found word
+            return result.matches("(\\s*|\\p{Punct})") ? null : result;
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage());
+            return null;
+        }
+    }
+
+    //this function returns a list of location where the name is found, and the line matches the regex
+    public List<Location> getLocations(@NotNull String searchedName, @NotNull String RegexLine) {
+        List<Location> result = new ArrayList<>();
+        for (Map.Entry<String, TextDocumentItem> document : FSHFileHandler.getInstance().getOpenedDocuments().entrySet()) {
+            String text = document.getValue().getText();
+
+            if (text.contains(searchedName)) {
+                String[] lines = text.split("\n");
+                for (int pos = 0; pos < lines.length; pos++) {
+
+                    if (lines[pos].matches(RegexLine)) {
+                        int characterPos = lines[pos].indexOf(searchedName);
+
+                        Position start = new Position(pos, characterPos);
+                        Position end = new Position(pos, characterPos + searchedName.length() - 1);
+                        result.add(new Location(document.getKey(),
+                                new Range(start, end)));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+}
