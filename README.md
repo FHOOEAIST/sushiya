@@ -55,24 +55,10 @@ Goto References
 ![rename](./images/rename.gif "rename")
 If the renaming entity is the last word, renaming won't work.
 
-## FAQ
-
-If you have any questions, please checkout our [FAQ](https://fhooeaist.github.io/seshat/faq.html) section.
+**Formatting** \
+All examples are from [FSH language reference](https://build.fhir.org/ig/HL7/fhir-shorthand/reference.html).
+![formatting](./images/formatting.gif "formatting")
 
 ## Contributing
 
 **First make sure to read our [general contribution guidelines](https://fhooeaist.github.io/CONTRIBUTING.html).**
-   
-## Licence
-
-Copyright (c) 2020 the original author or authors.
-DO NOT ALTER OR REMOVE COPYRIGHT NOTICES.
-
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/.
-
-## Research
-
-If you are going to use this project as part of a research paper, we would ask you to reference this project by citing
-it.
